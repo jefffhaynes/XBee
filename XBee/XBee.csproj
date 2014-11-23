@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EFEC26F4-5399-4803-979B-DA5DCD1D2709}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XBee</RootNamespace>
+    <AssemblyName>XBee</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BinarySerializer, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BinarySerializer\BinarySerializer\bin\Debug\BinarySerializer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataReceivedEventArgs.cs" />
+    <Compile Include="Frames\AtCommandException.cs" />
+    <Compile Include="CommandResponseFrameContent.cs" />
+    <Compile Include="CommandFrameContent.cs" />
+    <Compile Include="FrameContext.cs" />
+    <Compile Include="Frames\AtCommandResponseFrameData.cs" />
+    <Compile Include="Frames\AtCommands\DeviceType.cs" />
+    <Compile Include="Frames\AtCommands\HardwareVersion.cs" />
+    <Compile Include="Frames\AtCommands\HardwareVersionCommand.cs" />
+    <Compile Include="Frames\AtCommands\HardwareVersionResponseData.cs" />
+    <Compile Include="Frames\AtCommands\NetworkDiscoveryCommand.cs" />
+    <Compile Include="Frames\AtCommands\NetworkDiscoveryResponseData.cs" />
+    <Compile Include="Frames\AtCommands\NetworkDiscoveryResponseDataExtendedInfo.cs" />
+    <Compile Include="Frames\AtCommands\ResetCommand.cs" />
+    <Compile Include="Frames\DeliveryStatus.cs" />
+    <Compile Include="Frames\DeliveryStatusExt.cs" />
+    <Compile Include="Frames\DiscoveryStatus.cs" />
+    <Compile Include="Frames\ModemStatusFrame.cs" />
+    <Compile Include="Frames\ReceiveOptionsExt.cs" />
+    <Compile Include="Frames\RxIndicatorExplicitExtFrame.cs" />
+    <Compile Include="Frames\RxIndicatorExtFrame.cs" />
+    <Compile Include="Frames\TransmitOptions.cs" />
+    <Compile Include="Frames\TransmitOptionsExt.cs" />
+    <Compile Include="Frames\TxRequestFrame.cs" />
+    <Compile Include="Frames\TxRequestExtFrame.cs" />
+    <Compile Include="Frames\TxStatusFrame.cs" />
+    <Compile Include="Frames\TxStatusExtFrame.cs" />
+    <Compile Include="ModemStatus.cs" />
+    <Compile Include="NodeDiscoveredEventArgs.cs" />
+    <Compile Include="SignalStrength.cs" />
+    <Compile Include="LongAddress.cs" />
+    <Compile Include="ShortAddress.cs" />
+    <Compile Include="XBee.cs" />
+    <Compile Include="Frames\AtCommandStatus.cs" />
+    <Compile Include="Crc.cs" />
+    <Compile Include="Frame.cs" />
+    <Compile Include="FrameContent.cs" />
+    <Compile Include="FramePayload.cs" />
+    <Compile Include="FrameReceivedEventArgs.cs" />
+    <Compile Include="FrameSerializer.cs" />
+    <Compile Include="Frames\AtCommandFrameContent.cs" />
+    <Compile Include="Frames\AtCommandResponseFrame.cs" />
+    <Compile Include="FrameType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialConnection.cs" />
+    <Compile Include="StartDelimiter.cs" />
+    <Compile Include="XBeeException.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

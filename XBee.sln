@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBee", "XBee\XBee.csproj", "{EFEC26F4-5399-4803-979B-DA5DCD1D2709}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBee.Test", "XBee.Test\XBee.Test.csproj", "{20AA04CB-E301-42D5-AC9D-F5DD18C8F5AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBee.Tester", "XBee.Tester\XBee.Tester.csproj", "{549CAE95-633E-4CDF-80FE-3590B90C173A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFEC26F4-5399-4803-979B-DA5DCD1D2709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFEC26F4-5399-4803-979B-DA5DCD1D2709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFEC26F4-5399-4803-979B-DA5DCD1D2709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFEC26F4-5399-4803-979B-DA5DCD1D2709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20AA04CB-E301-42D5-AC9D-F5DD18C8F5AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20AA04CB-E301-42D5-AC9D-F5DD18C8F5AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20AA04CB-E301-42D5-AC9D-F5DD18C8F5AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20AA04CB-E301-42D5-AC9D-F5DD18C8F5AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{549CAE95-633E-4CDF-80FE-3590B90C173A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549CAE95-633E-4CDF-80FE-3590B90C173A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549CAE95-633E-4CDF-80FE-3590B90C173A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549CAE95-633E-4CDF-80FE-3590B90C173A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
