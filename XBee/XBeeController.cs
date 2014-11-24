@@ -7,7 +7,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee
 {
-    public class XBee : IDisposable
+    public class XBeeController : IDisposable
     {
         private const byte MinSignalLoss = 0x17;
         private const byte MaxSignalLoss = 0x64;

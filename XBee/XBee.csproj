@@ -94,7 +94,7 @@
     <Compile Include="SignalStrength.cs" />
     <Compile Include="LongAddress.cs" />
     <Compile Include="ShortAddress.cs" />
-    <Compile Include="XBee.cs" />
+    <Compile Include="XBeeController.cs" />
     <Compile Include="Frames\AtCommandStatus.cs" />
     <Compile Include="Checksum.cs" />
     <Compile Include="Frame.cs" />

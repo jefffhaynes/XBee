@@ -8,7 +8,7 @@ namespace XBee.Tester
 {
     class Program
     {
-        private static XBee _xbee = new XBee();
+        private static XBeeController _xbee = new XBeeController();
 
         private static void Main(string[] args)
         {
