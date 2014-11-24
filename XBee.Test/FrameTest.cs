@@ -1,7 +1,6 @@
-﻿
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using XBee.Frames;
+using XBee.Frames.AtCommands;
 
 namespace XBee.Test
 {
@@ -13,8 +12,18 @@ namespace XBee.Test
         private void Check(FrameContent frameContent, byte[] expectedValue)
         {
             var frame = new Frame(frameContent);
-            var data = _frameSerializer.Serialize(frame);
-            Assert.IsTrue(data.SequenceEqual(expectedValue));
+            var actualValue = _frameSerializer.Serialize(frame);
+
+            Assert.AreEqual(expectedValue.Length, actualValue.Length, "Actual data length does not match expected length.");
+
+            for (int i = 0; i < expectedValue.Length; i++)
+            {
+                var expected = expectedValue[i];
+                var actual = actualValue[i];
+
+                Assert.AreEqual(expected, actual,
+                    string.Format("Value at position {0} does not match expected value.", i));
+            }
         }
 
         [TestMethod]
@@ -66,6 +75,27 @@ namespace XBee.Test
             var expectedValue = new byte[] {0x7e, 0x00, 0x07, 0x8b, 0x47, 0xff, 0xfe, 0x00, 0x00, 0x02, 0x2e};
 
             Check(txStatusFrame, expectedValue);
+        }
+
+        [TestMethod]
+        public void AtCommand_CoordinatorEnable_FrameTest()
+        {
+            var atCommandFrame = new CoordinatorEnableCommand { FrameId = 0x33 };
+
+            var expectedValue = new byte[] { 0x7e, 0x00, 0x04, 0x08, 0x33, 0x43, 0x45, 0x3c };
+
+            Check(atCommandFrame, expectedValue);
+        }
+
+
+        [TestMethod]
+        public void AtCommand_CoordinatorEnableWithParam_FrameTest()
+        {
+            var atCommandFrame = new CoordinatorEnableCommand(true) { FrameId = 0x33 };
+
+            var expectedValue = new byte[] { 0x7e, 0x00, 0x05, 0x08, 0x33, 0x43, 0x45, 0x1, 0x3b };
+
+            Check(atCommandFrame, expectedValue);
         }
     }
 }

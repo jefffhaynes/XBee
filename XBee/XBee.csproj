@@ -57,6 +57,10 @@
     <Compile Include="CommandFrameContent.cs" />
     <Compile Include="FrameContext.cs" />
     <Compile Include="Frames\AtCommandResponseFrameData.cs" />
+    <Compile Include="Frames\AtCommands\CoordinatorEnableCommandExt.cs" />
+    <Compile Include="Frames\AtCommands\CoordinatorEnableCommand.cs" />
+    <Compile Include="Frames\AtCommands\CoordinatorEnableStateExt.cs" />
+    <Compile Include="Frames\AtCommands\CoordinatorEnableState.cs" />
     <Compile Include="Frames\AtCommands\DeviceType.cs" />
     <Compile Include="Frames\AtCommands\HardwareVersion.cs" />
     <Compile Include="Frames\AtCommands\HardwareVersionCommand.cs" />
@@ -64,7 +68,14 @@
     <Compile Include="Frames\AtCommands\NetworkDiscoveryCommand.cs" />
     <Compile Include="Frames\AtCommands\NetworkDiscoveryResponseData.cs" />
     <Compile Include="Frames\AtCommands\NetworkDiscoveryResponseDataExtendedInfo.cs" />
+    <Compile Include="Frames\AtCommands\NodeIdentifierCommand.cs" />
+    <Compile Include="Frames\AtCommands\NodeIdentifierResponseData.cs" />
+    <Compile Include="Frames\AtCommands\PrimitiveResponseData.cs" />
     <Compile Include="Frames\AtCommands\ResetCommand.cs" />
+    <Compile Include="Frames\AtCommands\CoordinatorEnableResponseData.cs" />
+    <Compile Include="Frames\AtCommands\SerialNumberLowCommand.cs" />
+    <Compile Include="Frames\AtCommands\SerialNumberHighCommand.cs" />
+    <Compile Include="Frames\AtCommands\WriteCommand.cs" />
     <Compile Include="Frames\DeliveryStatus.cs" />
     <Compile Include="Frames\DeliveryStatusExt.cs" />
     <Compile Include="Frames\DiscoveryStatus.cs" />
@@ -85,7 +96,7 @@
     <Compile Include="ShortAddress.cs" />
     <Compile Include="XBee.cs" />
     <Compile Include="Frames\AtCommandStatus.cs" />
-    <Compile Include="Crc.cs" />
+    <Compile Include="Checksum.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="FrameContent.cs" />
     <Compile Include="FramePayload.cs" />

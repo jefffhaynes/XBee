@@ -17,6 +17,11 @@ namespace XBee
             Value = value;
         }
 
+        public LongAddress(uint high, uint low)
+        {
+            Value = ((ulong) high << 32) + low;
+        }
+
         public ulong Value { get; set; }
 
         public bool Equals(LongAddress other)

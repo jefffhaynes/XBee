@@ -2,7 +2,7 @@
 
 namespace XBee
 {
-    public static class Crc
+    public static class Checksum
     {
         public static byte Calculate(byte[] data)
         {

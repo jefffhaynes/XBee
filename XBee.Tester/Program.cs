@@ -26,7 +26,7 @@ namespace XBee.Tester
             //    serialConnection.Send(frame2);
 
 
-            //    Console.ReadKey();
+            //    Console.ReadKey();s
             //}
 
             MainAsync();
@@ -42,6 +42,17 @@ namespace XBee.Tester
 
             await _xbee.OpenAsync("COM4", 115200);
 
+            //var coordinator = await _xbee.IsCoordinator();
+
+            //var name = await _xbee.GetNodeIdentification();
+
+            //await _xbee.SetNodeIdentifier("COORD 900HP");
+
+            //await _xbee.WriteChanges();
+
+            //name = await _xbee.GetNodeIdentification();
+
+            //var serialNumber = await _xbee.GetSerialNumber();
             //Discover();
         }
 

@@ -103,6 +103,17 @@ namespace XBee
             return ExecuteQueryAsync<TResponseFrame>(frame, DefaultQueryTimeout);
         }
 
+        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrameContent command)
+            where TResponseData : AtCommandResponseFrameData
+        {
+            AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
+
+            if (response.Status != AtCommandStatus.Success)
+                throw new AtCommandException(response.Status);
+
+            return response.Data as TResponseData;
+        }
+
         public async Task ExecuteAtCommandAsync(AtCommandFrameContent command)
         {
             AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
@@ -110,7 +121,6 @@ namespace XBee
             if (response.Status != AtCommandStatus.Success)
                 throw new AtCommandException(response.Status);
         }
-
 
         public async Task ExecuteMultiQueryAsync<TResponseFrame>(CommandFrameContent frame,
             Action<TResponseFrame> callback, TimeSpan timeout) where TResponseFrame : CommandResponseFrameContent
@@ -169,7 +179,7 @@ namespace XBee
 
         public event EventHandler<NodeDiscoveredEventArgs> NodeDiscovered;
 
-        public event EventHandler<DataReceivedEventArgs> DataReceived; 
+        public event EventHandler<DataReceivedEventArgs> DataReceived;
 
         public async Task DiscoverNetwork()
         {
@@ -200,9 +210,56 @@ namespace XBee
             _modemResetTaskCompletionSource = null;
         }
 
+        public async Task<bool> IsCoordinator()
+        {
+            CoordinatorEnableResponseData response;
+            if (CoordinatorHardwareVersion == HardwareVersion.XBeePro900HP)
+                response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommandExt());
+            else response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
+
+            if(response.EnableState != null)
+                return response.EnableState.Value == CoordinatorEnableState.Coordinator;
+
+            if(response.EnableStateExt != null)
+                return response.EnableStateExt.Value == CoordinatorEnableStateExt.NonRoutingCoordinator;
+
+            throw new InvalidOperationException("No coordinator state returned.");
+        }
+
+        public async Task SetCoordinator(bool enable)
+        {
+            if (CoordinatorHardwareVersion == HardwareVersion.XBeePro900HP)
+                await ExecuteAtCommandAsync(new CoordinatorEnableCommandExt(enable));
+            else await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
+        }
+
+        public async Task<string> GetNodeIdentification()
+        {
+            var response = await ExecuteAtQueryAsync<NodeIdentifierResponseData>(new NodeIdentifierCommand());
+            return response.Id;
+        }
+
+        public async Task SetNodeIdentifier(string id)
+        {
+            await ExecuteAtCommandAsync(new NodeIdentifierCommand(id));
+        }
+
+        public async Task<LongAddress> GetSerialNumber()
+        {
+            var highAddress = await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberHighCommand());
+            var lowAddress = await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberLowCommand());
+
+            return new LongAddress(highAddress.Value, lowAddress.Value);
+        }
+
+        public async Task WriteChanges()
+        {
+            await ExecuteAtCommandAsync(new WriteCommand());
+        }
+
         private void OnFrameReceived(object sender, FrameReceivedEventArgs e)
         {
-            var content = e.FrameContent;
+            FrameContent content = e.FrameContent;
 
             if (content is CommandResponseFrameContent)
             {
@@ -235,7 +292,7 @@ namespace XBee
             {
                 var rxIndicator = content as RxIndicatorExtFrame;
 
-                if(DataReceived != null)
+                if (DataReceived != null)
                     DataReceived(this, new DataReceivedEventArgs(rxIndicator.Source, rxIndicator.Data));
             }
             else if (content is RxIndicatorExplicitExtFrame)

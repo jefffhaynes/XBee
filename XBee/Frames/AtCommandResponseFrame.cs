@@ -1,4 +1,5 @@
-﻿using BinarySerialization;
+﻿using System;
+using BinarySerialization;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
@@ -15,6 +16,11 @@ namespace XBee.Frames
 
         [Subtype("AtCommand", "ND", typeof(NetworkDiscoveryResponseData))]
         [Subtype("AtCommand", "HV", typeof(HardwareVersionResponseData))]
+        [Subtype("AtCommand", "CE", typeof(CoordinatorEnableResponseData))]
+        [Subtype("AtCommand", "NI", typeof(NodeIdentifierResponseData))]
+        [Subtype("AtCommand", "SH", typeof(PrimitiveResponseData<UInt32>))]
+        [Subtype("AtCommand", "SL", typeof(PrimitiveResponseData<UInt32>))]
+
         public TResponseData Data { get; set; }
     }
 

@@ -25,6 +25,6 @@ namespace XBee.Frames
         [FieldLength(AtCommandFieldLength)]
         public string AtCommand { get; set; }
 
-        public byte? ParameterValue { get; set; }
+        public object Parameter { get; set; }
     }
 }
