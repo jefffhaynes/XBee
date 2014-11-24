@@ -10,7 +10,7 @@
     <description>.NET library for XBee wireless controllers</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2014</copyright>
-    <tags>Serialization</tags>
+    <tags>XBee Wireless</tags>
     <dependencies>
       <dependency id="BinarySerializer" version="2.4" />
     </dependencies>
