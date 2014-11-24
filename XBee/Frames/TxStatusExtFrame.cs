@@ -2,14 +2,12 @@
 {
     public class TxStatusExtFrame : CommandResponseFrameContent
     {
-        private static readonly byte[] ReservedData = { 0xff, 0xfe };
-
         public TxStatusExtFrame()
         {
-            Reserved = ReservedData;
+            Reserved = ShortAddress.Broadcast;
         }
 
-        public byte[] Reserved { get; set; }
+        public ShortAddress Reserved { get; set; }
 
         public byte RetryCount { get; set; }
 

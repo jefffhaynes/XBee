@@ -40,7 +40,7 @@
   <ItemGroup>
     <Reference Include="BinarySerializer, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\BinarySerializer\BinarySerializer\bin\Debug\BinarySerializer.dll</HintPath>
+      <HintPath>..\packages\BinarySerializer.2.4.0.0\lib\net40\BinarySerializer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -110,7 +110,12 @@
     <Compile Include="StartDelimiter.cs" />
     <Compile Include="XBeeException.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="nuget\nuget.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,15 +1,19 @@
-﻿
-namespace XBee
+﻿namespace XBee
 {
     public class ShortAddress
     {
-        private ushort _value;
+        public static readonly ShortAddress Broadcast = new ShortAddress(0xfffe);
 
-        public ushort Value
+        public ShortAddress()
         {
-            get { return _value; }
-            set { _value = value; }
         }
+
+        public ShortAddress(ushort value)
+        {
+            Value = value;
+        }
+
+        public ushort Value { get; set; }
 
         public override string ToString()
         {
