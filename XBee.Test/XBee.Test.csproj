@@ -64,7 +64,7 @@
   <ItemGroup>
     <ProjectReference Include="..\XBee\XBee.csproj">
       <Project>{EFEC26F4-5399-4803-979B-DA5DCD1D2709}</Project>
-      <Name>XBee2</Name>
+      <Name>XBee</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

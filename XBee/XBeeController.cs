@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XBee.Frames;
@@ -9,13 +11,6 @@ namespace XBee
 {
     public class XBeeController : IDisposable
     {
-        private const byte MinSignalLoss = 0x17;
-        private const byte MaxSignalLoss = 0x64;
-        private const byte SignalLossRange = MaxSignalLoss - MinSignalLoss;
-        private const byte SignalLossBandSize = SignalLossRange/3;
-        private const byte SignalLossHighThreshold = MaxSignalLoss - SignalLossBandSize;
-        private const byte SignalLossLowThreshold = MinSignalLoss + SignalLossBandSize;
-
         private static readonly ConcurrentDictionary<byte, TaskCompletionSource<CommandResponseFrameContent>>
             ExecuteTaskCompletionSources =
                 new ConcurrentDictionary<byte, TaskCompletionSource<CommandResponseFrameContent>>();
@@ -35,6 +30,8 @@ namespace XBee
 
         public HardwareVersion CoordinatorHardwareVersion { get; private set; }
 
+        public EventHandler<SampleReceivedEventArgs> SampleReceived;
+ 
         public void Dispose()
         {
             if (_connection != null)
@@ -190,7 +187,7 @@ namespace XBee
 
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
                         NodeDiscovered(this, new NodeDiscoveredEventArgs(discoveryData.LongAddress,
-                            discoveryData.Name, GetSignalStrength(discoveryData.SignalLoss)));
+                            discoveryData.Name, discoveryData.ReceivedSignalStrengthIndicator.SignalStrength));
                 }), NetworkDiscoveryTimeout);
         }
 
@@ -252,6 +249,17 @@ namespace XBee
             return new LongAddress(highAddress.Value, lowAddress.Value);
         }
 
+        public async Task<InputOutputState> GetInputOutputState(InputOutputChannel channel)
+        {
+            var response = await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputCommand(channel));
+            return response.State;
+        }
+
+        public async Task SetInputOutputState(InputOutputChannel channel, InputOutputState state)
+        {
+            await ExecuteAtCommandAsync(new InputOutputCommand(channel, state));
+        }
+
         public async Task WriteChanges()
         {
             await ExecuteAtCommandAsync(new WriteCommand());
@@ -302,6 +310,22 @@ namespace XBee
                 if (DataReceived != null)
                     DataReceived(this, new DataReceivedEventArgs(rxIndicator.Source, rxIndicator.Data));
             }
+            else if (content is RxIndicatorSampleFrame)
+            {
+                var sampleFrame = content as RxIndicatorSampleFrame;
+                var analogChannels = (sampleFrame.Channels & SampleChannels.AllAnalog).GetFlagValues();
+                var analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
+                    (sample, channel) => new AnalogSample(channel, sample));
+                OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
+            }
+            else if (content is RxIndicatorSampleExtFrame)
+            {
+                var sampleFrame = content as RxIndicatorSampleExtFrame;
+                var analogChannels = (sampleFrame.AnalogChannels & AnalogSampleChannels.All).GetFlagValues();
+                var analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
+                    (sample, channel) => new AnalogSample(channel, sample));
+                OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
+            }
         }
 
         private byte GetNextFrameId()
@@ -317,16 +341,10 @@ namespace XBee
             return _frameId;
         }
 
-        private static SignalStrength GetSignalStrength(byte signalLoss)
+        private void OnSampleReceived(DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
         {
-            SignalStrength signalStrength;
-            if (signalLoss > SignalLossHighThreshold)
-                signalStrength = SignalStrength.Low;
-            else if (signalLoss < SignalLossLowThreshold)
-                signalStrength = SignalStrength.High;
-            else signalStrength = SignalStrength.Medium;
-
-            return signalStrength;
+            if(SampleReceived != null)
+                SampleReceived(this, new SampleReceivedEventArgs(digitalSampleState, analogSamples.ToList()));
         }
     }
 }
