@@ -38,18 +38,21 @@ namespace XBee
         public Frame Deserialize(Stream stream)
         {
             var serializer = CreateSerializer();
-            //serializer.MemberDeserializing += (sender, args) =>
-            //{
-            //    Console.CursorLeft = args.Context.Depth * 4;
-            //    Console.WriteLine("Start: {0}", args.MemberName);
-            //};
 
-            //serializer.MemberDeserialized += (sender, args) =>
-            //{
-            //    Console.CursorLeft = args.Context.Depth * 4;
-            //    var value = args.Value ?? "null";
-            //    Console.WriteLine("End: {0} ({1})", args.MemberName, value);
-            //};
+#if DEBUG
+            serializer.MemberDeserializing += (sender, args) =>
+            {
+                Console.CursorLeft = args.Context.Depth * 4;
+                Console.WriteLine("Start: {0}", args.MemberName);
+            };
+
+            serializer.MemberDeserialized += (sender, args) =>
+            {
+                Console.CursorLeft = args.Context.Depth * 4;
+                var value = args.Value ?? "null";
+                Console.WriteLine("End: {0} ({1})", args.MemberName, value);
+            };
+#endif
 
             var frame =  serializer.Deserialize<Frame>(stream, 
                 new BinarySerializationContext(new FrameContext(CoordinatorHardwareVersion)));

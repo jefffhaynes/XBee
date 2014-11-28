@@ -4,6 +4,11 @@
     {
         HardwareReset = 0x0,
         WatchdogReset = 0x1,
+        Associated = 0x2,
+        Disassociated = 0x3,
+        SynchronizationLost = 0x4,
+        CoordinatorRealignment = 0x5,
+        CoordinatorStarted = 0x6,
         NetworkWake = 0xB,
         NetworkSleep = 0xC
     }

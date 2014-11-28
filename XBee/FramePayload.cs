@@ -24,6 +24,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.TxStatusExt, typeof(TxStatusExtFrame))]
         [Subtype("FrameType", FrameType.ModemStatus, typeof(ModemStatusFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorSample, typeof(RxIndicatorSampleFrame))]
+        [Subtype("FrameType", FrameType.RxIndicator16Sample, typeof(RxIndicator16SampleFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorExt, typeof(RxIndicatorExtFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorExplicitExt, typeof(RxIndicatorExplicitExtFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorSampleExt, typeof(RxIndicatorSampleExtFrame))]

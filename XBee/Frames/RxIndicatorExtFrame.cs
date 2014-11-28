@@ -1,6 +1,4 @@
-﻿using BinarySerialization;
-
-namespace XBee.Frames
+﻿namespace XBee.Frames
 {
     public class RxIndicatorExtFrame : CommandFrameContent
     {

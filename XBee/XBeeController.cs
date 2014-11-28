@@ -30,8 +30,6 @@ namespace XBee
 
         public HardwareVersion CoordinatorHardwareVersion { get; private set; }
 
-        public EventHandler<SampleReceivedEventArgs> SampleReceived;
- 
         public void Dispose()
         {
             if (_connection != null)
@@ -123,7 +121,8 @@ namespace XBee
             else
             {
                 var remoteCommand = new RemoteAtCommandFrame(device, command);
-                var response = await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
+                RemoteAtCommandResponseFrame response =
+                    await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
                 responseContent = response.Content;
             }
 
@@ -190,6 +189,8 @@ namespace XBee
 
         public event EventHandler<DataReceivedEventArgs> DataReceived;
 
+        public event EventHandler<SampleReceivedEventArgs> SampleReceived;
+
         public async Task DiscoverNetwork()
         {
             await ExecuteMultiQueryAsync(new NetworkDiscoveryCommand(), new Action<AtCommandResponseFrame>(
@@ -226,10 +227,10 @@ namespace XBee
                 response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommandExt());
             else response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
 
-            if(response.EnableState != null)
+            if (response.EnableState != null)
                 return response.EnableState.Value == CoordinatorEnableState.Coordinator;
 
-            if(response.EnableStateExt != null)
+            if (response.EnableStateExt != null)
                 return response.EnableStateExt.Value == CoordinatorEnableStateExt.NonRoutingCoordinator;
 
             throw new InvalidOperationException("No coordinator state returned.");
@@ -244,7 +245,8 @@ namespace XBee
 
         public async Task<string> GetNodeIdentification()
         {
-            var response = await ExecuteAtQueryAsync<NodeIdentifierResponseData>(new NodeIdentifierCommand());
+            NodeIdentifierResponseData response =
+                await ExecuteAtQueryAsync<NodeIdentifierResponseData>(new NodeIdentifierCommand());
             return response.Id;
         }
 
@@ -255,15 +257,18 @@ namespace XBee
 
         public async Task<LongAddress> GetSerialNumber()
         {
-            var highAddress = await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberHighCommand());
-            var lowAddress = await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberLowCommand());
+            PrimitiveResponseData<uint> highAddress =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberHighCommand());
+            PrimitiveResponseData<uint> lowAddress =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberLowCommand());
 
             return new LongAddress(highAddress.Value, lowAddress.Value);
         }
 
         public async Task<InputOutputState> GetInputOutputState(InputOutputChannel channel)
         {
-            var response = await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputCommand(channel));
+            InputOutputResponseData response =
+                await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputCommand(channel));
             return response.State;
         }
 
@@ -325,16 +330,18 @@ namespace XBee
             else if (content is RxIndicatorSampleFrame)
             {
                 var sampleFrame = content as RxIndicatorSampleFrame;
-                var analogChannels = (sampleFrame.Channels & SampleChannels.AllAnalog).GetFlagValues();
-                var analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
+                IEnumerable<SampleChannels> analogChannels =
+                    (sampleFrame.Channels & SampleChannels.AllAnalog).GetFlagValues();
+                IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
                     (sample, channel) => new AnalogSample(channel, sample));
                 OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
             }
             else if (content is RxIndicatorSampleExtFrame)
             {
                 var sampleFrame = content as RxIndicatorSampleExtFrame;
-                var analogChannels = (sampleFrame.AnalogChannels & AnalogSampleChannels.All).GetFlagValues();
-                var analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
+                IEnumerable<AnalogSampleChannels> analogChannels =
+                    (sampleFrame.AnalogChannels & AnalogSampleChannels.All).GetFlagValues();
+                IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
                     (sample, channel) => new AnalogSample(channel, sample));
                 OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
             }
@@ -355,7 +362,7 @@ namespace XBee
 
         private void OnSampleReceived(DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
         {
-            if(SampleReceived != null)
+            if (SampleReceived != null)
                 SampleReceived(this, new SampleReceivedEventArgs(digitalSampleState, analogSamples.ToList()));
         }
     }

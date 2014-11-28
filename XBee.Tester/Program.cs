@@ -40,7 +40,11 @@ namespace XBee.Tester
         {
             _xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
 
-            await _xbee.OpenAsync("COM4", 115200);
+            //await _xbee.OpenAsync("COM4", 115200);
+
+            await _xbee.OpenAsync("COM5", 9600);
+
+            _xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved");
 
             //var coordinator = await _xbee.IsCoordinator();
 
@@ -53,7 +57,7 @@ namespace XBee.Tester
             //name = await _xbee.GetNodeIdentification();
 
             //var serialNumber = await _xbee.GetSerialNumber();
-            Discover();
+            //Discover();
         }
 
         private static async void Discover()
