@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
@@ -96,6 +97,31 @@ namespace XBee.Test
             var expectedValue = new byte[] { 0x7e, 0x00, 0x05, 0x08, 0x33, 0x43, 0x45, 0x1, 0x3b };
 
             Check(atCommandFrame, expectedValue);
+        }
+
+        [TestMethod]
+        public void RxIndicatorSampleFrameTest()
+        {
+            var data = new byte[]
+            {
+                0x7e, 0x00, 0x16, 0x82,
+                0x76, 0x54, 0x32, 0x10, 
+                0x76, 0x54, 0x32, 0x10, 
+                0x1b, 0x00, 0x01, 0x0e,
+                0x58, 0x00, 0x18, 0x00, 
+                0x46, 0x01, 0x54, 0x02, 
+                0x0a, 0x10
+            };
+
+            var frame = _frameSerializer.Deserialize(new MemoryStream(data));
+
+            var content = frame.Payload.Content as RxIndicatorSampleFrame;
+
+            Assert.IsNotNull(content);
+            Assert.AreEqual(content.AnalogSamples.Count, 3);
+            Assert.AreEqual(content.AnalogSamples[0], 0x46);
+            Assert.AreEqual(content.AnalogSamples[1], 0x154);
+            Assert.AreEqual(content.AnalogSamples[2], 0x20a);
         }
     }
 }

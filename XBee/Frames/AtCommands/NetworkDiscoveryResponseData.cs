@@ -10,7 +10,7 @@ namespace XBee.Frames.AtCommands
 
         [SerializeWhen("CoordinatorHardwareVersion", HardwareVersion.XBeeSeries1, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
         [SerializeWhen("CoordinatorHardwareVersion", HardwareVersion.XBeeProSeries1, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
-        public byte SignalLoss { get; set; }
+        public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
 
         public string Name { get; set; }
 

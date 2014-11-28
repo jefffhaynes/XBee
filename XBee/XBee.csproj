@@ -19,6 +19,8 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,10 +40,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BinarySerializer, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\BinarySerializer.2.4.1.0\lib\net40\BinarySerializer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,7 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\BitCountingConverter.cs" />
+    <Compile Include="Converters\BitwiseAndConverter.cs" />
     <Compile Include="DataReceivedEventArgs.cs" />
+    <Compile Include="EnumExtensions.cs" />
+    <Compile Include="AnalogSample.cs" />
+    <Compile Include="Frames\AnalogSampleChannels.cs" />
     <Compile Include="Frames\AtCommandException.cs" />
     <Compile Include="CommandResponseFrameContent.cs" />
     <Compile Include="CommandFrameContent.cs" />
@@ -62,9 +65,13 @@
     <Compile Include="Frames\AtCommands\CoordinatorEnableStateExt.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableState.cs" />
     <Compile Include="Frames\AtCommands\DeviceType.cs" />
+    <Compile Include="Frames\AtCommands\InputOutputChannel.cs" />
+    <Compile Include="Frames\AtCommands\InputOutputCommand.cs" />
     <Compile Include="Frames\AtCommands\HardwareVersion.cs" />
     <Compile Include="Frames\AtCommands\HardwareVersionCommand.cs" />
     <Compile Include="Frames\AtCommands\HardwareVersionResponseData.cs" />
+    <Compile Include="Frames\AtCommands\InputOutputResponseData.cs" />
+    <Compile Include="Frames\AtCommands\InputOutputState.cs" />
     <Compile Include="Frames\AtCommands\NetworkDiscoveryCommand.cs" />
     <Compile Include="Frames\AtCommands\NetworkDiscoveryResponseData.cs" />
     <Compile Include="Frames\AtCommands\NetworkDiscoveryResponseDataExtendedInfo.cs" />
@@ -73,18 +80,25 @@
     <Compile Include="Frames\AtCommands\PrimitiveResponseData.cs" />
     <Compile Include="Frames\AtCommands\ResetCommand.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableResponseData.cs" />
+    <Compile Include="Frames\AtCommands\SampleRateCommand.cs" />
     <Compile Include="Frames\AtCommands\SerialNumberLowCommand.cs" />
     <Compile Include="Frames\AtCommands\SerialNumberHighCommand.cs" />
     <Compile Include="Frames\AtCommands\WriteCommand.cs" />
     <Compile Include="Frames\RemoteAtCommandFrame.cs" />
     <Compile Include="Frames\DeliveryStatus.cs" />
     <Compile Include="Frames\DeliveryStatusExt.cs" />
+    <Compile Include="Frames\DigitalSampleChannels.cs" />
+    <Compile Include="Frames\DigitalSampleState.cs" />
     <Compile Include="Frames\DiscoveryStatus.cs" />
     <Compile Include="Frames\ModemStatusFrame.cs" />
+    <Compile Include="Frames\ReceiveOptions.cs" />
     <Compile Include="Frames\ReceiveOptionsExt.cs" />
     <Compile Include="Frames\RemoteCommandOptions.cs" />
+    <Compile Include="Frames\SampleChannels.cs" />
     <Compile Include="Frames\RxIndicatorExplicitExtFrame.cs" />
     <Compile Include="Frames\RxIndicatorExtFrame.cs" />
+    <Compile Include="Frames\RxIndicatorSampleExtFrame.cs" />
+    <Compile Include="Frames\RxIndicatorSampleFrame.cs" />
     <Compile Include="Frames\TransmitOptions.cs" />
     <Compile Include="Frames\TransmitOptionsExt.cs" />
     <Compile Include="Frames\TxRequestFrame.cs" />
@@ -93,6 +107,8 @@
     <Compile Include="Frames\TxStatusExtFrame.cs" />
     <Compile Include="ModemStatus.cs" />
     <Compile Include="NodeDiscoveredEventArgs.cs" />
+    <Compile Include="ReceivedSignalStrengthIndicator.cs" />
+    <Compile Include="SampleReceivedEventArgs.cs" />
     <Compile Include="SignalStrength.cs" />
     <Compile Include="LongAddress.cs" />
     <Compile Include="ShortAddress.cs" />
@@ -123,6 +139,7 @@
   <PropertyGroup>
     <PostBuildEvent>"$(ProjectDir)\nuget\nuget.exe" pack "$(ProjectPath)" -Prop Configuration=Release</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
