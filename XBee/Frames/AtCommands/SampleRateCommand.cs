@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class SampleRateCommand : AtCommandFrameContent
+    public class SampleRateCommand : AtCommandFrame
     {
         public SampleRateCommand() : base("IR")
         {
