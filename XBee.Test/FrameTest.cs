@@ -119,9 +119,9 @@ namespace XBee.Test
 
             Assert.IsNotNull(content);
             Assert.AreEqual(content.AnalogSamples.Count, 3);
-            Assert.AreEqual(content.AnalogSamples[0].Value, 0x46);
-            Assert.AreEqual(content.AnalogSamples[1].Value, 0x154);
-            Assert.AreEqual(content.AnalogSamples[2].Value, 0x20a);
+            Assert.AreEqual(content.AnalogSamples[0], 0x46);
+            Assert.AreEqual(content.AnalogSamples[1], 0x154);
+            Assert.AreEqual(content.AnalogSamples[2], 0x20a);
         }
     }
 }
