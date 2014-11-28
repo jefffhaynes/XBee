@@ -40,8 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BinarySerializer">
-      <HintPath>..\packages\BinarySerializer.2.5.1.0\lib\net40\BinarySerializer.dll</HintPath>
+    <Reference Include="BinarySerializer, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\BinarySerializer.2.6.0.0\lib\portable-net40+sl50+win+MonoAndroid10+MonoTouch10\BinarySerializer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtCommandResponseFrameContent.cs" />
     <Compile Include="Converters\BitCountingConverter.cs" />
     <Compile Include="Converters\BitwiseAndConverter.cs" />
     <Compile Include="DataReceivedEventArgs.cs" />
@@ -96,7 +98,7 @@
     <Compile Include="Frames\ModemStatusFrame.cs" />
     <Compile Include="Frames\ReceiveOptions.cs" />
     <Compile Include="Frames\ReceiveOptionsExt.cs" />
-    <Compile Include="Frames\RemoteCommandOptions.cs" />
+    <Compile Include="Frames\RemoteAtCommandOptions.cs" />
     <Compile Include="Frames\SampleChannels.cs" />
     <Compile Include="Frames\RxIndicatorExplicitExtFrame.cs" />
     <Compile Include="Frames\RxIndicatorExtFrame.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="ModemStatus.cs" />
     <Compile Include="NodeDiscoveredEventArgs.cs" />
     <Compile Include="ReceivedSignalStrengthIndicator.cs" />
+    <Compile Include="RemoteAtCommandResponseFrame.cs" />
     <Compile Include="SampleReceivedEventArgs.cs" />
     <Compile Include="SignalStrength.cs" />
     <Compile Include="LongAddress.cs" />

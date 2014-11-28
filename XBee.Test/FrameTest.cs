@@ -40,7 +40,11 @@ namespace XBee.Test
         [TestMethod]
         public void AtCommandResponseFrameTest()
         {
-            var atResponseCommandFrame = new AtCommandResponseFrame {AtCommand = "BD", FrameId = 0x01};
+            var atResponseCommandFrame = new AtCommandResponseFrame
+            {
+                FrameId = 0x01,
+                Content = new AtCommandResponseFrameContent {AtCommand = "BD"}
+            };
 
             var expectedValue = new byte[] { 0x7e, 0x00, 0x05, 0x88, 0x01, 0x42, 0x44, 0x00, 0xf0 };
 

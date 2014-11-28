@@ -52,7 +52,7 @@ namespace XBee
             /* Unfortunately the protocol changes based on what type of hardware we're using... */
             AtCommandResponseFrame response =
                 await ExecuteQueryAsync<AtCommandResponseFrame>(new HardwareVersionCommand());
-            CoordinatorHardwareVersion = ((HardwareVersionResponseData) response.Data).HardwareVersion;
+            CoordinatorHardwareVersion = ((HardwareVersionResponseData) response.Content.Data).HardwareVersion;
             _connection.CoordinatorHardwareVersion = CoordinatorHardwareVersion;
         }
 
@@ -105,18 +105,30 @@ namespace XBee
         {
             AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
 
-            if (response.Status != AtCommandStatus.Success)
-                throw new AtCommandException(response.Status);
+            if (response.Content.Status != AtCommandStatus.Success)
+                throw new AtCommandException(response.Content.Status);
 
-            return response.Data as TResponseData;
+            return response.Content.Data as TResponseData;
         }
 
-        public async Task ExecuteAtCommandAsync(AtCommandFrame command)
+        public async Task ExecuteAtCommandAsync(AtCommandFrame command, LongAddress device = null)
         {
-            AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
+            AtCommandResponseFrameContent responseContent;
 
-            if (response.Status != AtCommandStatus.Success)
-                throw new AtCommandException(response.Status);
+            if (device == null)
+            {
+                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
+                responseContent = response.Content;
+            }
+            else
+            {
+                var remoteCommand = new RemoteAtCommandFrame(device, command);
+                var response = await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
+                responseContent = response.Content;
+            }
+
+            if (responseContent.Status != AtCommandStatus.Success)
+                throw new AtCommandException(responseContent.Status);
         }
 
         public async Task ExecuteMultiQueryAsync<TResponseFrame>(CommandFrameContent frame,
@@ -183,7 +195,7 @@ namespace XBee
             await ExecuteMultiQueryAsync(new NetworkDiscoveryCommand(), new Action<AtCommandResponseFrame>(
                 frame =>
                 {
-                    var discoveryData = (NetworkDiscoveryResponseData) frame.Data;
+                    var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
 
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
                         NodeDiscovered(this, new NodeDiscoveredEventArgs(discoveryData.LongAddress,

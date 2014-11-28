@@ -1,40 +1,26 @@
-﻿using System;
-using BinarySerialization;
-
-namespace XBee.Frames
+﻿namespace XBee.Frames
 {
     public class RemoteAtCommandFrame : CommandFrameContent
     {
-        private const int AtCommandFieldLength = 2;
-
-        public RemoteAtCommandFrame() : this(string.Empty)
+        public RemoteAtCommandFrame()
         {
         }
 
-        public RemoteAtCommandFrame(string atCommand)
+        public RemoteAtCommandFrame(LongAddress destination, AtCommandFrame command)
         {
-            if(atCommand == null)
-                throw new ArgumentNullException("atCommand");
+            Destination = destination;
 
-            if(atCommand.Length > AtCommandFieldLength)
-                throw new ArgumentException("Command cannot exceed field length.", "atCommand");
+            Options = RemoteAtCommandOptions.Commit;
 
-            AtCommand = atCommand;
-
-            ShortAddress = ShortAddress.Broadcast;
-
-            Options = RemoteCommandOptions.Commit;
+            Command = command;
         }
 
         public LongAddress Destination { get; set; }
 
         public ShortAddress ShortAddress { get; set; }
 
-        public RemoteCommandOptions Options { get; set; }
+        public RemoteAtCommandOptions Options { get; set; }
 
-        [FieldLength(AtCommandFieldLength)]
-        public string AtCommand { get; set; }
-
-        public object Parameter { get; set; }
+        public AtCommandFrame Command { get; set; }
     }
 }
