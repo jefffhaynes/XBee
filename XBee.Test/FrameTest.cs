@@ -29,7 +29,7 @@ namespace XBee.Test
         [TestMethod]
         public void AtCommandFrameTest()
         {
-            var atCommandFrame = new AtCommandFrameContent("NH") {FrameId = 0x52};
+            var atCommandFrame = new AtCommandFrame("NH") {FrameId = 0x52};
 
             var expectedValue = new byte[] { 0x7e, 0x00, 0x04, 0x08, 0x52, 0x4e, 0x48, 0x0f };
 

@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class WriteCommand : AtCommandFrameContent
+    public class WriteCommand : AtCommandFrame
     {
         public WriteCommand() : base("WR")
         {

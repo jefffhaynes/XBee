@@ -3,16 +3,15 @@ using BinarySerialization;
 
 namespace XBee.Frames
 {
-    public class AtRemoteCommandFrameContent : CommandFrameContent
+    public class RemoteAtCommandFrame : CommandFrameContent
     {
         private const int AtCommandFieldLength = 2;
 
-        public AtRemoteCommandFrameContent() : this(string.Empty)
+        public RemoteAtCommandFrame() : this(string.Empty)
         {
-
         }
 
-        public AtRemoteCommandFrameContent(string atCommand)
+        public RemoteAtCommandFrame(string atCommand)
         {
             if(atCommand == null)
                 throw new ArgumentNullException("atCommand");
@@ -22,13 +21,16 @@ namespace XBee.Frames
 
             AtCommand = atCommand;
 
-            LegacyDestination = ShortAddress.Broadcast;
+            ShortAddress = ShortAddress.Broadcast;
+
+            Options = RemoteCommandOptions.Commit;
         }
 
         public LongAddress Destination { get; set; }
 
-        [Obsolete]
         public ShortAddress ShortAddress { get; set; }
+
+        public RemoteCommandOptions Options { get; set; }
 
         [FieldLength(AtCommandFieldLength)]
         public string AtCommand { get; set; }

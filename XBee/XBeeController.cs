@@ -103,7 +103,7 @@ namespace XBee
             return ExecuteQueryAsync<TResponseFrame>(frame, DefaultQueryTimeout);
         }
 
-        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrameContent command)
+        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrame command)
             where TResponseData : AtCommandResponseFrameData
         {
             AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
@@ -114,7 +114,7 @@ namespace XBee
             return response.Data as TResponseData;
         }
 
-        public async Task ExecuteAtCommandAsync(AtCommandFrameContent command)
+        public async Task ExecuteAtCommandAsync(AtCommandFrame command)
         {
             AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
 

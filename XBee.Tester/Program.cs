@@ -17,12 +17,12 @@ namespace XBee.Tester
             //    serialConnection.FrameReceived += SerialConnectionOnFrameReceived;
             //    serialConnection.OpenAsync();
 
-            //    var frame = new AtCommandFrameContent("ND") {FrameId = 1};
+            //    var frame = new AtCommandFrame("ND") {FrameId = 1};
             //    serialConnection.Send(frame);
 
             //    Console.ReadKey();
 
-            //    var frame2 = new AtCommandFrameContent("ND") {FrameId = 2};
+            //    var frame2 = new AtCommandFrame("ND") {FrameId = 2};
             //    serialConnection.Send(frame2);
 
 
@@ -53,7 +53,7 @@ namespace XBee.Tester
             //name = await _xbee.GetNodeIdentification();
 
             //var serialNumber = await _xbee.GetSerialNumber();
-            //Discover();
+            Discover();
         }
 
         private static async void Discover()
@@ -68,6 +68,8 @@ namespace XBee.Tester
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
                 //await _xbee.TransmitDataAsync(args.Address, Encoding.ASCII.GetBytes("Hello!"));
                 //Console.WriteLine("Ack from '{0}'!", args.Name);
+
+
             };
 
             await _xbee.DiscoverNetwork();

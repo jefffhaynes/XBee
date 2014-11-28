@@ -3,15 +3,15 @@ using BinarySerialization;
 
 namespace XBee.Frames
 {
-    public class AtCommandFrameContent : CommandFrameContent
+    public class AtCommandFrame : CommandFrameContent
     {
         private const int AtCommandFieldLength = 2;
 
-        public AtCommandFrameContent() : this(string.Empty)
+        public AtCommandFrame() : this(string.Empty)
         {
         }
 
-        public AtCommandFrameContent(string atCommand)
+        public AtCommandFrame(string atCommand)
         {
             if(atCommand == null)
                 throw new ArgumentNullException("atCommand");

@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class SerialNumberHighCommand : AtCommandFrameContent
+    public class SerialNumberHighCommand : AtCommandFrame
     {
         public SerialNumberHighCommand() : base("SH")
         {

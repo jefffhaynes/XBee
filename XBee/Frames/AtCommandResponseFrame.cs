@@ -4,8 +4,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
 {
-    public class AtCommandResponseFrame<TResponseData> : CommandResponseFrameContent 
-        where TResponseData : AtCommandResponseFrameData
+    public class AtCommandResponseFrame : CommandResponseFrameContent 
     {
         private const int AtCommandFieldLength = 2;
 
@@ -21,10 +20,6 @@ namespace XBee.Frames
         [Subtype("AtCommand", "SH", typeof(PrimitiveResponseData<UInt32>))]
         [Subtype("AtCommand", "SL", typeof(PrimitiveResponseData<UInt32>))]
 
-        public TResponseData Data { get; set; }
-    }
-
-    public class AtCommandResponseFrame : AtCommandResponseFrame<AtCommandResponseFrameData>
-    {
+        public AtCommandResponseFrameData Data { get; set; }
     }
 }

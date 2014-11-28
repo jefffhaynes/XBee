@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class NetworkDiscoveryCommand : AtCommandFrameContent
+    public class NetworkDiscoveryCommand : AtCommandFrame
     {
         public NetworkDiscoveryCommand() : base("ND")
         {

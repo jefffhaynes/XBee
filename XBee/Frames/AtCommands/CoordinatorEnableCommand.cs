@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class CoordinatorEnableCommand : AtCommandFrameContent
+    public class CoordinatorEnableCommand : AtCommandFrame
     {
         public CoordinatorEnableCommand() : base("CE")
         {

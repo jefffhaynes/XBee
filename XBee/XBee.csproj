@@ -76,11 +76,13 @@
     <Compile Include="Frames\AtCommands\SerialNumberLowCommand.cs" />
     <Compile Include="Frames\AtCommands\SerialNumberHighCommand.cs" />
     <Compile Include="Frames\AtCommands\WriteCommand.cs" />
+    <Compile Include="Frames\RemoteAtCommandFrame.cs" />
     <Compile Include="Frames\DeliveryStatus.cs" />
     <Compile Include="Frames\DeliveryStatusExt.cs" />
     <Compile Include="Frames\DiscoveryStatus.cs" />
     <Compile Include="Frames\ModemStatusFrame.cs" />
     <Compile Include="Frames\ReceiveOptionsExt.cs" />
+    <Compile Include="Frames\RemoteCommandOptions.cs" />
     <Compile Include="Frames\RxIndicatorExplicitExtFrame.cs" />
     <Compile Include="Frames\RxIndicatorExtFrame.cs" />
     <Compile Include="Frames\TransmitOptions.cs" />
@@ -102,7 +104,7 @@
     <Compile Include="FramePayload.cs" />
     <Compile Include="FrameReceivedEventArgs.cs" />
     <Compile Include="FrameSerializer.cs" />
-    <Compile Include="Frames\AtCommandFrameContent.cs" />
+    <Compile Include="Frames\AtCommandFrame.cs" />
     <Compile Include="Frames\AtCommandResponseFrame.cs" />
     <Compile Include="FrameType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
