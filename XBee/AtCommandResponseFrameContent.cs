@@ -30,6 +30,8 @@ namespace XBee
         [Subtype("AtCommand", "D7", typeof(InputOutputResponseData))]
         [Subtype("AtCommand", "D8", typeof(InputOutputResponseData))]
         [Subtype("AtCommand", "D9", typeof(InputOutputResponseData))]
+        [Subtype("AtCommand", "IC", typeof(PrimitiveResponseData<DigitalSampleChannels>))]
+
 
         public AtCommandResponseFrameData Data { get; set; }
     }
