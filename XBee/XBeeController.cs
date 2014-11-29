@@ -53,9 +53,9 @@ namespace XBee
             await Reset();
 
             /* Unfortunately the protocol changes based on what type of hardware we're using... */
-            AtCommandResponseFrame response =
-                await ExecuteQueryAsync<AtCommandResponseFrame>(new HardwareVersionCommand());
-            ControllerHardwareVersion = ((HardwareVersionResponseData) response.Content.Data).HardwareVersion;
+            HardwareVersionResponseData response =
+                await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand());
+            ControllerHardwareVersion = response.HardwareVersion;
             _connection.CoordinatorHardwareVersion = ControllerHardwareVersion;
         }
 
@@ -110,7 +110,7 @@ namespace XBee
             return ExecuteQueryAsync<TResponseFrame>(frame, DefaultQueryTimeout);
         }
 
-        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrame command,
+        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
             NodeAddress address = null)
             where TResponseData : AtCommandResponseFrameData
         {
@@ -118,12 +118,13 @@ namespace XBee
 
             if (address == null)
             {
-                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
+                var atCommandFrame = new AtCommandFrameContent(command);
+                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame);
                 responseContent = response.Content;
             }
             else
             {
-                var remoteCommand = new RemoteAtCommandFrame(address, command);
+                var remoteCommand = new RemoteAtCommandFrameContent(address, command);
                 RemoteAtCommandResponseFrame response =
                     await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
                 responseContent = response.Content;
@@ -135,18 +136,19 @@ namespace XBee
             return responseContent.Data as TResponseData;
         }
 
-        public async Task ExecuteAtCommandAsync(AtCommandFrame command, NodeAddress address = null)
+        public async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null)
         {
             AtCommandResponseFrameContent responseContent;
 
             if (address == null)
             {
-                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
+                var atCommandFrame = new AtCommandFrameContent(command);
+                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame);
                 responseContent = response.Content;
             }
             else
             {
-                var remoteCommand = new RemoteAtCommandFrame(address, command);
+                var remoteCommand = new RemoteAtCommandFrameContent(address, command);
                 RemoteAtCommandResponseFrame response =
                     await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
                 responseContent = response.Content;
@@ -219,7 +221,9 @@ namespace XBee
 
         public async Task DiscoverNetwork()
         {
-            await ExecuteMultiQueryAsync(new NetworkDiscoveryCommand(), new Action<AtCommandResponseFrame>(
+            var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
+
+            await ExecuteMultiQueryAsync(atCommandFrame, new Action<AtCommandResponseFrame>(
                 frame =>
                 {
                     var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;

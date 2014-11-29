@@ -1,12 +1,12 @@
 ﻿namespace XBee.Frames
 {
-    public class RemoteAtCommandFrame : CommandFrameContent
+    public class RemoteAtCommandFrameContent : CommandFrameContent
     {
-        public RemoteAtCommandFrame()
+        public RemoteAtCommandFrameContent()
         {
         }
 
-        public RemoteAtCommandFrame(NodeAddress address, AtCommandFrame command)
+        public RemoteAtCommandFrameContent(NodeAddress address, AtCommand command)
         {
             LongAddress = address.LongAddress;
 
@@ -23,6 +23,6 @@
 
         public RemoteAtCommandOptions Options { get; set; }
 
-        public AtCommandFrame Command { get; set; }
+        public AtCommand Command { get; set; }
     }
 }

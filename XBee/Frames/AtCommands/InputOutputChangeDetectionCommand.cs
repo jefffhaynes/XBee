@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class InputOutputChangeDetectionCommand : AtCommandFrame
+    public class InputOutputChangeDetectionCommand : AtCommand
     {
         public InputOutputChangeDetectionCommand() : base("IC")
         {

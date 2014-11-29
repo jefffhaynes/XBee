@@ -3,7 +3,7 @@
 namespace XBee.Frames
 {
     [Flags]
-    public enum DigitalSampleChannels : ushort
+    public enum DigitalSampleChannels : byte
     {
         None = 0x0,
         Input0 = 0x1,
@@ -14,11 +14,13 @@ namespace XBee.Frames
         Input5 = 0x20,
         Input6 = 0x40,
         Input7 = 0x80,
-        Input8 = 0x100,
-        Input9 = 0x200,
-        Input10 = 0x400,
-        Input11 = 0x800,
-        Input12 = 0x1000,
-        All = Input0 | Input1 | Input2 | Input3 | Input4 | Input5 | Input6 | Input7 | Input8 | Input9 | Input10 | Input11 | Input12 
+        //Input8 = 0x100,
+        //Input9 = 0x200,
+        //Input10 = 0x400,
+        //Input11 = 0x800,
+        //Input12 = 0x1000,
+        //All = Input0 | Input1 | Input2 | Input3 | Input4 | Input5 | Input6 | Input7 | Input8 | Input9 | Input10 | Input11 | Input12 ,
+
+        All = Input0 | Input1 | Input2 | Input3 | Input4 | Input5 | Input6 | Input7 
     }
 }

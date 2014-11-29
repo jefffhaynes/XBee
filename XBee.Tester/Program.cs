@@ -17,12 +17,12 @@ namespace XBee.Tester
             //    serialConnection.FrameReceived += SerialConnectionOnFrameReceived;
             //    serialConnection.OpenAsync();
 
-            //    var frame = new AtCommandFrame("ND") {FrameId = 1};
+            //    var frame = new AtCommandFrameContent("ND") {FrameId = 1};
             //    serialConnection.Send(frame);
 
             //    Console.ReadKey();
 
-            //    var frame2 = new AtCommandFrame("ND") {FrameId = 2};
+            //    var frame2 = new AtCommandFrameContent("ND") {FrameId = 2};
             //    serialConnection.Send(frame2);
 
 
@@ -74,7 +74,9 @@ namespace XBee.Tester
                 //Console.WriteLine("Ack from '{0}'!", args.Name);
 
                 var changeDetection = await args.Node.GetChangeDetection();
-                
+
+                //var id = await args.Node.GetNodeIdentifier();
+
                 Console.WriteLine(changeDetection);
             };
 

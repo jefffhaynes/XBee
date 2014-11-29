@@ -16,7 +16,7 @@ namespace XBee
 
         public FrameType FrameType { get; set; }
 
-        [Subtype("FrameType", FrameType.AtCommand, typeof(AtCommandFrame))]
+        [Subtype("FrameType", FrameType.AtCommand, typeof(AtCommandFrameContent))]
         [Subtype("FrameType", FrameType.AtCommandResponse, typeof(AtCommandResponseFrame))]
         [Subtype("FrameType", FrameType.TxRequest, typeof(TxRequestFrame))]
         [Subtype("FrameType", FrameType.TxRequestExt, typeof(TxRequestExtFrame))]
@@ -28,7 +28,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.RxIndicatorExt, typeof(RxIndicatorExtFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorExplicitExt, typeof(RxIndicatorExplicitExtFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorSampleExt, typeof(RxIndicatorSampleExtFrame))]
-        [Subtype("FrameType", FrameType.RemoteAtCommand, typeof(RemoteAtCommandFrame))]
+        [Subtype("FrameType", FrameType.RemoteAtCommand, typeof(RemoteAtCommandFrameContent))]
         [Subtype("FrameType", FrameType.RemoteAtCommandResponse, typeof(RemoteAtCommandResponseFrame))]
         public FrameContent Content { get; set; }
     }

@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class EncryptionEnableCommand : AtCommandFrame
+    public class EncryptionEnableCommand : AtCommand
     {
         public EncryptionEnableCommand() : base("EE")
         {

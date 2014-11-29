@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class ForceSampleCommand : AtCommandFrame
+    public class ForceSampleCommand : AtCommand
     {
         public ForceSampleCommand() : base("IS")
         {

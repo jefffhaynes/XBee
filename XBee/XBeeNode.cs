@@ -124,13 +124,13 @@ namespace XBee
             await ExecuteAtCommandAsync(new WriteCommand());
         }
 
-        private async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrame command)
+        private async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
             where TResponseData : AtCommandResponseFrameData
         {
             return await _controller.ExecuteAtQueryAsync<TResponseData>(command, Address);
         }
 
-        private async Task ExecuteAtCommandAsync(AtCommandFrame command)
+        private async Task ExecuteAtCommandAsync(AtCommand command)
         {
             await _controller.ExecuteAtCommandAsync(command, Address);
         }
