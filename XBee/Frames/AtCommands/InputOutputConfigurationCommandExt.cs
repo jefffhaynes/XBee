@@ -1,16 +1,15 @@
-﻿using System;
-using BinarySerialization;
+﻿using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class InputOutputConfigurationCommand : AtCommand
+    public class InputOutputConfigurationCommandExt : AtCommand
     {
-        public InputOutputConfigurationCommand(InputOutputChannel channel) :
+        public InputOutputConfigurationCommandExt(InputOutputChannel channel) :
             base(string.Format("D{0}", (int)channel))
         {
         }
 
-        public InputOutputConfigurationCommand(InputOutputChannel channel, 
+        public InputOutputConfigurationCommandExt(InputOutputChannel channel, 
             InputOutputConfiguration configuration) : this(channel)
         {
             Configuration = configuration;
@@ -20,7 +19,7 @@ namespace XBee.Frames.AtCommands
         public InputOutputConfiguration? Configuration
         {
             get { return Parameter as InputOutputConfiguration?; }
-            set { Parameter = Convert.ToByte(value); }
+            set { Parameter = value; }
         }
     }
 }

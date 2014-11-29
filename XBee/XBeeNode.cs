@@ -71,7 +71,10 @@ namespace XBee
 
         public async Task SetInputOutputConfiguration(InputOutputChannel channel, InputOutputConfiguration configuration)
         {
-            await ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
+            if (_controller.ControllerHardwareVersion == HardwareVersion.XBeePro900 ||
+                _controller.ControllerHardwareVersion == HardwareVersion.XBeePro900HP)
+                await ExecuteAtCommandAsync(new InputOutputConfigurationCommandExt(channel, configuration));
+            else await ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
         }
 
         public async Task<DigitalSampleChannels> GetChangeDetection()

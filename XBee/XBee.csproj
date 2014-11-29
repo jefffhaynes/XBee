@@ -68,6 +68,8 @@
     <Compile Include="Frames\AtCommandResponseFrameData.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableCommandExt.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableCommand.cs" />
+    <Compile Include="Frames\AtCommands\InputOutputConfigurationCommandExt.cs" />
+    <Compile Include="Frames\AtCommands\InputOutputConfigurationResponseData.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableStateExt.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableState.cs" />
     <Compile Include="Frames\AtCommands\DeviceType.cs" />

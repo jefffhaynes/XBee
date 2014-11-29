@@ -35,16 +35,16 @@ namespace XBee.Frames
             ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input6)]
         [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input7,
             ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input7)]
-        //[SerializeWhen("DigitalChannels", DigitalSampleChannels.Input8,
-        //    ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input8)]
-        //[SerializeWhen("DigitalChannels", DigitalSampleChannels.Input9,
-        //    ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input9)]
-        //[SerializeWhen("DigitalChannels", DigitalSampleChannels.Input10,
-        //    ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input10)]
-        //[SerializeWhen("DigitalChannels", DigitalSampleChannels.Input11,
-        //    ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input11)]
-        //[SerializeWhen("DigitalChannels", DigitalSampleChannels.Input12,
-        //    ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input12)]
+        [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input8,
+            ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input8)]
+        [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input9,
+            ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input9)]
+        [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input10,
+            ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input10)]
+        [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input11,
+            ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input11)]
+        [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input12,
+            ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input12)]
         public DigitalSampleState DigitalSampleState { get; set; }
 
 
