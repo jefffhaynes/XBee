@@ -70,6 +70,7 @@
     <Compile Include="Frames\AtCommands\CoordinatorEnableStateExt.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableState.cs" />
     <Compile Include="Frames\AtCommands\DeviceType.cs" />
+    <Compile Include="Frames\AtCommands\EncryptionEnableCommand.cs" />
     <Compile Include="Frames\AtCommands\EncryptionKeyCommand.cs" />
     <Compile Include="Frames\AtCommands\ForceSampleCommand.cs" />
     <Compile Include="Frames\AtCommands\InputOutputChangeDetectionCommand.cs" />

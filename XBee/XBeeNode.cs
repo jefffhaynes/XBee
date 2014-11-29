@@ -103,6 +103,17 @@ namespace XBee
             await ExecuteAtCommandAsync(new SampleRateCommand(interval));
         }
 
+        public async Task<bool> IsEncryptionEnabled()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new EncryptionEnableCommand());
+            return response.Value;
+        }
+
+        public async Task SetEncryptionEnabled(bool enabled)
+        {
+            await ExecuteAtCommandAsync(new EncryptionEnableCommand(enabled));
+        }
+
         public async Task SetEncryptionKey(byte[] key)
         {
             await ExecuteAtCommandAsync(new EncryptionKeyCommand(key));
