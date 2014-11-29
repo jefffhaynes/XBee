@@ -9,6 +9,11 @@ namespace XBee.Frames.AtCommands
         {
         }
 
+        public SampleRateCommand(TimeSpan interval) : this()
+        {
+            Interval = interval;
+        }
+
         [Ignore]
         public TimeSpan Interval
         {
@@ -23,7 +28,12 @@ namespace XBee.Frames.AtCommands
 
             set
             {
-                Parameter = value.TotalMilliseconds;
+                var interval = value.TotalMilliseconds;
+
+                if(interval > ushort.MaxValue)
+                    throw new ArgumentOutOfRangeException("value", interval, "Must be less than 0xFFFF");
+
+                Parameter = interval;
             }
         }
     }
