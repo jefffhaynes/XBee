@@ -8,11 +8,11 @@
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for XBee wireless controllers</description>
-    <releaseNotes>Basic sampling support added.</releaseNotes>
+    <releaseNotes>Breaking changes to handling AT commands but they are now functioning.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>XBee Wireless</tags>
     <dependencies>
-      <dependency id="BinarySerializer" version="2.4" />
+      <dependency id="BinarySerializer" version="2.6" />
     </dependencies>
   </metadata>
 </package>
