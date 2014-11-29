@@ -4,11 +4,11 @@ namespace XBee
 {
     public class FrameContext
     {
-        public FrameContext(HardwareVersion? coordinatorHardwareVersion)
+        public FrameContext(HardwareVersion? controllerHardwareVersion)
         {
-            CoordinatorHardwareVersion = coordinatorHardwareVersion;
+            ControllerHardwareVersion = controllerHardwareVersion;
         }
 
-        public HardwareVersion? CoordinatorHardwareVersion { get; private set; }
+        public HardwareVersion? ControllerHardwareVersion { get; private set; }
     }
 }

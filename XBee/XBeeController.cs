@@ -63,7 +63,7 @@ namespace XBee
 
         public XBeeNode GetRemote(LongAddress address)
         {
-            return new XBeeNode(this, address);
+            return new XBeeNode(this);
         }
 
         public void Execute(FrameContent frame)
@@ -111,19 +111,19 @@ namespace XBee
         }
 
         public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrame command,
-            LongAddress device = null)
+            NodeAddress address = null)
             where TResponseData : AtCommandResponseFrameData
         {
             AtCommandResponseFrameContent responseContent;
 
-            if (device == null)
+            if (address == null)
             {
                 AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
                 responseContent = response.Content;
             }
             else
             {
-                var remoteCommand = new RemoteAtCommandFrame(device, command);
+                var remoteCommand = new RemoteAtCommandFrame(address, command);
                 RemoteAtCommandResponseFrame response =
                     await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
                 responseContent = response.Content;
@@ -135,18 +135,18 @@ namespace XBee
             return responseContent.Data as TResponseData;
         }
 
-        public async Task ExecuteAtCommandAsync(AtCommandFrame command, LongAddress device = null)
+        public async Task ExecuteAtCommandAsync(AtCommandFrame command, NodeAddress address = null)
         {
             AtCommandResponseFrameContent responseContent;
 
-            if (device == null)
+            if (address == null)
             {
                 AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
                 responseContent = response.Content;
             }
             else
             {
-                var remoteCommand = new RemoteAtCommandFrame(device, command);
+                var remoteCommand = new RemoteAtCommandFrame(address, command);
                 RemoteAtCommandResponseFrame response =
                     await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
                 responseContent = response.Content;
@@ -226,7 +226,7 @@ namespace XBee
 
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
                     {
-                        var node = new XBeeNode(this, discoveryData.LongAddress);
+                        var node = new XBeeNode(this, new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress));
 
                         NodeDiscovered(this,
                             new NodeDiscoveredEventArgs(discoveryData.Name,

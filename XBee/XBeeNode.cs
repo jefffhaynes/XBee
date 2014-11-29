@@ -9,13 +9,13 @@ namespace XBee
     {
         private readonly XBeeController _controller;
 
-        internal XBeeNode(XBeeController controller, LongAddress address = null)
+        internal XBeeNode(XBeeController controller, NodeAddress address = null)
         {
             _controller = controller;
             Address = address;
         }
 
-        public LongAddress Address { get; private set; }
+        public NodeAddress Address { get; set; }
 
         public async Task<string> GetNodeIdentifier()
         {

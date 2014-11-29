@@ -1,9 +1,8 @@
 ﻿using System;
 using BinarySerialization;
-using XBee.Frames;
 using XBee.Frames.AtCommands;
 
-namespace XBee
+namespace XBee.Frames
 {
     public class AtCommandResponseFrameContent
     {

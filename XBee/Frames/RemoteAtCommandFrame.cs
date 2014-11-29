@@ -6,16 +6,18 @@
         {
         }
 
-        public RemoteAtCommandFrame(LongAddress destination, AtCommandFrame command)
+        public RemoteAtCommandFrame(NodeAddress address, AtCommandFrame command)
         {
-            Destination = destination;
+            LongAddress = address.LongAddress;
+
+            ShortAddress = address.ShortAddress;
 
             Options = RemoteAtCommandOptions.Commit;
 
             Command = command;
         }
 
-        public LongAddress Destination { get; set; }
+        public LongAddress LongAddress { get; set; }
 
         public ShortAddress ShortAddress { get; set; }
 

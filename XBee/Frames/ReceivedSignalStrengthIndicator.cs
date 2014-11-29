@@ -1,6 +1,6 @@
 ﻿using BinarySerialization;
 
-namespace XBee
+namespace XBee.Frames
 {
     public class ReceivedSignalStrengthIndicator
     {

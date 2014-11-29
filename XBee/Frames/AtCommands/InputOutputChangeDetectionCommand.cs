@@ -1,4 +1,6 @@
-﻿namespace XBee.Frames.AtCommands
+﻿using BinarySerialization;
+
+namespace XBee.Frames.AtCommands
 {
     public class InputOutputChangeDetectionCommand : AtCommandFrame
     {
@@ -11,6 +13,7 @@
             Channels = channels;
         }
 
+        [Ignore]
         public DigitalSampleChannels? Channels
         {
             get { return Parameter as DigitalSampleChannels?; }

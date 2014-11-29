@@ -1,4 +1,4 @@
-﻿namespace XBee
+﻿namespace XBee.Frames
 {
     public class RemoteAtCommandResponseFrame : CommandResponseFrameContent
     {

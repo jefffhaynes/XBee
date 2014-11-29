@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AtCommandResponseFrameContent.cs" />
+    <Compile Include="Frames\AtCommandResponseFrameContent.cs" />
     <Compile Include="Converters\BitCountingConverter.cs" />
     <Compile Include="Converters\BitwiseAndConverter.cs" />
     <Compile Include="DataReceivedEventArgs.cs" />
@@ -117,9 +117,10 @@
     <Compile Include="Frames\TxStatusFrame.cs" />
     <Compile Include="Frames\TxStatusExtFrame.cs" />
     <Compile Include="ModemStatus.cs" />
+    <Compile Include="NodeAddress.cs" />
     <Compile Include="NodeDiscoveredEventArgs.cs" />
-    <Compile Include="ReceivedSignalStrengthIndicator.cs" />
-    <Compile Include="RemoteAtCommandResponseFrame.cs" />
+    <Compile Include="Frames\ReceivedSignalStrengthIndicator.cs" />
+    <Compile Include="Frames\RemoteAtCommandResponseFrame.cs" />
     <Compile Include="SampleReceivedEventArgs.cs" />
     <Compile Include="SignalStrength.cs" />
     <Compile Include="LongAddress.cs" />
