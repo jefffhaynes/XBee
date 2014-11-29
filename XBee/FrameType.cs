@@ -23,7 +23,7 @@
         RxIndicatorExplicitExt = 0x91,
         RxIndicatorSampleExt = 0x92,
         NodeIdentificationIndicator = 0x95,
-        RemoteCommandResponse = 0x97,
+        RemoteAtCommandResponse = 0x97,
         FirmwareUpdateStatus = 0xa0,
         RouteRecordIndicator = 0xa1,
         ManytooneRouteRequestIndicator = 0xa3,

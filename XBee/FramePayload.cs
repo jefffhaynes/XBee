@@ -29,6 +29,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.RxIndicatorExplicitExt, typeof(RxIndicatorExplicitExtFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorSampleExt, typeof(RxIndicatorSampleExtFrame))]
         [Subtype("FrameType", FrameType.RemoteAtCommand, typeof(RemoteAtCommandFrame))]
+        [Subtype("FrameType", FrameType.RemoteAtCommandResponse, typeof(RemoteAtCommandResponseFrame))]
         public FrameContent Content { get; set; }
     }
 }
