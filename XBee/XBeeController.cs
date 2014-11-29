@@ -98,15 +98,28 @@ namespace XBee
             return ExecuteQueryAsync<TResponseFrame>(frame, DefaultQueryTimeout);
         }
 
-        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrame command)
+        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrame command, LongAddress device = null)
             where TResponseData : AtCommandResponseFrameData
         {
-            AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
+            AtCommandResponseFrameContent responseContent;
 
-            if (response.Content.Status != AtCommandStatus.Success)
-                throw new AtCommandException(response.Content.Status);
+            if (device == null)
+            {
+                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(command);
+                responseContent = response.Content;
+            }
+            else
+            {
+                var remoteCommand = new RemoteAtCommandFrame(device, command);
+                RemoteAtCommandResponseFrame response = 
+                    await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
+                responseContent = response.Content;
+            }
 
-            return response.Content.Data as TResponseData;
+            if (responseContent.Status != AtCommandStatus.Success)
+                throw new AtCommandException(responseContent.Status);
+
+            return responseContent.Data as TResponseData;
         }
 
         public async Task ExecuteAtCommandAsync(AtCommandFrame command, LongAddress device = null)
