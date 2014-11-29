@@ -28,7 +28,12 @@ namespace XBee
         private byte _frameId = byte.MinValue;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
-        public HardwareVersion CoordinatorHardwareVersion { get; private set; }
+        public XBeeController()
+        {
+            Local = new XBeeNode(this);
+        }
+
+        public HardwareVersion ControllerHardwareVersion { get; private set; }
 
         public void Dispose()
         {
@@ -50,8 +55,15 @@ namespace XBee
             /* Unfortunately the protocol changes based on what type of hardware we're using... */
             AtCommandResponseFrame response =
                 await ExecuteQueryAsync<AtCommandResponseFrame>(new HardwareVersionCommand());
-            CoordinatorHardwareVersion = ((HardwareVersionResponseData) response.Content.Data).HardwareVersion;
-            _connection.CoordinatorHardwareVersion = CoordinatorHardwareVersion;
+            ControllerHardwareVersion = ((HardwareVersionResponseData) response.Content.Data).HardwareVersion;
+            _connection.CoordinatorHardwareVersion = ControllerHardwareVersion;
+        }
+
+        public XBeeNode Local { get; private set; }
+
+        public XBeeNode GetRemote(LongAddress address)
+        {
+            return new XBeeNode(this, address);
         }
 
         public void Execute(FrameContent frame)
@@ -98,7 +110,8 @@ namespace XBee
             return ExecuteQueryAsync<TResponseFrame>(frame, DefaultQueryTimeout);
         }
 
-        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrame command, LongAddress device = null)
+        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommandFrame command,
+            LongAddress device = null)
             where TResponseData : AtCommandResponseFrameData
         {
             AtCommandResponseFrameContent responseContent;
@@ -111,7 +124,7 @@ namespace XBee
             else
             {
                 var remoteCommand = new RemoteAtCommandFrame(device, command);
-                RemoteAtCommandResponseFrame response = 
+                RemoteAtCommandResponseFrame response =
                     await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
                 responseContent = response.Content;
             }
@@ -178,8 +191,8 @@ namespace XBee
 
         public async Task TransmitDataAsync(LongAddress address, byte[] data)
         {
-            if (CoordinatorHardwareVersion == HardwareVersion.XBeeSeries1 ||
-                CoordinatorHardwareVersion == HardwareVersion.XBeeProSeries1)
+            if (ControllerHardwareVersion == HardwareVersion.XBeeSeries1 ||
+                ControllerHardwareVersion == HardwareVersion.XBeeProSeries1)
             {
                 var transmitRequest = new TxRequestFrame(address, data);
                 TxStatusFrame response = await ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
@@ -212,13 +225,18 @@ namespace XBee
                     var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
 
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
-                        NodeDiscovered(this, new NodeDiscoveredEventArgs(discoveryData.LongAddress,
-                            discoveryData.Name, discoveryData.ReceivedSignalStrengthIndicator.SignalStrength));
+                    {
+                        var node = new XBeeNode(this, discoveryData.LongAddress);
+
+                        NodeDiscovered(this,
+                            new NodeDiscoveredEventArgs(discoveryData.Name,
+                                discoveryData.ReceivedSignalStrengthIndicator.SignalStrength,
+                                node));
+                    }
                 }), NetworkDiscoveryTimeout);
         }
 
-
-        public async Task Reset()
+        internal async Task Reset()
         {
             _modemResetTaskCompletionSource = new TaskCompletionSource<ModemStatus>();
             await ExecuteAtCommandAsync(new ResetCommand());
@@ -231,81 +249,6 @@ namespace XBee
 
             delayCancellationTokenSource.Cancel();
             _modemResetTaskCompletionSource = null;
-        }
-
-        public async Task<bool> IsCoordinator()
-        {
-            CoordinatorEnableResponseData response;
-            if (CoordinatorHardwareVersion == HardwareVersion.XBeePro900HP)
-                response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommandExt());
-            else response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
-
-            if (response.EnableState != null)
-                return response.EnableState.Value == CoordinatorEnableState.Coordinator;
-
-            if (response.EnableStateExt != null)
-                return response.EnableStateExt.Value == CoordinatorEnableStateExt.NonRoutingCoordinator;
-
-            throw new InvalidOperationException("No coordinator state returned.");
-        }
-
-        public async Task SetCoordinator(bool enable)
-        {
-            if (CoordinatorHardwareVersion == HardwareVersion.XBeePro900HP)
-                await ExecuteAtCommandAsync(new CoordinatorEnableCommandExt(enable));
-            else await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
-        }
-
-        public async Task<string> GetNodeIdentification()
-        {
-            NodeIdentifierResponseData response =
-                await ExecuteAtQueryAsync<NodeIdentifierResponseData>(new NodeIdentifierCommand());
-            return response.Id;
-        }
-
-        public async Task SetNodeIdentifier(string id)
-        {
-            await ExecuteAtCommandAsync(new NodeIdentifierCommand(id));
-        }
-
-        public async Task<LongAddress> GetSerialNumber()
-        {
-            PrimitiveResponseData<uint> highAddress =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberHighCommand());
-            PrimitiveResponseData<uint> lowAddress =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberLowCommand());
-
-            return new LongAddress(highAddress.Value, lowAddress.Value);
-        }
-
-        public async Task<InputOutputState> GetInputOutputState(InputOutputChannel channel)
-        {
-            InputOutputResponseData response =
-                await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputCommand(channel));
-            return response.State;
-        }
-
-        public async Task SetInputOutputState(InputOutputChannel channel, InputOutputState state)
-        {
-            await ExecuteAtCommandAsync(new InputOutputCommand(channel, state));
-        }
-
-        public async Task<DigitalSampleChannels> GetChangeDetection()
-        {
-            InputOutputChangeDetectionResponseData response =
-                await ExecuteAtQueryAsync<InputOutputChangeDetectionResponseData>(
-                        new InputOutputChangeDetectionCommand());
-            return response.Channels;
-        }
-
-        public async Task SetChangeDetection(DigitalSampleChannels channels)
-        {
-            await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
-        }
-
-        public async Task WriteChanges()
-        {
-            await ExecuteAtCommandAsync(new WriteCommand());
         }
 
         private void OnFrameReceived(object sender, FrameReceivedEventArgs e)

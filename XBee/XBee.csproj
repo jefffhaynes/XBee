@@ -136,6 +136,7 @@
     <Compile Include="SerialConnection.cs" />
     <Compile Include="StartDelimiter.cs" />
     <Compile Include="XBeeException.cs" />
+    <Compile Include="XBeeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nuget\XBee.dll.nuspec" />

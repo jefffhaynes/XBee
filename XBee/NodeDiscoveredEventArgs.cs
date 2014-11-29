@@ -4,17 +4,17 @@ namespace XBee
 {
     public class NodeDiscoveredEventArgs : EventArgs
     {
-        public NodeDiscoveredEventArgs(LongAddress address, string name, SignalStrength signalStrength)
+        public NodeDiscoveredEventArgs(string name, SignalStrength signalStrength, XBeeNode node)
         {
-            Address = address;
             Name = name;
             SignalStrength = signalStrength;
+            Node = node;
         }
-
-        public LongAddress Address { get; private set; }
 
         public string Name { get; private set; }
 
         public SignalStrength SignalStrength { get; private set; }
+
+        public XBeeNode Node { get; private set; }
     }
 }

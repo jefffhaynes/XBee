@@ -8,13 +8,13 @@ namespace XBee.Frames.AtCommands
 
         public LongAddress LongAddress { get; set; }
 
-        [SerializeWhen("CoordinatorHardwareVersion", HardwareVersion.XBeeSeries1, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
-        [SerializeWhen("CoordinatorHardwareVersion", HardwareVersion.XBeeProSeries1, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeSeries1, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProSeries1, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
         public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
 
         public string Name { get; set; }
 
-        [SerializeWhen("CoordinatorHardwareVersion", HardwareVersion.XBeePro900HP, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900HP, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
         public NetworkDiscoveryResponseDataExtendedInfo ExtendedInfo { get; set; }
 
         [Ignore]
