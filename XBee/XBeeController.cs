@@ -290,6 +290,19 @@ namespace XBee
             await ExecuteAtCommandAsync(new InputOutputCommand(channel, state));
         }
 
+        public async Task<DigitalSampleChannels> GetChangeDetection()
+        {
+            InputOutputChangeDetectionResponseData response =
+                await ExecuteAtQueryAsync<InputOutputChangeDetectionResponseData>(
+                        new InputOutputChangeDetectionCommand());
+            return response.Channels;
+        }
+
+        public async Task SetChangeDetection(DigitalSampleChannels channels)
+        {
+            await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
+        }
+
         public async Task WriteChanges()
         {
             await ExecuteAtCommandAsync(new WriteCommand());
