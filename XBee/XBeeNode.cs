@@ -62,16 +62,16 @@ namespace XBee
             else await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
         }
 
-        public async Task<InputOutputState> GetInputOutputState(InputOutputChannel channel)
+        public async Task<InputOutputConfiguration> GetInputOutputConfiguration(InputOutputChannel channel)
         {
             InputOutputResponseData response =
-                await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputCommand(channel));
+                await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputConfigurationCommand(channel));
             return response.Value;
         }
 
-        public async Task SetInputOutputState(InputOutputChannel channel, InputOutputState state)
+        public async Task SetInputOutputConfiguration(InputOutputChannel channel, InputOutputConfiguration configuration)
         {
-            await ExecuteAtCommandAsync(new InputOutputCommand(channel, state));
+            await ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
         }
 
         public async Task<DigitalSampleChannels> GetChangeDetection()

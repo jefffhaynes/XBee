@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public enum InputOutputState : byte
+    public enum InputOutputConfiguration : byte
     {
         Disabled = 0x0,
         Special = 0x1,

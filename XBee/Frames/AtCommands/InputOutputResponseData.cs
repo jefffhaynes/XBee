@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class InputOutputResponseData : PrimitiveResponseData<InputOutputState>
+    public class InputOutputResponseData : PrimitiveResponseData<InputOutputConfiguration>
     {
     }
 }

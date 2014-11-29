@@ -57,7 +57,7 @@ namespace XBee.Tester
             //name = await _xbee.GetNodeIdentification();
 
             //var serialNumber = await _xbee.GetSerialNumber();
-            //Discover();
+            Discover();
         }
 
         private static async void Discover()
@@ -73,7 +73,9 @@ namespace XBee.Tester
                 //await _xbee.TransmitDataAsync(args.Address, Encoding.ASCII.GetBytes("Hello!"));
                 //Console.WriteLine("Ack from '{0}'!", args.Name);
 
-
+                var changeDetection = await args.Node.GetChangeDetection();
+                
+                Console.WriteLine(changeDetection);
             };
 
             await _xbee.DiscoverNetwork();

@@ -75,12 +75,12 @@
     <Compile Include="Frames\AtCommands\ForceSampleCommand.cs" />
     <Compile Include="Frames\AtCommands\InputOutputChangeDetectionCommand.cs" />
     <Compile Include="Frames\AtCommands\InputOutputChannel.cs" />
-    <Compile Include="Frames\AtCommands\InputOutputCommand.cs" />
+    <Compile Include="Frames\AtCommands\InputOutputConfigurationCommand.cs" />
     <Compile Include="Frames\AtCommands\HardwareVersion.cs" />
     <Compile Include="Frames\AtCommands\HardwareVersionCommand.cs" />
     <Compile Include="Frames\AtCommands\HardwareVersionResponseData.cs" />
     <Compile Include="Frames\AtCommands\InputOutputResponseData.cs" />
-    <Compile Include="Frames\AtCommands\InputOutputState.cs" />
+    <Compile Include="Frames\AtCommands\InputOutputConfiguration.cs" />
     <Compile Include="Frames\AtCommands\NetworkDiscoveryCommand.cs" />
     <Compile Include="Frames\AtCommands\NetworkDiscoveryResponseData.cs" />
     <Compile Include="Frames\AtCommands\NetworkDiscoveryResponseDataExtendedInfo.cs" />
