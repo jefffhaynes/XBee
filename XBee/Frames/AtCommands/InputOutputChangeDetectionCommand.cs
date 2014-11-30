@@ -1,4 +1,5 @@
-﻿using BinarySerialization;
+﻿using System;
+using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
@@ -17,7 +18,7 @@ namespace XBee.Frames.AtCommands
         public DigitalSampleChannels? Channels
         {
             get { return Parameter as DigitalSampleChannels?; }
-            set { Parameter = value; }
+            set { Parameter = Convert.ToByte(value); }
         }
     }
 }

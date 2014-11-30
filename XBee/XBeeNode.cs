@@ -42,22 +42,17 @@ namespace XBee
         public async Task<bool> IsCoordinator()
         {
             CoordinatorEnableResponseData response;
-            if (_controller.ControllerHardwareVersion == HardwareVersion.XBeePro900HP)
+
+            if (Is900Series)
                 response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommandExt());
             else response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
 
-            if (response.EnableState != null)
-                return response.EnableState.Value == CoordinatorEnableState.Coordinator;
-
-            if (response.EnableStateExt != null)
-                return response.EnableStateExt.Value == CoordinatorEnableStateExt.NonRoutingCoordinator;
-
-            throw new InvalidOperationException("No coordinator state returned.");
+            return response.IsCoordinator;
         }
 
         public async Task SetCoordinator(bool enable)
         {
-            if (_controller.ControllerHardwareVersion == HardwareVersion.XBeePro900HP)
+            if (Is900Series)
                 await ExecuteAtCommandAsync(new CoordinatorEnableCommandExt(enable));
             else await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
         }
@@ -71,23 +66,29 @@ namespace XBee
 
         public async Task SetInputOutputConfiguration(InputOutputChannel channel, InputOutputConfiguration configuration)
         {
-            if (_controller.ControllerHardwareVersion == HardwareVersion.XBeePro900 ||
-                _controller.ControllerHardwareVersion == HardwareVersion.XBeePro900HP)
-                await ExecuteAtCommandAsync(new InputOutputConfigurationCommandExt(channel, configuration));
-            else await ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
+            await ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
         }
 
         public async Task<DigitalSampleChannels> GetChangeDetection()
         {
-            PrimitiveResponseData<DigitalSampleChannels> response =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<DigitalSampleChannels>>(
+            InputOutputChangeDetectionResponseData response =
+                await ExecuteAtQueryAsync<InputOutputChangeDetectionResponseData>(
                     new InputOutputChangeDetectionCommand());
-            return response.Value;
+
+            if (response.Channels != null)
+                return response.Channels.Value;
+
+            if (response.ChannelsExt != null)
+                return response.ChannelsExt.Value;
+
+            throw new InvalidOperationException("No channels returned.");
         }
 
         public async Task SetChangeDetection(DigitalSampleChannels channels)
         {
-            await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
+            if (Is900Series)
+                await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
+            else await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
         }
 
         public async Task ForceSample()
@@ -136,6 +137,15 @@ namespace XBee
         private async Task ExecuteAtCommandAsync(AtCommand command)
         {
             await _controller.ExecuteAtCommandAsync(command, Address);
+        }
+
+        private bool Is900Series
+        {
+            get
+            {
+                return _controller.ControllerHardwareVersion == HardwareVersion.XBeePro900 ||
+                       _controller.ControllerHardwareVersion == HardwareVersion.XBeePro900HP;
+            }
         }
     }
 }
