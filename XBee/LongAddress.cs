@@ -31,7 +31,7 @@ namespace XBee
             set
             {
                 High = (uint)((value & 0xFFFFFFFF00000000UL) >> 32);
-                Low = (uint)(Value & 0x00000000FFFFFFFFUL);
+                Low = (uint)(value & 0x00000000FFFFFFFFUL);
             }
         }
 

@@ -58,8 +58,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="FrameTest.cs" />
+    <Compile Include="FrameTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LongAddressTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XBee\XBee.csproj">

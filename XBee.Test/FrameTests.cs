@@ -6,7 +6,7 @@ using XBee.Frames.AtCommands;
 namespace XBee.Test
 {
     [TestClass]
-    public class FrameTest
+    public class FrameTests
     {
         private readonly FrameSerializer _frameSerializer = new FrameSerializer();
 
@@ -27,15 +27,15 @@ namespace XBee.Test
             }
         }
 
-        //[TestMethod]
-        //public void AtCommandFrameTest()
-        //{
-        //    var atCommandFrame = new AtCommandFrameContent("NH") {FrameId = 0x52};
+        [TestMethod]
+        public void AtCommandFrameTest()
+        {
+            var atCommandFrame = new AtCommandFrameContent(new ForceSampleCommand()) { FrameId = 0x52 };
 
-        //    var expectedValue = new byte[] { 0x7e, 0x00, 0x04, 0x08, 0x52, 0x4e, 0x48, 0x0f };
+            var expectedValue = new byte[] { 0x7e, 0x00, 0x04, 0x08, 0x52, 0x49, 0x53, 0x09 };
 
-        //    Check(atCommandFrame, expectedValue);
-        //}
+            Check(atCommandFrame, expectedValue);
+        }
 
         [TestMethod]
         public void AtCommandResponseFrameTest()
@@ -82,26 +82,26 @@ namespace XBee.Test
             Check(txStatusFrame, expectedValue);
         }
 
-        //[TestMethod]
-        //public void AtCommand_CoordinatorEnable_FrameTest()
-        //{
-        //    var atCommandFrame = new CoordinatorEnableCommand { FrameId = 0x33 };
+        [TestMethod]
+        public void AtCommand_CoordinatorEnable_FrameTest()
+        {
+            var atCommandFrame = new AtCommandFrameContent(new CoordinatorEnableCommand()) { FrameId = 0x33 };
 
-        //    var expectedValue = new byte[] { 0x7e, 0x00, 0x04, 0x08, 0x33, 0x43, 0x45, 0x3c };
+            var expectedValue = new byte[] { 0x7e, 0x00, 0x04, 0x08, 0x33, 0x43, 0x45, 0x3c };
 
-        //    Check(atCommandFrame, expectedValue);
-        //}
+            Check(atCommandFrame, expectedValue);
+        }
 
 
-        //[TestMethod]
-        //public void AtCommand_CoordinatorEnableWithParam_FrameTest()
-        //{
-        //    var atCommandFrame = new CoordinatorEnableCommand(true) { FrameId = 0x33 };
+        [TestMethod]
+        public void AtCommand_CoordinatorEnableWithParam_FrameTest()
+        {
+            var atCommandFrame = new AtCommandFrameContent(new CoordinatorEnableCommand(true)) { FrameId = 0x33 };
 
-        //    var expectedValue = new byte[] { 0x7e, 0x00, 0x05, 0x08, 0x33, 0x43, 0x45, 0x1, 0x3b };
+            var expectedValue = new byte[] { 0x7e, 0x00, 0x05, 0x08, 0x33, 0x43, 0x45, 0x1, 0x3b };
 
-        //    Check(atCommandFrame, expectedValue);
-        //}
+            Check(atCommandFrame, expectedValue);
+        }
 
         [TestMethod]
         public void RxIndicatorSampleFrameTest()
