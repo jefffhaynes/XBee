@@ -66,6 +66,8 @@
     <Compile Include="CommandFrameContent.cs" />
     <Compile Include="FrameContext.cs" />
     <Compile Include="Frames\AtCommandResponseFrameData.cs" />
+    <Compile Include="Frames\AtCommands\DestinationAddressHighCommand.cs" />
+    <Compile Include="Frames\AtCommands\DestinationAddressLowCommand.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableCommandExt.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableCommand.cs" />
     <Compile Include="Frames\AtCommands\InputOutputChangeDetectionCommandExt.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Frames\AtCommands\SampleRateResponseData.cs" />
     <Compile Include="Frames\AtCommands\SerialNumberLowCommand.cs" />
     <Compile Include="Frames\AtCommands\SerialNumberHighCommand.cs" />
+    <Compile Include="Frames\AtCommands\SourceAddressCommand.cs" />
     <Compile Include="Frames\AtCommands\WriteCommand.cs" />
     <Compile Include="Frames\RemoteAtCommandFrameContent.cs" />
     <Compile Include="Frames\DeliveryStatus.cs" />

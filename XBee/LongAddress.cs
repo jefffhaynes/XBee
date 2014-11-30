@@ -1,5 +1,6 @@
 ﻿
 using System;
+using BinarySerialization;
 
 namespace XBee
 {
@@ -19,10 +20,26 @@ namespace XBee
 
         public LongAddress(uint high, uint low)
         {
-            Value = ((ulong) high << 32) + low;
+            High = high;
+            Low = low;
         }
 
-        public ulong Value { get; set; }
+        public ulong Value
+        {
+            get { return ((ulong)High << 32) + Low; }
+
+            set
+            {
+                High = (uint)((value & 0xFFFFFFFF00000000UL) >> 32);
+                Low = (uint)(Value & 0x00000000FFFFFFFFUL);
+            }
+        }
+
+        [Ignore]
+        public uint High { get; set; }
+
+        [Ignore]
+        public uint Low { get; set; }
 
         public bool Equals(LongAddress other)
         {

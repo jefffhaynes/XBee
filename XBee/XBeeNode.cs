@@ -29,6 +29,34 @@ namespace XBee
             await ExecuteAtCommandAsync(new NodeIdentifierCommand(id));
         }
 
+        public async Task<NodeAddress> GetAddress()
+        {
+            var high = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
+            var low = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand());
+
+            var address = new LongAddress(high.Value, low.Value);
+
+            if (Is900Series)
+                return new NodeAddress(address);
+
+            var source = await ExecuteAtQueryAsync<PrimitiveResponseData<ShortAddress>>(new SourceAddressCommand());
+
+            return new NodeAddress(address, source.Value);
+        }
+
+        public async Task SetAddress(LongAddress address)
+        {
+            await ExecuteAtCommandAsync(new DestinationAddressHighCommand(address.High));
+            Address.LongAddress.High = address.High;
+            await ExecuteAtCommandAsync(new DestinationAddressLowCommand(address.Low));
+            Address.LongAddress.Low = address.Low;
+        }
+
+        public async Task SetAddress(ShortAddress address)
+        {
+            await ExecuteAtCommandAsync(new SourceAddressCommand(address));
+        }
+
         public async Task<LongAddress> GetSerialNumber()
         {
             PrimitiveResponseData<uint> highAddress =
