@@ -73,11 +73,16 @@ namespace XBee.Tester
                 //await _xbee.TransmitDataAsync(args.Address, Encoding.ASCII.GetBytes("Hello!"));
                 //Console.WriteLine("Ack from '{0}'!", args.Name);
 
-                var changeDetection = await args.Node.GetChangeDetection();
+                //var changeDetection = await args.Node.GetChangeDetection();
+                //var ee = await args.Node.IsEncryptionEnabled();
 
                 //var id = await args.Node.GetNodeIdentifier();
 
-                Console.WriteLine(changeDetection);
+                var something = await args.Node.GetAddress();
+
+                Console.WriteLine(something);
+
+                //await args.Node.ForceSample();
             };
 
             await _xbee.DiscoverNetwork();

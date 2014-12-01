@@ -1,4 +1,6 @@
-﻿namespace XBee.Frames.AtCommands
+﻿using BinarySerialization;
+
+namespace XBee.Frames.AtCommands
 {
     public class DestinationAddressHighCommand : AtCommand
     {
@@ -11,6 +13,7 @@
             High = high;
         }
 
+        [Ignore]
         public uint? High
         {
             get { return Parameter as uint?; }
