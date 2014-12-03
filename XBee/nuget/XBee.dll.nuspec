@@ -8,7 +8,7 @@
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for XBee wireless controllers</description>
-    <releaseNotes>Breaking changes to handling AT commands but they are now functioning.</releaseNotes>
+    <releaseNotes>Bug fixes, improved unit testing.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>XBee Wireless</tags>
     <dependencies>

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using XBee.Devices;
 using XBee.Frames;
+using XBee.Frames.AtCommands;
 
 namespace XBee.Test
 {
@@ -60,6 +61,19 @@ namespace XBee.Test
             Assert.AreEqual(testSampleRate, await device.GetSampleRate());
 
             await device.SetSampleRate(sampleRate);
+        }
+
+        public async Task LocalReadWriteInputOutputConfigurationTestBase()
+        {
+            var device = await GetDevice();
+
+            var ioConfig = await device.GetInputOutputConfiguration(InputOutputChannel.Channel5);
+
+            await device.SetInputOutputConfiguration(InputOutputChannel.Channel5, InputOutputConfiguration.AnalogIn);
+
+            Assert.AreEqual(InputOutputConfiguration.AnalogIn, await device.GetInputOutputConfiguration(InputOutputChannel.Channel5));
+
+            await device.SetInputOutputConfiguration(InputOutputChannel.Channel5, ioConfig);
         }
     }
 }

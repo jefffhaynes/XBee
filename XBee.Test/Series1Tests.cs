@@ -23,5 +23,11 @@ namespace XBee.Test
         {
             await LocalReadWriteSampleRateTestBase();
         }
+
+        [TestMethod]
+        public async Task LocalReadWriteInputOutputConfigurationTest()
+        {
+            await LocalReadWriteInputOutputConfigurationTestBase();
+        }
     }
 }
