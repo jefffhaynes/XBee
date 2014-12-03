@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using XBee.Devices;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
@@ -28,12 +29,7 @@ namespace XBee
         private byte _frameId = byte.MinValue;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
-        public XBeeController()
-        {
-            Local = new XBeeNode(this);
-        }
-
-        public HardwareVersion ControllerHardwareVersion { get; private set; }
+        public HardwareVersion HardwareVersion { get; private set; }
 
         public void Dispose()
         {
@@ -55,15 +51,18 @@ namespace XBee
             /* Unfortunately the protocol changes based on what type of hardware we're using... */
             HardwareVersionResponseData response =
                 await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand());
-            ControllerHardwareVersion = response.HardwareVersion;
-            _connection.CoordinatorHardwareVersion = ControllerHardwareVersion;
+            HardwareVersion = response.HardwareVersion;
+            _connection.CoordinatorHardwareVersion = HardwareVersion;
+
+            Local = CreateNode(response.HardwareVersion);
         }
 
         public XBeeNode Local { get; private set; }
 
-        public XBeeNode GetRemote(LongAddress address)
+        public async Task<XBeeNode> GetRemote(NodeAddress address)
         {
-            return new XBeeNode(this);
+            var version = await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address);
+            return CreateNode(version.HardwareVersion, address);
         }
 
         public void Execute(FrameContent frame)
@@ -193,8 +192,8 @@ namespace XBee
 
         public async Task TransmitDataAsync(LongAddress address, byte[] data)
         {
-            if (ControllerHardwareVersion == HardwareVersion.XBeeSeries1 ||
-                ControllerHardwareVersion == HardwareVersion.XBeeProSeries1)
+            if (HardwareVersion == HardwareVersion.XBeeSeries1 ||
+                HardwareVersion == HardwareVersion.XBeeProSeries1)
             {
                 var transmitRequest = new TxRequestFrame(address, data);
                 TxStatusFrame response = await ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
@@ -224,13 +223,14 @@ namespace XBee
             var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
 
             await ExecuteMultiQueryAsync(atCommandFrame, new Action<AtCommandResponseFrame>(
-                frame =>
+                async frame =>
                 {
                     var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
 
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
                     {
-                        var node = new XBeeNode(this, new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress));
+                        var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
+                        var node = await GetRemote(address);
 
                         NodeDiscovered(this,
                             new NodeDiscoveredEventArgs(discoveryData.Name,
@@ -253,6 +253,27 @@ namespace XBee
 
             delayCancellationTokenSource.Cancel();
             _modemResetTaskCompletionSource = null;
+        }
+
+        private XBeeNode CreateNode(HardwareVersion hardwareVersion, NodeAddress address = null)
+        {
+            switch (hardwareVersion)
+            {
+                case HardwareVersion.XBeeSeries1:
+                    return new XBeeSeries1(this, HardwareVersion.XBeeSeries1, address);
+                case HardwareVersion.XBeeProSeries1:
+                    return new XBeeSeries1(this, HardwareVersion.XBeeProSeries1, address);
+                case HardwareVersion.XBeeProS2:
+                    return new XBeeSeries1(this, HardwareVersion.XBeeProS2, address);
+                case HardwareVersion.XBeeProS2B:
+                    return new XBeeSeries1(this, HardwareVersion.XBeeProS2B, address);
+                case HardwareVersion.XBeePro900:
+                    return new XBeePro900HP(this, HardwareVersion.XBeePro900, address);
+                case HardwareVersion.XBeePro900HP:
+                    return new XBeePro900HP(this, HardwareVersion.XBeePro900HP, address);
+                default:
+                    throw new NotSupportedException(string.Format("{0} not supported.", hardwareVersion));
+            }
         }
 
         private void OnFrameReceived(object sender, FrameReceivedEventArgs e)

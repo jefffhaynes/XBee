@@ -5,15 +5,18 @@ using XBee.Frames.AtCommands;
 
 namespace XBee
 {
-    public class XBeeNode
+    public abstract class XBeeNode
     {
         private readonly XBeeController _controller;
 
-        internal XBeeNode(XBeeController controller, NodeAddress address = null)
+        internal XBeeNode(XBeeController controller, HardwareVersion hardwareVersion, NodeAddress address = null)
         {
             _controller = controller;
+            HardwareVersion = hardwareVersion;
             Address = address;
         }
+
+        public HardwareVersion HardwareVersion { get; private set; }
 
         public NodeAddress Address { get; set; }
 
@@ -29,15 +32,12 @@ namespace XBee
             await ExecuteAtCommandAsync(new NodeIdentifierCommand(id));
         }
 
-        public async Task<NodeAddress> GetAddress()
+        public virtual async Task<NodeAddress> GetAddress()
         {
             var high = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
             var low = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand());
 
             var address = new LongAddress(high.Value, low.Value);
-
-            if (Is900Series)
-                return new NodeAddress(address);
 
             var source = await ExecuteAtQueryAsync<PrimitiveResponseData<ShortAddress>>(new SourceAddressCommand());
 
@@ -67,22 +67,16 @@ namespace XBee
             return new LongAddress(highAddress.Value, lowAddress.Value);
         }
 
-        public async Task<bool> IsCoordinator()
+        public virtual async Task<bool> IsCoordinator()
         {
-            CoordinatorEnableResponseData response;
-
-            if (Is900Series)
-                response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommandExt());
-            else response = await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
-
+            CoordinatorEnableResponseData response = 
+                await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
             return response.IsCoordinator;
         }
 
-        public async Task SetCoordinator(bool enable)
+        public virtual async Task SetCoordinator(bool enable)
         {
-            if (Is900Series)
-                await ExecuteAtCommandAsync(new CoordinatorEnableCommandExt(enable));
-            else await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
+            await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
         }
 
         public async Task<InputOutputConfiguration> GetInputOutputConfiguration(InputOutputChannel channel)
@@ -112,11 +106,9 @@ namespace XBee
             throw new InvalidOperationException("No channels returned.");
         }
 
-        public async Task SetChangeDetection(DigitalSampleChannels channels)
+        public virtual async Task SetChangeDetection(DigitalSampleChannels channels)
         {
-            if (Is900Series)
-                await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
-            else await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
+            await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
         }
 
         public async Task ForceSample()
@@ -156,24 +148,15 @@ namespace XBee
             await ExecuteAtCommandAsync(new WriteCommand());
         }
 
-        private async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
+        protected async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
             where TResponseData : AtCommandResponseFrameData
         {
             return await _controller.ExecuteAtQueryAsync<TResponseData>(command, Address);
         }
 
-        private async Task ExecuteAtCommandAsync(AtCommand command)
+        protected virtual async Task ExecuteAtCommandAsync(AtCommand command)
         {
             await _controller.ExecuteAtCommandAsync(command, Address);
-        }
-
-        private bool Is900Series
-        {
-            get
-            {
-                return _controller.ControllerHardwareVersion == HardwareVersion.XBeePro900 ||
-                       _controller.ControllerHardwareVersion == HardwareVersion.XBeePro900HP;
-            }
         }
     }
 }

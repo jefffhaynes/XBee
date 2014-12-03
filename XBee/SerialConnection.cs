@@ -20,8 +20,8 @@ namespace XBee
 
         public HardwareVersion? CoordinatorHardwareVersion
         {
-            get { return _frameSerializer.CoordinatorHardwareVersion; }
-            set { _frameSerializer.CoordinatorHardwareVersion = value; }
+            get { return _frameSerializer.ControllerHardwareVersion; }
+            set { _frameSerializer.ControllerHardwareVersion = value; }
         }
 
         public void Send(FrameContent frameContent)
