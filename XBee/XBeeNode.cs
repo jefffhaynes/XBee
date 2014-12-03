@@ -67,18 +67,6 @@ namespace XBee
             return new LongAddress(highAddress.Value, lowAddress.Value);
         }
 
-        public virtual async Task<bool> IsCoordinator()
-        {
-            CoordinatorEnableResponseData response = 
-                await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
-            return response.IsCoordinator;
-        }
-
-        public virtual async Task SetCoordinator(bool enable)
-        {
-            await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
-        }
-
         public virtual async Task<SleepMode> GetSleepMode()
         {
             var response = await ExecuteAtQueryAsync<PrimitiveResponseData<SleepMode>>(new SleepModeCommand());

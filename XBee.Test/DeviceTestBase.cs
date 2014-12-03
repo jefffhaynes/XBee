@@ -50,6 +50,16 @@ namespace XBee.Test
             await device.SetSleepMode(mode);
         }
 
+        public async Task LocalReadWriteSleepOptionsTestBase()
+        {
+            var device = await GetDevice();
+
+            var options = await device.GetSleepOptions();
+            await device.SetSleepOptions(SleepOptions.SampleOnWakeDisable);
+            Assert.AreEqual(SleepOptions.SampleOnWakeDisable, await device.GetSleepOptions());
+            await device.SetSleepOptions(options);
+        }
+
         public async Task LocalReadWriteChangeDetectionTestBase()
         {
             var device = await GetDevice();

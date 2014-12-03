@@ -74,7 +74,7 @@
     <Compile Include="Frames\AtCommands\CoordinatorEnableCommand.cs" />
     <Compile Include="Frames\AtCommands\InputOutputChangeDetectionCommandExt.cs" />
     <Compile Include="Frames\AtCommands\InputOutputChangeDetectionResponseData.cs" />
-    <Compile Include="Frames\AtCommands\CoordinatorEnableStateExt.cs" />
+    <Compile Include="Frames\AtCommands\NodeMessagingOptions.cs" />
     <Compile Include="Frames\AtCommands\CoordinatorEnableState.cs" />
     <Compile Include="Frames\AtCommands\DeviceType.cs" />
     <Compile Include="Frames\AtCommands\EncryptionEnableCommand.cs" />
@@ -102,6 +102,11 @@
     <Compile Include="Frames\AtCommands\SerialNumberHighCommand.cs" />
     <Compile Include="Frames\AtCommands\SleepMode.cs" />
     <Compile Include="Frames\AtCommands\SleepModeCommand.cs" />
+    <Compile Include="Frames\AtCommands\SleepOptions.cs" />
+    <Compile Include="Frames\AtCommands\SleepOptionsCommandExt.cs" />
+    <Compile Include="Frames\AtCommands\SleepOptionsCommand.cs" />
+    <Compile Include="Frames\AtCommands\SleepOptionsExt.cs" />
+    <Compile Include="Frames\AtCommands\SleepOptionsResponseData.cs" />
     <Compile Include="Frames\AtCommands\SourceAddressCommand.cs" />
     <Compile Include="Frames\AtCommands\WriteCommand.cs" />
     <Compile Include="Frames\RemoteAtCommandFrameContent.cs" />

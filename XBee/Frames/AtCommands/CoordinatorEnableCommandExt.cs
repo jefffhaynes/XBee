@@ -8,16 +8,16 @@ namespace XBee.Frames.AtCommands
         {
         }
 
-        public CoordinatorEnableCommandExt(bool enable)
+        public CoordinatorEnableCommandExt(NodeMessagingOptions options)
             : this()
         {
-            EnableState = enable ? CoordinatorEnableStateExt.NonRoutingCoordinator : CoordinatorEnableStateExt.StandardRouter;
+            Options = options;
         }
 
         [Ignore]
-        public CoordinatorEnableStateExt? EnableState
+        public NodeMessagingOptions? Options
         {
-            get { return Parameter as CoordinatorEnableStateExt?; }
+            get { return Parameter as NodeMessagingOptions?; }
             set { Parameter = value; }
         }
     }

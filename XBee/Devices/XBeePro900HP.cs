@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
@@ -22,22 +23,40 @@ namespace XBee.Devices
             return new NodeAddress(address);
         }
 
-        public override async Task<bool> IsCoordinator()
+        public async Task<NodeMessagingOptions> GetNodeMessagingOptions()
         {
             CoordinatorEnableResponseData response = 
                 await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommandExt());
 
-            return response.IsCoordinator;
+            if(response.Options == null)
+                throw new InvalidOperationException("No valid coordinator state returned.");
+
+            return response.Options.Value;
         }
 
-        public override async Task SetCoordinator(bool enable)
+        public async Task SetNodeMessagingOptions(NodeMessagingOptions options)
         {
-            await ExecuteAtCommandAsync(new CoordinatorEnableCommandExt(enable));
+            await ExecuteAtCommandAsync(new CoordinatorEnableCommandExt(options));
         }
 
         public override async Task SetChangeDetectionChannels(DigitalSampleChannels channels)
         {
             await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
+        }
+
+        public async Task<SleepOptionsExt> GetSleepOptions()
+        {
+            var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand());
+
+            if (response.OptionsExt == null)
+                throw new InvalidOperationException("No valid sleep options returned.");
+
+            return response.OptionsExt.Value;
+        }
+
+        public async Task SetSleepOptions(SleepOptionsExt options)
+        {
+            await ExecuteAtCommandAsync(new SleepOptionsCommandExt(options));
         }
     }
 }

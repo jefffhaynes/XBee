@@ -25,6 +25,12 @@ namespace XBee.Test
         }
 
         [TestMethod]
+        public async Task LocalReadWriteSleepOptionsTest()
+        {
+            await LocalReadWriteSleepOptionsTestBase();
+        }
+
+        [TestMethod]
         public async Task LocalReadWriteChangeDetectionTest()
         {
             await LocalReadWriteChangeDetectionTestBase();

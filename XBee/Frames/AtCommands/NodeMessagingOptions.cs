@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public enum CoordinatorEnableStateExt : byte
+    public enum NodeMessagingOptions : byte
     {
         StandardRouter = 0,
         IndirectMessageCoordinator = 1,
