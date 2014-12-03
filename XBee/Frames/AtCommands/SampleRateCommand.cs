@@ -33,7 +33,7 @@ namespace XBee.Frames.AtCommands
                 if(interval > ushort.MaxValue)
                     throw new ArgumentOutOfRangeException("value", interval, "Must be less than 0xFFFF");
 
-                Parameter = interval;
+                Parameter = (ushort)interval;
             }
         }
     }

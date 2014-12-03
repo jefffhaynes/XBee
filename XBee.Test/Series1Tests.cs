@@ -4,18 +4,24 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace XBee.Test
 {
     [TestClass]
-    public class Series1Tests : DeviceTestsBase
+    public class Series1Tests : DeviceTestBase
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        [TestMethod]
+        public async Task LocalReadWriteIdTest()
         {
-            OpenDevice(9600);
+            await LocalReadWriteChangeDetectionTestBase();
         }
 
         [TestMethod]
-        public override async Task LocalReadWriteIdTest()
+        public async Task LocalReadWriteChangeDetectionTest()
         {
-            await base.LocalReadWriteIdTest();
+            await LocalReadWriteChangeDetectionTestBase();
+        }
+
+        [TestMethod]
+        public async Task LocalReadWriteSampleRateTest()
+        {
+            await LocalReadWriteSampleRateTestBase();
         }
     }
 }

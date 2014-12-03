@@ -35,7 +35,7 @@ namespace XBee.Devices
             await ExecuteAtCommandAsync(new CoordinatorEnableCommandExt(enable));
         }
 
-        public override async Task SetChangeDetection(DigitalSampleChannels channels)
+        public override async Task SetChangeDetectionChannels(DigitalSampleChannels channels)
         {
             await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
         }

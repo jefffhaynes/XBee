@@ -18,7 +18,7 @@ namespace XBee
 
         public HardwareVersion HardwareVersion { get; private set; }
 
-        public NodeAddress Address { get; set; }
+        public NodeAddress Address { get; private set; }
 
         public async Task<string> GetNodeIdentifier()
         {
@@ -91,7 +91,7 @@ namespace XBee
             await ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
         }
 
-        public async Task<DigitalSampleChannels> GetChangeDetection()
+        public async Task<DigitalSampleChannels> GetChangeDetectionChannels()
         {
             InputOutputChangeDetectionResponseData response =
                 await ExecuteAtQueryAsync<InputOutputChangeDetectionResponseData>(
@@ -106,7 +106,7 @@ namespace XBee
             throw new InvalidOperationException("No channels returned.");
         }
 
-        public virtual async Task SetChangeDetection(DigitalSampleChannels channels)
+        public virtual async Task SetChangeDetectionChannels(DigitalSampleChannels channels)
         {
             await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
         }
