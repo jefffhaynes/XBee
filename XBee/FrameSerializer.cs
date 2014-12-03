@@ -55,7 +55,6 @@ namespace XBee
             var serializer = CreateSerializer();
 
 #if DEBUG
-
             serializer.MemberDeserializing += (sender, args) =>
             {
                 Console.CursorLeft = args.Context.Depth * 4;

@@ -16,6 +16,7 @@ namespace XBee.Frames
         [Subtype("AtCommand", "MY", typeof(PrimitiveResponseData<ShortAddress>))]
         [Subtype("AtCommand", "DH", typeof(PrimitiveResponseData<uint>))]
         [Subtype("AtCommand", "DL", typeof(PrimitiveResponseData<uint>))]
+        [Subtype("AtCommand", "SM", typeof(PrimitiveResponseData<SleepMode>))]
         [Subtype("AtCommand", "ND", typeof(NetworkDiscoveryResponseData))]
         [Subtype("AtCommand", "HV", typeof(HardwareVersionResponseData))]
         [Subtype("AtCommand", "CE", typeof(CoordinatorEnableResponseData))]

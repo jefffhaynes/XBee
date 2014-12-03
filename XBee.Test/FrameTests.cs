@@ -104,6 +104,15 @@ namespace XBee.Test
         }
 
         [TestMethod]
+        public void AtCommand_SleepMode_FrameTest()
+        {
+            var data = new byte[] { 0x7E, 0x00, 0x06, 0x88, 0x01, 0x53, 0x4D, 0x00, 0x00, 0xD6 };
+
+            var frame = _frameSerializer.Deserialize(new MemoryStream(data));
+
+        }
+
+        [TestMethod]
         public void RxIndicatorSampleFrameTest()
         {
             var data = new byte[]

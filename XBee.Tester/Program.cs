@@ -44,11 +44,13 @@ namespace XBee.Tester
 
             await _xbee.OpenAsync("COM5", 9600);
 
-            _xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved");
+            //_xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved");
 
             //var coordinator = await _xbee.IsCoordinator();
 
             //var name = await _xbee.GetNodeIdentification();
+
+            var sleepMode = await _xbee.Local.GetSleepMode();
 
             //await _xbee.SetNodeIdentifier("COORD 900HP");
 
@@ -57,7 +59,7 @@ namespace XBee.Tester
             //name = await _xbee.GetNodeIdentification();
 
             //var serialNumber = await _xbee.GetSerialNumber();
-            Discover();
+            //Discover();
         }
 
         private static async void Discover()

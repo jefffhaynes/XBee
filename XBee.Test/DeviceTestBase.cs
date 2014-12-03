@@ -23,6 +23,12 @@ namespace XBee.Test
             return _device;
         }
 
+        public async Task LocalReadSerialNumberTestBase()
+        {
+            var device = await GetDevice();
+            await device.GetSerialNumber();
+        }
+
         public async Task LocalReadWriteIdTestBase()
         {
             var device = await GetDevice();
@@ -32,6 +38,16 @@ namespace XBee.Test
             await device.SetNodeIdentifier(testId);
             Assert.AreEqual(testId, await device.GetNodeIdentifier());
             await device.SetNodeIdentifier(id);
+        }
+
+        public async Task LocalReadWriteSleepModeTestBase()
+        {
+            var device = await GetDevice();
+
+            var mode = await device.GetSleepMode();
+            await device.SetSleepMode(SleepMode.CyclicSleepWithPinWake);
+            Assert.AreEqual(SleepMode.CyclicSleepWithPinWake, await device.GetSleepMode());
+            await device.SetSleepMode(mode);
         }
 
         public async Task LocalReadWriteChangeDetectionTestBase()
@@ -74,6 +90,12 @@ namespace XBee.Test
             Assert.AreEqual(InputOutputConfiguration.AnalogIn, await device.GetInputOutputConfiguration(InputOutputChannel.Channel5));
 
             await device.SetInputOutputConfiguration(InputOutputChannel.Channel5, ioConfig);
+        }
+
+        public async Task LocalReadEncryptionEnableTestBase()
+        {
+            var device = await GetDevice();
+            await device.IsEncryptionEnabled();
         }
     }
 }

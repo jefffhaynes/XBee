@@ -7,9 +7,21 @@ namespace XBee.Test
     public class Series1Tests : DeviceTestBase
     {
         [TestMethod]
+        public async Task LocalReadSerialNumberTest()
+        {
+            await LocalReadSerialNumberTestBase();
+        }
+
+        [TestMethod]
         public async Task LocalReadWriteIdTest()
         {
-            await LocalReadWriteChangeDetectionTestBase();
+            await LocalReadWriteIdTestBase();
+        }
+
+        [TestMethod]
+        public async Task LocalReadWriteSleepModeTest()
+        {
+            await LocalReadWriteSleepModeTestBase();
         }
 
         [TestMethod]
@@ -28,6 +40,12 @@ namespace XBee.Test
         public async Task LocalReadWriteInputOutputConfigurationTest()
         {
             await LocalReadWriteInputOutputConfigurationTestBase();
+        }
+
+        [TestMethod]
+        public async Task LocalReadEncryptionEnableTest()
+        {
+            await LocalReadEncryptionEnableTestBase();
         }
     }
 }

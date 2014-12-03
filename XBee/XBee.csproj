@@ -100,6 +100,8 @@
     <Compile Include="Frames\AtCommands\SampleRateResponseData.cs" />
     <Compile Include="Frames\AtCommands\SerialNumberLowCommand.cs" />
     <Compile Include="Frames\AtCommands\SerialNumberHighCommand.cs" />
+    <Compile Include="Frames\AtCommands\SleepMode.cs" />
+    <Compile Include="Frames\AtCommands\SleepModeCommand.cs" />
     <Compile Include="Frames\AtCommands\SourceAddressCommand.cs" />
     <Compile Include="Frames\AtCommands\WriteCommand.cs" />
     <Compile Include="Frames\RemoteAtCommandFrameContent.cs" />

@@ -79,6 +79,17 @@ namespace XBee
             await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
         }
 
+        public virtual async Task<SleepMode> GetSleepMode()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<SleepMode>>(new SleepModeCommand());
+            return response.Value;
+        }
+
+        public virtual async Task SetSleepMode(SleepMode mode)
+        {
+            await ExecuteAtCommandAsync(new SleepModeCommand(mode));
+        }
+
         public async Task<InputOutputConfiguration> GetInputOutputConfiguration(InputOutputChannel channel)
         {
             InputOutputResponseData response =
