@@ -6,14 +6,17 @@ namespace XBee
 {
     public class SampleReceivedEventArgs : EventArgs
     {
-        public SampleReceivedEventArgs(DigitalSampleState digitalSampleState, List<AnalogSample> analogSamples)
+        public SampleReceivedEventArgs(NodeAddress address, DigitalSampleState digitalSampleState, List<AnalogSample> analogSamples)
         {
+            Address = address;
             DigitalSampleState = digitalSampleState;
             AnalogSamples = analogSamples;
         }
 
-        public DigitalSampleState DigitalSampleState { get; set; }
+        public NodeAddress Address { get; private set; }
 
-        public List<AnalogSample> AnalogSamples { get; set; } 
+        public DigitalSampleState DigitalSampleState { get; private set; }
+
+        public List<AnalogSample> AnalogSamples { get; private set; } 
     }
 }
