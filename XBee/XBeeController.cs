@@ -330,6 +330,15 @@ namespace XBee
                     (sample, channel) => new AnalogSample(channel, sample));
                 OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
             }
+            else if (content is RxIndicator16SampleFrame)
+            {
+                var sampleFrame = content as RxIndicator16SampleFrame;
+                IEnumerable<SampleChannels> analogChannels =
+                    (sampleFrame.Channels & SampleChannels.AllAnalog).GetFlagValues();
+                IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
+                    (sample, channel) => new AnalogSample(channel, sample));
+                OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
+            }
             else if (content is RxIndicatorSampleExtFrame)
             {
                 var sampleFrame = content as RxIndicatorSampleExtFrame;
