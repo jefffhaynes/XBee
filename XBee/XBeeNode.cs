@@ -7,6 +7,8 @@ namespace XBee
 {
     public abstract class XBeeNode
     {
+        private static readonly TimeSpan HardwareResetTime = TimeSpan.FromMilliseconds(200);
+
         private readonly XBeeController _controller;
 
         internal XBeeNode(XBeeController controller, HardwareVersion hardwareVersion, NodeAddress address = null)
@@ -19,6 +21,15 @@ namespace XBee
         public HardwareVersion HardwareVersion { get; private set; }
 
         public NodeAddress Address { get; private set; }
+
+        public async Task Reset()
+        {
+            /* We get no response from remote reset commands */
+            ExecuteAtCommand(new ResetCommand());
+
+            /* Wait approximate reset time per documentation */
+            await Task.Delay(HardwareResetTime);
+        }
 
         public async Task<string> GetNodeIdentifier()
         {
@@ -145,6 +156,11 @@ namespace XBee
         public async Task WriteChanges()
         {
             await ExecuteAtCommandAsync(new WriteCommand());
+        }
+
+        protected void ExecuteAtCommand(AtCommand command)
+        {
+            _controller.ExecuteAtCommand(command);
         }
 
         protected async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)

@@ -68,6 +68,20 @@ namespace XBee
             _connection.Send(frame);
         }
 
+        public void ExecuteAtCommand(AtCommand command, NodeAddress address = null)
+        {
+            if (address == null)
+            {
+                var atCommandFrame = new AtCommandFrameContent(command);
+                Execute(atCommandFrame);
+            }
+            else
+            {
+                var remoteCommand = new RemoteAtCommandFrameContent(address, command);
+                Execute(remoteCommand);
+            }
+        }
+
         public async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout)
             where TResponseFrame : CommandResponseFrameContent
         {

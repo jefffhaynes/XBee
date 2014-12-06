@@ -59,7 +59,7 @@ namespace XBee.Tester
             //name = await _xbee.GetNodeIdentification();
 
             //var serialNumber = await _xbee.GetSerialNumber();
-            //Discover();
+            Discover();
         }
 
         private static async void Discover()
@@ -80,9 +80,9 @@ namespace XBee.Tester
 
                 //var id = await args.Node.GetNodeIdentifier();
 
-                var something = await args.Node.GetAddress();
+                await args.Node.Reset();
 
-                Console.WriteLine(something);
+                Console.WriteLine("reset");
 
                 //await args.Node.ForceSample();
             };
