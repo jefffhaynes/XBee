@@ -8,7 +8,7 @@
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for XBee wireless controllers</description>
-    <releaseNotes>Include address information in samples.</releaseNotes>
+    <releaseNotes>Added support for 16-bit address samples.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>XBee Wireless</tags>
     <dependencies>
