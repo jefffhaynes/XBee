@@ -109,6 +109,9 @@
     <Compile Include="Frames\AtCommands\SleepOptionsResponseData.cs" />
     <Compile Include="Frames\AtCommands\SourceAddressCommand.cs" />
     <Compile Include="Frames\AtCommands\WriteCommand.cs" />
+    <Compile Include="Frames\IRxIndicatorDataFrame.cs" />
+    <Compile Include="Frames\IRxIndicatorFrame.cs" />
+    <Compile Include="Frames\IRxIndicatorSampleFrame.cs" />
     <Compile Include="Frames\RemoteAtCommandFrameContent.cs" />
     <Compile Include="Frames\DeliveryStatus.cs" />
     <Compile Include="Frames\DeliveryStatusExt.cs" />
@@ -120,6 +123,8 @@
     <Compile Include="Frames\ReceiveOptionsExt.cs" />
     <Compile Include="Frames\RemoteAtCommandOptions.cs" />
     <Compile Include="Frames\RxIndicator16SampleFrame.cs" />
+    <Compile Include="Frames\RxIndicator16Frame.cs" />
+    <Compile Include="Frames\RxIndicatorFrame.cs" />
     <Compile Include="Frames\SampleChannels.cs" />
     <Compile Include="Frames\RxIndicatorExplicitExtFrame.cs" />
     <Compile Include="Frames\RxIndicatorExtFrame.cs" />

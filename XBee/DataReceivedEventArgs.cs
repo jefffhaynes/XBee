@@ -4,13 +4,13 @@ namespace XBee
 {
     public class DataReceivedEventArgs : EventArgs
     {
-        public DataReceivedEventArgs(LongAddress source, byte[] data)
+        public DataReceivedEventArgs(NodeAddress address, byte[] data)
         {
-            Source = source;
+            Address = address;
             Data = data;
         }
 
-        public LongAddress Source { get; private set; }
+        public NodeAddress Address { get; private set; }
 
         public byte[] Data { get; private set; }
     }

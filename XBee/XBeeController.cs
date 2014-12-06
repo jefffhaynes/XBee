@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XBee.Devices;
@@ -30,6 +28,7 @@ namespace XBee
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
         public HardwareVersion HardwareVersion { get; private set; }
+        public XBeeNode Local { get; private set; }
 
         public void Dispose()
         {
@@ -57,11 +56,10 @@ namespace XBee
             Local = CreateNode(response.HardwareVersion);
         }
 
-        public XBeeNode Local { get; private set; }
-
         public async Task<XBeeNode> GetRemote(NodeAddress address)
         {
-            var version = await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address);
+            HardwareVersionResponseData version =
+                await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address);
             return CreateNode(version.HardwareVersion, address);
         }
 
@@ -230,7 +228,7 @@ namespace XBee
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
                     {
                         var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
-                        var node = await GetRemote(address);
+                        XBeeNode node = await GetRemote(address);
 
                         NodeDiscovered(this,
                             new NodeDiscoveredEventArgs(discoveryData.Name,
@@ -280,7 +278,14 @@ namespace XBee
         {
             FrameContent content = e.FrameContent;
 
-            if (content is CommandResponseFrameContent)
+            if (content is ModemStatusFrame)
+            {
+                var modemStatusFrame = content as ModemStatusFrame;
+
+                if (_modemResetTaskCompletionSource != null)
+                    _modemResetTaskCompletionSource.SetResult(modemStatusFrame.ModemStatus);
+            }
+            else if (content is CommandResponseFrameContent)
             {
                 var commandResponse = content as CommandResponseFrameContent;
 
@@ -300,56 +305,25 @@ namespace XBee
                     }
                 }
             }
-            else if (content is ModemStatusFrame)
+            else if (content is IRxIndicatorDataFrame)
             {
-                var modemStatusFrame = content as ModemStatusFrame;
-
-                if (_modemResetTaskCompletionSource != null)
-                    _modemResetTaskCompletionSource.SetResult(modemStatusFrame.ModemStatus);
-            }
-            else if (content is RxIndicatorExtFrame)
-            {
-                var rxIndicator = content as RxIndicatorExtFrame;
-
                 if (DataReceived != null)
-                    DataReceived(this, new DataReceivedEventArgs(rxIndicator.Source, rxIndicator.Data));
+                {
+                    var dataFrame = content as IRxIndicatorDataFrame;
+                    NodeAddress address = dataFrame.GetAddress();
+                    DataReceived(this, new DataReceivedEventArgs(address, dataFrame.Data));
+                }
             }
-            else if (content is RxIndicatorExplicitExtFrame)
+            else if (content is IRxIndicatorSampleFrame)
             {
-                var rxIndicator = content as RxIndicatorExplicitExtFrame;
-
-                if (DataReceived != null)
-                    DataReceived(this, new DataReceivedEventArgs(rxIndicator.Source, rxIndicator.Data));
-            }
-            else if (content is RxIndicatorSampleFrame)
-            {
-                var sampleFrame = content as RxIndicatorSampleFrame;
-                var address = new NodeAddress(sampleFrame.Source);
-                IEnumerable<SampleChannels> analogChannels =
-                    (sampleFrame.Channels & SampleChannels.AllAnalog).GetFlagValues();
-                IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
-                    (sample, channel) => new AnalogSample(channel, sample));
-                OnSampleReceived(address, sampleFrame.DigitalSampleState, analogSamples.ToList());
-            }
-            else if (content is RxIndicator16SampleFrame)
-            {
-                var sampleFrame = content as RxIndicator16SampleFrame;
-                var address = new NodeAddress(sampleFrame.Source);
-                IEnumerable<SampleChannels> analogChannels =
-                    (sampleFrame.Channels & SampleChannels.AllAnalog).GetFlagValues();
-                IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
-                    (sample, channel) => new AnalogSample(channel, sample));
-                OnSampleReceived(address, sampleFrame.DigitalSampleState, analogSamples.ToList());
-            }
-            else if (content is RxIndicatorSampleExtFrame)
-            {
-                var sampleFrame = content as RxIndicatorSampleExtFrame;
-                var address = new NodeAddress(sampleFrame.Source, sampleFrame.ShortAddress);
-                IEnumerable<AnalogSampleChannels> analogChannels =
-                    (sampleFrame.AnalogChannels & AnalogSampleChannels.All).GetFlagValues();
-                IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
-                    (sample, channel) => new AnalogSample(channel, sample));
-                OnSampleReceived(address, sampleFrame.DigitalSampleState, analogSamples.ToList());
+                if (SampleReceived != null)
+                {
+                    var sampleFrame = content as IRxIndicatorSampleFrame;
+                    NodeAddress address = sampleFrame.GetAddress();
+                    SampleReceived(this,
+                        new SampleReceivedEventArgs(address, sampleFrame.DigitalSampleState,
+                            sampleFrame.GetAnalogSamples()));
+                }
             }
         }
 
@@ -364,12 +338,6 @@ namespace XBee
                 _frameId = 1;
 
             return _frameId;
-        }
-
-        private void OnSampleReceived(NodeAddress address, DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
-        {
-            if (SampleReceived != null)
-                SampleReceived(this, new SampleReceivedEventArgs(address, digitalSampleState, analogSamples.ToList()));
         }
     }
 }

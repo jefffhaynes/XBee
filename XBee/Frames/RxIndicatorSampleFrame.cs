@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BinarySerialization;
 using XBee.Converters;
 
 namespace XBee.Frames
 {
-    public class RxIndicatorSampleFrame : FrameContent
+    public class RxIndicatorSampleFrame : FrameContent, IRxIndicatorSampleFrame
     {
         public LongAddress Source { get; set; }
 
@@ -15,6 +16,10 @@ namespace XBee.Frames
         public byte SampleCount { get; set; }
 
         public SampleChannels Channels { get; set; }
+
+        [FieldCount(Path = "Channels",
+            ConverterType = typeof (BitCountingConverter), ConverterParameter = SampleChannels.AllAnalog)]
+        public List<ushort> AnalogSamples { get; set; }
 
         [SerializeWhen("Channels", SampleChannels.Digital0,
             ConverterType = typeof (BitwiseAndConverter), ConverterParameter = SampleChannels.Digital0)]
@@ -36,8 +41,15 @@ namespace XBee.Frames
             ConverterType = typeof (BitwiseAndConverter), ConverterParameter = SampleChannels.Digital8)]
         public DigitalSampleState DigitalSampleState { get; set; }
 
-        [FieldCount(Path = "Channels",
-            ConverterType = typeof(BitCountingConverter), ConverterParameter = SampleChannels.AllAnalog)]
-        public List<ushort> AnalogSamples { get; set; } 
+        public NodeAddress GetAddress()
+        {
+            return new NodeAddress(Source);
+        }
+
+        public IEnumerable<AnalogSample> GetAnalogSamples()
+        {
+            IEnumerable<SampleChannels> analogChannels = (Channels & SampleChannels.AllAnalog).GetFlagValues();
+            return AnalogSamples.Zip(analogChannels, (sample, channel) => new AnalogSample(channel, sample));
+        }
     }
 }

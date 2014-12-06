@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public class RxIndicatorExplicitExtFrame : CommandFrameContent
+    public class RxIndicatorExplicitExtFrame : CommandFrameContent, IRxIndicatorDataFrame
     {
         public LongAddress Source { get; set; }
 
@@ -15,6 +15,11 @@
         public ushort ProfileId { get; set; }
 
         public ReceiveOptionsExt Options { get; set; }
+
+        public NodeAddress GetAddress()
+        {
+            return new NodeAddress(Source, ShortAddress);
+        }
 
         public byte[] Data { get; set; }
     }
