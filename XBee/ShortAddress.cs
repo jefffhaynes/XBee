@@ -2,7 +2,8 @@
 {
     public class ShortAddress
     {
-        public static readonly ShortAddress Broadcast = new ShortAddress(0xfffe);
+        public static readonly ShortAddress Broadcast = new ShortAddress(0xffff);
+        public static readonly ShortAddress Disabled = new ShortAddress(0xfffe);
 
         public ShortAddress()
         {

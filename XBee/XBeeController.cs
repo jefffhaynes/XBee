@@ -324,29 +324,32 @@ namespace XBee
             else if (content is RxIndicatorSampleFrame)
             {
                 var sampleFrame = content as RxIndicatorSampleFrame;
+                var address = new NodeAddress(sampleFrame.Source);
                 IEnumerable<SampleChannels> analogChannels =
                     (sampleFrame.Channels & SampleChannels.AllAnalog).GetFlagValues();
                 IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
                     (sample, channel) => new AnalogSample(channel, sample));
-                OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
+                OnSampleReceived(address, sampleFrame.DigitalSampleState, analogSamples.ToList());
             }
             else if (content is RxIndicator16SampleFrame)
             {
                 var sampleFrame = content as RxIndicator16SampleFrame;
+                var address = new NodeAddress(sampleFrame.Source);
                 IEnumerable<SampleChannels> analogChannels =
                     (sampleFrame.Channels & SampleChannels.AllAnalog).GetFlagValues();
                 IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
                     (sample, channel) => new AnalogSample(channel, sample));
-                OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
+                OnSampleReceived(address, sampleFrame.DigitalSampleState, analogSamples.ToList());
             }
             else if (content is RxIndicatorSampleExtFrame)
             {
                 var sampleFrame = content as RxIndicatorSampleExtFrame;
+                var address = new NodeAddress(sampleFrame.Source, sampleFrame.ShortAddress);
                 IEnumerable<AnalogSampleChannels> analogChannels =
                     (sampleFrame.AnalogChannels & AnalogSampleChannels.All).GetFlagValues();
                 IEnumerable<AnalogSample> analogSamples = sampleFrame.AnalogSamples.Zip(analogChannels,
                     (sample, channel) => new AnalogSample(channel, sample));
-                OnSampleReceived(sampleFrame.DigitalSampleState, analogSamples.ToList());
+                OnSampleReceived(address, sampleFrame.DigitalSampleState, analogSamples.ToList());
             }
         }
 
@@ -363,10 +366,10 @@ namespace XBee
             return _frameId;
         }
 
-        private void OnSampleReceived(DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
+        private void OnSampleReceived(NodeAddress address, DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
         {
             if (SampleReceived != null)
-                SampleReceived(this, new SampleReceivedEventArgs(digitalSampleState, analogSamples.ToList()));
+                SampleReceived(this, new SampleReceivedEventArgs(address, digitalSampleState, analogSamples.ToList()));
         }
     }
 }

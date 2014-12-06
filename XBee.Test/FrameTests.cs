@@ -77,7 +77,7 @@ namespace XBee.Test
                 DiscoveryStatus = DiscoveryStatus.RouteDiscovery
             };
 
-            var expectedValue = new byte[] {0x7e, 0x00, 0x07, 0x8b, 0x47, 0xff, 0xfe, 0x00, 0x00, 0x02, 0x2e};
+            var expectedValue = new byte[] {0x7e, 0x00, 0x07, 0x8b, 0x47, 0xff, 0xff, 0x00, 0x00, 0x02, 0x2d};
 
             Check(txStatusFrame, expectedValue);
         }
@@ -108,8 +108,7 @@ namespace XBee.Test
         {
             var data = new byte[] { 0x7E, 0x00, 0x06, 0x88, 0x01, 0x53, 0x4D, 0x00, 0x00, 0xD6 };
 
-            var frame = _frameSerializer.Deserialize(new MemoryStream(data));
-
+            _frameSerializer.Deserialize(new MemoryStream(data));
         }
 
         [TestMethod]

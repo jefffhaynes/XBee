@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using XBee.Frames;
@@ -8,15 +9,18 @@ namespace XBee
 {
     public class SampleReceivedEventArgs : EventArgs
     {
-        public SampleReceivedEventArgs(DigitalSampleState digitalSampleState, List<AnalogSample> analogSamples)
+        public SampleReceivedEventArgs(NodeAddress address, DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
         {
+            Address = address;
             DigitalSampleState = digitalSampleState;
-            AnalogSamples = analogSamples;
+            AnalogSamples = new ReadOnlyCollection<AnalogSample>(analogSamples.ToList());
         }
 
-        public DigitalSampleState DigitalSampleState { get; set; }
+        public NodeAddress Address { get; private set; }
 
-        public List<AnalogSample> AnalogSamples { get; set; }
+        public DigitalSampleState DigitalSampleState { get; private set; }
+
+        public ReadOnlyCollection<AnalogSample> AnalogSamples { get; private set; }
 
         public override string ToString()
         {
