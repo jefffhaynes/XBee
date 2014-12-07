@@ -25,12 +25,12 @@ namespace XBee
             set { _frameSerializer.ControllerHardwareVersion = value; }
         }
 
-        public void Send(FrameContent frameContent)
+        public async Task Send(FrameContent frameContent)
         {
-            lock (_portLock)
+           // lock (_portLock)
             {
                 var data = _frameSerializer.Serialize(new Frame(frameContent));
-                _serialPort.BaseStream.Write(data, 0, data.Length);
+                await _serialPort.BaseStream.WriteAsync(data, 0, data.Length);
             }
         }
 

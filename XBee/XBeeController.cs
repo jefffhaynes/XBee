@@ -23,6 +23,7 @@ namespace XBee
         private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromMilliseconds(300);
         private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(6);
+        private readonly object _frameIdLock = new object();
 
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
         private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
@@ -35,6 +36,18 @@ namespace XBee
 
         public XBeeNode Local { get; private set; }
 
+        public bool IsOpen
+        {
+            get { return _connection != null; }
+        }
+
+        public void Dispose()
+        {
+            Close();
+            _sampleSource.Dispose();
+            _receivedDataSource.Dispose();
+        }
+
         public event EventHandler<NodeDiscoveredEventArgs> NodeDiscovered;
 
         public event EventHandler<SourcedDataReceivedEventArgs> DataReceived;
@@ -43,6 +56,9 @@ namespace XBee
 
         public async Task OpenAsync(string port, int baudRate)
         {
+            if(IsOpen)
+                throw new InvalidOperationException("The controller is already conntected, please close the existing connection.");
+
             _connection = new SerialConnection(port, baudRate);
             _connection.FrameReceived += OnFrameReceived;
             _connection.Open();
@@ -72,22 +88,26 @@ namespace XBee
             return CreateNode(version.HardwareVersion, address);
         }
 
-        public void Execute(FrameContent frame)
+        public async Task Execute(FrameContent frame)
         {
-            _connection.Send(frame);
-        }
+            var content = frame as CommandFrameContent;
+            if(content != null)
+                Console.WriteLine("X {0}", content.FrameId);
 
-        public void ExecuteAtCommand(AtCommand command, NodeAddress address = null)
+            await _connection.Send(frame);
+        }
+        
+        public async Task ExecuteAtCommand(AtCommand command, NodeAddress address = null)
         {
             if (address == null)
             {
                 var atCommandFrame = new AtCommandFrameContent(command);
-                Execute(atCommandFrame);
+                await Execute(atCommandFrame);
             }
             else
             {
                 var remoteCommand = new RemoteAtCommandFrameContent(address, command);
-                Execute(remoteCommand);
+                await Execute(remoteCommand);
             }
         }
 
@@ -108,7 +128,7 @@ namespace XBee
                         b => new TaskCompletionSource<CommandResponseFrameContent>(),
                         (b, source) => new TaskCompletionSource<CommandResponseFrameContent>());
 
-                Execute(frame);
+                await Execute(frame);
 
                 if (await Task.WhenAny(taskCompletionSource.Task, delayTask) == taskCompletionSource.Task)
                 {
@@ -198,7 +218,7 @@ namespace XBee
 
                 ExecuteCallbacks.AddOrUpdate(frame.FrameId, b => callbackProxy, (b, source) => callbackProxy);
 
-                Execute(frame);
+                await Execute(frame);
 
                 await Task.Delay(timeout);
 
@@ -260,6 +280,9 @@ namespace XBee
 
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
                     {
+                        /* Devices have trouble resetting after ND for some reason... */
+                        await Task.Delay(10);
+
                         var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
                         XBeeNode node = await GetRemote(address);
 
@@ -324,6 +347,14 @@ namespace XBee
 
                 byte frameId = commandResponse.FrameId;
 
+                //var atCommand = commandResponse as AtCommandResponseFrame;
+                //if (atCommand != null)
+                //    Console.WriteLine("AT:  {0} ({1})", frameId, atCommand.Content.AtCommand);
+
+                //var remoteAtCommand = commandResponse as RemoteAtCommandResponseFrame;
+                //if (remoteAtCommand != null)
+                //    Console.WriteLine("RAT: {0} ({1})", frameId, remoteAtCommand.Content.AtCommand);
+
                 TaskCompletionSource<CommandResponseFrameContent> taskCompletionSource;
                 if (ExecuteTaskCompletionSources.TryRemove(frameId, out taskCompletionSource))
                 {
@@ -362,27 +393,27 @@ namespace XBee
 
         private byte GetNextFrameId()
         {
-            unchecked
+            lock (_frameIdLock)
             {
-                ++_frameId;
+                unchecked
+                {
+                    _frameId++;
+                }
+
+                if (_frameId == 0)
+                    _frameId = 1;
+
+                return _frameId;
             }
-
-            if (_frameId == 0)
-                _frameId = 1;
-
-            return _frameId;
         }
 
-        public void Dispose()
+        public void Close()
         {
-            if (_connection != null)
+            if (IsOpen)
             {
                 _connection.Dispose();
                 _connection = null;
             }
-
-            _sampleSource.Dispose();
-            _receivedDataSource.Dispose();
         }
     }
 }

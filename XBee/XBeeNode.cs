@@ -35,7 +35,7 @@ namespace XBee
         public async Task Reset()
         {
             /* We get no response from remote reset commands */
-            ExecuteAtCommand(new ResetCommand());
+            await ExecuteAtCommand(new ResetCommand());
 
             /* Wait approximate reset time per documentation */
             await Task.Delay(HardwareResetTime);
@@ -189,9 +189,9 @@ namespace XBee
 
         public abstract Task TransmitDataAsync(byte[] data);
 
-        protected void ExecuteAtCommand(AtCommand command)
+        protected async Task ExecuteAtCommand(AtCommand command)
         {
-            Controller.ExecuteAtCommand(command);
+            await Controller.ExecuteAtCommand(command);
         }
 
         protected async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)

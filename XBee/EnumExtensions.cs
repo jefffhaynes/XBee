@@ -13,7 +13,7 @@ namespace XBee
 
             return Enum.GetValues(typeof (T))
                 .Cast<object>()
-                .Where(o => ((int) o & (int) (object) enumValue) != 0)
+                .Where(o => (Convert.ToInt32(o) & Convert.ToInt32(enumValue)) != 0)
                 .Cast<T>();
         }
     }

@@ -45,6 +45,8 @@ namespace XBee.Tester
 
             await _xbee.OpenAsync("COM5", 9600);
 
+            Console.WriteLine("Running {0}", _xbee.HardwareVersion);
+
             //_xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args);
 
             //var coordinator = await _xbee.IsCoordinator();
@@ -79,14 +81,18 @@ namespace XBee.Tester
                 //var changeDetection = await args.Node.GetChangeDetectionChannels();
                 //var ee = await args.Node.IsEncryptionEnabled();
 
-                //var id = await args.Node.GetNodeIdentifier();
+                //for (int i = 0; i < 100; i++)
+                //{
+                //    var id = await args.Node.GetNodeIdentifier();
+                //    Console.WriteLine(id);
+                //}
 
                 //await args.Node.Reset();
 
                 //Console.WriteLine("reset");
 
                 await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel2, InputOutputConfiguration.DigitalIn);
-                await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel3, InputOutputConfiguration.DigitalIn);
+                await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel3, InputOutputConfiguration.AnalogIn);
 
                 await args.Node.SetChangeDetectionChannels(DigitalSampleChannels.Input2 | DigitalSampleChannels.Input3);
 

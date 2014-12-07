@@ -17,10 +17,6 @@ namespace XBee.Frames
 
         public SampleChannels Channels { get; set; }
 
-        [FieldCount(Path = "Channels",
-            ConverterType = typeof (BitCountingConverter), ConverterParameter = SampleChannels.AllAnalog)]
-        public List<ushort> AnalogSamples { get; set; }
-
         [SerializeWhen("Channels", SampleChannels.Digital0,
             ConverterType = typeof (BitwiseAndConverter), ConverterParameter = SampleChannels.Digital0)]
         [SerializeWhen("Channels", SampleChannels.Digital1,
@@ -41,6 +37,9 @@ namespace XBee.Frames
             ConverterType = typeof (BitwiseAndConverter), ConverterParameter = SampleChannels.Digital8)]
         public DigitalSampleState DigitalSampleState { get; set; }
 
+        [FieldCount(Path = "Channels",
+            ConverterType = typeof(BitCountingConverter), ConverterParameter = SampleChannels.AllAnalog)]
+        public List<ushort> AnalogSamples { get; set; }
 
         public Sample GetSample()
         {
