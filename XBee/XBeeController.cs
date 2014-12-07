@@ -90,10 +90,6 @@ namespace XBee
 
         public async Task Execute(FrameContent frame)
         {
-            var content = frame as CommandFrameContent;
-            if(content != null)
-                Console.WriteLine("X {0}", content.FrameId);
-
             await _connection.Send(frame);
         }
         
@@ -346,14 +342,6 @@ namespace XBee
                 var commandResponse = content as CommandResponseFrameContent;
 
                 byte frameId = commandResponse.FrameId;
-
-                //var atCommand = commandResponse as AtCommandResponseFrame;
-                //if (atCommand != null)
-                //    Console.WriteLine("AT:  {0} ({1})", frameId, atCommand.Content.AtCommand);
-
-                //var remoteAtCommand = commandResponse as RemoteAtCommandResponseFrame;
-                //if (remoteAtCommand != null)
-                //    Console.WriteLine("RAT: {0} ({1})", frameId, remoteAtCommand.Content.AtCommand);
 
                 TaskCompletionSource<CommandResponseFrameContent> taskCompletionSource;
                 if (ExecuteTaskCompletionSources.TryRemove(frameId, out taskCompletionSource))
