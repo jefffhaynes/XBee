@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
+using XBee.Observable;
 
 namespace XBee
 {
@@ -10,6 +11,7 @@ namespace XBee
         private static readonly TimeSpan HardwareResetTime = TimeSpan.FromMilliseconds(200);
 
         private readonly XBeeController _controller;
+        private readonly Source<Sample> _sampleSource = new Source<Sample>();
 
         internal XBeeNode(XBeeController controller, HardwareVersion hardwareVersion, NodeAddress address = null)
         {
@@ -21,6 +23,11 @@ namespace XBee
         public HardwareVersion HardwareVersion { get; private set; }
 
         public NodeAddress Address { get; private set; }
+
+        //public event EventHandler<DataReceivedEventArgs> DataReceived;
+
+        //public event EventHandler<SampleReceivedEventArgs> SampleReceived;
+
 
         public async Task Reset()
         {
@@ -45,12 +52,15 @@ namespace XBee
 
         public virtual async Task<NodeAddress> GetAddress()
         {
-            var high = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
-            var low = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand());
+            PrimitiveResponseData<uint> high =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
+            PrimitiveResponseData<uint> low =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand());
 
             var address = new LongAddress(high.Value, low.Value);
 
-            var source = await ExecuteAtQueryAsync<PrimitiveResponseData<ShortAddress>>(new SourceAddressCommand());
+            PrimitiveResponseData<ShortAddress> source =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<ShortAddress>>(new SourceAddressCommand());
 
             return new NodeAddress(address, source.Value);
         }
@@ -80,7 +90,8 @@ namespace XBee
 
         public virtual async Task<SleepMode> GetSleepMode()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<SleepMode>>(new SleepModeCommand());
+            PrimitiveResponseData<SleepMode> response =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<SleepMode>>(new SleepModeCommand());
             return response.Value;
         }
 
@@ -128,7 +139,7 @@ namespace XBee
 
         public async Task<TimeSpan> GetSampleRate()
         {
-            var response = await ExecuteAtQueryAsync<SampleRateResponseData>(new SampleRateCommand());
+            SampleRateResponseData response = await ExecuteAtQueryAsync<SampleRateResponseData>(new SampleRateCommand());
             return response.Interval;
         }
 
@@ -139,7 +150,8 @@ namespace XBee
 
         public async Task<bool> IsEncryptionEnabled()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new EncryptionEnableCommand());
+            PrimitiveResponseData<bool> response =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new EncryptionEnableCommand());
             return response.Value;
         }
 
@@ -172,6 +184,11 @@ namespace XBee
         protected virtual async Task ExecuteAtCommandAsync(AtCommand command)
         {
             await _controller.ExecuteAtCommandAsync(command, Address);
+        }
+
+        public IObservable<Sample> GetSamples()
+        {
+            return _controller.GetSampleSource().Where(sample => sample.Address.Equals(Address)).Select(sample => sample.Sample);
         }
     }
 }

@@ -4,8 +4,6 @@ namespace XBee.Frames
 {
     public interface IRxIndicatorSampleFrame : IRxIndicatorFrame
     {
-        DigitalSampleState DigitalSampleState { get; set; }
-
-        IEnumerable<AnalogSample> GetAnalogSamples();
+        Sample GetSample();
     }
 }

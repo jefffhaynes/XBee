@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnonymousDisposable.cs" />
     <Compile Include="Devices\XBeePro900HP.cs" />
     <Compile Include="Devices\XBeeSeries1.cs" />
     <Compile Include="Frames\AtCommand.cs" />
@@ -141,10 +142,19 @@
     <Compile Include="NodeDiscoveredEventArgs.cs" />
     <Compile Include="Frames\ReceivedSignalStrengthIndicator.cs" />
     <Compile Include="Frames\RemoteAtCommandResponseFrame.cs" />
+    <Compile Include="Observable\ObservableExtensions.cs" />
+    <Compile Include="Observable\Producer.cs" />
+    <Compile Include="Observable\Select.cs" />
+    <Compile Include="Observable\Sink.cs" />
+    <Compile Include="Observable\Source.cs" />
+    <Compile Include="Observable\Where.cs" />
+    <Compile Include="Sample.cs" />
     <Compile Include="SampleReceivedEventArgs.cs" />
     <Compile Include="SignalStrength.cs" />
     <Compile Include="LongAddress.cs" />
     <Compile Include="ShortAddress.cs" />
+    <Compile Include="SourcedData.cs" />
+    <Compile Include="SourcedSample.cs" />
     <Compile Include="XBeeController.cs" />
     <Compile Include="Frames\AtCommandStatus.cs" />
     <Compile Include="Checksum.cs" />

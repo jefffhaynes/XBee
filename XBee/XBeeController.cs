@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using XBee.Devices;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
+using XBee.Observable;
 
 namespace XBee
 {
@@ -23,21 +24,22 @@ namespace XBee
         private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(6);
 
+        private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
+        private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
+
         private SerialConnection _connection;
         private byte _frameId = byte.MinValue;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
         public HardwareVersion HardwareVersion { get; private set; }
+
         public XBeeNode Local { get; private set; }
 
-        public void Dispose()
-        {
-            if (_connection != null)
-            {
-                _connection.Dispose();
-                _connection = null;
-            }
-        }
+        public event EventHandler<NodeDiscoveredEventArgs> NodeDiscovered;
+
+        public event EventHandler<DataReceivedEventArgs> DataReceived;
+
+        public event EventHandler<SampleReceivedEventArgs> SampleReceived;
 
         public async Task OpenAsync(string port, int baudRate)
         {
@@ -224,11 +226,15 @@ namespace XBee
             }
         }
 
-        public event EventHandler<NodeDiscoveredEventArgs> NodeDiscovered;
+        public IObservable<SourcedSample> GetSampleSource()
+        {
+            return _sampleSource;
+        }
 
-        public event EventHandler<DataReceivedEventArgs> DataReceived;
-
-        public event EventHandler<SampleReceivedEventArgs> SampleReceived;
+        public IObservable<SourcedData> GetReceivedDataSource()
+        {
+            return _receivedDataSource;
+        }
 
         public async Task DiscoverNetwork()
         {
@@ -321,23 +327,23 @@ namespace XBee
             }
             else if (content is IRxIndicatorDataFrame)
             {
+                var dataFrame = content as IRxIndicatorDataFrame;
+                NodeAddress address = dataFrame.GetAddress();
+
                 if (DataReceived != null)
-                {
-                    var dataFrame = content as IRxIndicatorDataFrame;
-                    NodeAddress address = dataFrame.GetAddress();
                     DataReceived(this, new DataReceivedEventArgs(address, dataFrame.Data));
-                }
             }
             else if (content is IRxIndicatorSampleFrame)
             {
+                var sampleFrame = content as IRxIndicatorSampleFrame;
+                NodeAddress address = sampleFrame.GetAddress();
+                Sample sample = sampleFrame.GetSample();
+
+                _sampleSource.Push(new SourcedSample(address, sample));
+
                 if (SampleReceived != null)
-                {
-                    var sampleFrame = content as IRxIndicatorSampleFrame;
-                    NodeAddress address = sampleFrame.GetAddress();
                     SampleReceived(this,
-                        new SampleReceivedEventArgs(address, sampleFrame.DigitalSampleState,
-                            sampleFrame.GetAnalogSamples()));
-                }
+                        new SampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
             }
         }
 
@@ -352,6 +358,18 @@ namespace XBee
                 _frameId = 1;
 
             return _frameId;
+        }
+
+        public void Dispose()
+        {
+            if (_connection != null)
+            {
+                _connection.Dispose();
+                _connection = null;
+            }
+
+            _sampleSource.Dispose();
+            _receivedDataSource.Dispose();
         }
     }
 }

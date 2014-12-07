@@ -60,12 +60,17 @@ namespace XBee.Frames
             ConverterType = typeof (BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input12)]
         public DigitalSampleState DigitalSampleState { get; set; }
 
+        public Sample GetSample()
+        {
+            return new Sample(DigitalSampleState, GetAnalogSamples());
+        }
+
         public NodeAddress GetAddress()
         {
             return new NodeAddress(Source, ShortAddress);
         }
 
-        public IEnumerable<AnalogSample> GetAnalogSamples()
+        private IEnumerable<AnalogSample> GetAnalogSamples()
         {
             IEnumerable<AnalogSampleChannels> analogChannels =
                 (AnalogChannels & AnalogSampleChannels.All).GetFlagValues();

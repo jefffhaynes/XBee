@@ -6,7 +6,7 @@ namespace XBee
 {
     public class LongAddress : IEquatable<LongAddress>
     {
-        public static readonly LongAddress BroadcastAddress = new LongAddress(0xFFFF);
+        public static readonly LongAddress Broadcast = new LongAddress(0xFFFF);
         public static readonly LongAddress CoordinatorAddress = new LongAddress(0);
 
         public LongAddress()

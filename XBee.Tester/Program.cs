@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XBee.Frames;
@@ -80,9 +81,13 @@ namespace XBee.Tester
 
                 //var id = await args.Node.GetNodeIdentifier();
 
-                await args.Node.Reset();
+                //await args.Node.Reset();
 
-                Console.WriteLine("reset");
+                //Console.WriteLine("reset");
+
+                var samples = args.Node.GetSamples();
+
+                await samples.ForEachAsync(sample => Console.WriteLine(sample.ToString()));
 
                 //await args.Node.ForceSample();
             };

@@ -1,6 +1,9 @@
-﻿namespace XBee
+﻿using System;
+using System.Runtime.Remoting.Messaging;
+
+namespace XBee
 {
-    public class NodeAddress
+    public class NodeAddress : IEquatable<NodeAddress>
     {
         public NodeAddress()
         {
@@ -16,13 +19,24 @@
         {
         }
 
-        public NodeAddress(ShortAddress shortAddress) : this(LongAddress.BroadcastAddress, shortAddress)
+        public NodeAddress(ShortAddress shortAddress) : this(LongAddress.Broadcast, shortAddress)
         {
         }
 
         public LongAddress LongAddress { get; set; }
 
         public ShortAddress ShortAddress { get; set; }
+
+        public bool Equals(NodeAddress other)
+        {
+            if (ShortAddress.Equals(ShortAddress.Broadcast) || ShortAddress.Equals(ShortAddress.Disabled))
+                return LongAddress.Equals(other.LongAddress);
+
+            if (LongAddress.Equals(LongAddress.Broadcast))
+                return ShortAddress.Equals(other.ShortAddress);
+
+            return LongAddress.Equals(other.LongAddress) && ShortAddress.Equals(other.ShortAddress);
+        }
 
         public override string ToString()
         {
