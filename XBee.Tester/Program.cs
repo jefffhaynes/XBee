@@ -94,7 +94,7 @@ namespace XBee.Tester
                 await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel2, InputOutputConfiguration.DigitalIn);
                 await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel3, InputOutputConfiguration.AnalogIn);
 
-                await args.Node.SetChangeDetectionChannels(DigitalSampleChannels.Input2 | DigitalSampleChannels.Input3);
+                await args.Node.SetChangeDetectionChannels(DigitalSampleChannels.Input2);
 
                 await args.Node.SetSampleRate(TimeSpan.FromSeconds(5));
 
