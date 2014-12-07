@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousDisposable.cs" />
+    <Compile Include="SourcedDataReceivedEventArgs.cs" />
     <Compile Include="Devices\XBeePro900HP.cs" />
     <Compile Include="Devices\XBeeSeries1.cs" />
     <Compile Include="Frames\AtCommand.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Frames\RxIndicatorSampleFrame.cs" />
     <Compile Include="Frames\TransmitOptions.cs" />
     <Compile Include="Frames\TransmitOptionsExt.cs" />
+    <Compile Include="Frames\TxRequest16Frame.cs" />
     <Compile Include="Frames\TxRequestFrame.cs" />
     <Compile Include="Frames\TxRequestExtFrame.cs" />
     <Compile Include="Frames\TxStatusFrame.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Observable\Source.cs" />
     <Compile Include="Observable\Where.cs" />
     <Compile Include="Sample.cs" />
+    <Compile Include="SourcedSampleReceivedEventArgs.cs" />
     <Compile Include="SampleReceivedEventArgs.cs" />
     <Compile Include="SignalStrength.cs" />
     <Compile Include="LongAddress.cs" />

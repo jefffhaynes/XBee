@@ -85,9 +85,15 @@ namespace XBee.Tester
 
                 //Console.WriteLine("reset");
 
-                var samples = args.Node.GetSamples();
+                args.Node.SampleReceived += Node_SampleReceived;
 
-                await samples.ForEachAsync(sample => Console.WriteLine(sample.ToString()));
+                //var address = await args.Node.GetAddress();
+                //await args.Node.SetAddress(new ShortAddress(0));
+                //await args.Node.WriteChanges();
+
+                //var samples = args.Node.GetSamples();
+
+                //await samples.ForEachAsync(sample => Console.WriteLine(sample.ToString()));
 
                 //await args.Node.ForceSample();
             };
@@ -108,6 +114,11 @@ namespace XBee.Tester
             //    }), TimeSpan.FromSeconds(6));
 
             Console.WriteLine("Done.");
+        }
+
+        static void Node_SampleReceived(object sender, SampleReceivedEventArgs e)
+        {
+            Console.WriteLine("sample!");
         }
 
         //private static void SerialConnectionOnFrameReceived(object sender, FrameReceivedEventArgs e)

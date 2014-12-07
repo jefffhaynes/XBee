@@ -3,7 +3,7 @@
     public enum FrameType : byte
     {
         TxRequest = 0x00,
-        Request16 = 0x01,
+        TxRequest16 = 0x01,
         AtCommand = 0x08,
         AtQueueCommand = 0x09,
         TxRequestExt = 0x10,

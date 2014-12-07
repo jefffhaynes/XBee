@@ -44,6 +44,11 @@ namespace XBee.Devices
             await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
         }
 
+        public override async Task TransmitDataAsync(byte[] data)
+        {
+            await Controller.TransmitDataExtAsync(Address.LongAddress, data);
+        }
+
         public async Task<SleepOptionsExt> GetSleepOptions()
         {
             var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand());

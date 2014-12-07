@@ -22,6 +22,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.RemoteAtCommand, typeof(RemoteAtCommandFrameContent))]
         [Subtype("FrameType", FrameType.RemoteAtCommandResponse, typeof(RemoteAtCommandResponseFrame))]
         [Subtype("FrameType", FrameType.TxRequest, typeof(TxRequestFrame))]
+        [Subtype("FrameType", FrameType.TxRequest16, typeof(TxRequest16Frame))]
         [Subtype("FrameType", FrameType.TxRequestExt, typeof(TxRequestExtFrame))]
         [Subtype("FrameType", FrameType.TxStatus, typeof(TxStatusFrame))]
         [Subtype("FrameType", FrameType.TxStatusExt, typeof(TxStatusExtFrame))]

@@ -10,23 +10,26 @@ namespace XBee
     {
         private static readonly TimeSpan HardwareResetTime = TimeSpan.FromMilliseconds(200);
 
-        private readonly XBeeController _controller;
-        private readonly Source<Sample> _sampleSource = new Source<Sample>();
+        protected readonly XBeeController Controller;
 
         internal XBeeNode(XBeeController controller, HardwareVersion hardwareVersion, NodeAddress address = null)
         {
-            _controller = controller;
+            Controller = controller;
             HardwareVersion = hardwareVersion;
             Address = address;
+
+            Controller.SampleReceived += ControllerOnSampleReceived;
+            Controller.DataReceived += ControllerOnDataReceived;
         }
+
 
         public HardwareVersion HardwareVersion { get; private set; }
 
         public NodeAddress Address { get; private set; }
 
-        //public event EventHandler<DataReceivedEventArgs> DataReceived;
+        public event EventHandler<DataReceivedEventArgs> DataReceived;
 
-        //public event EventHandler<SampleReceivedEventArgs> SampleReceived;
+        public event EventHandler<SampleReceivedEventArgs> SampleReceived;
 
 
         public async Task Reset()
@@ -170,25 +173,48 @@ namespace XBee
             await ExecuteAtCommandAsync(new WriteCommand());
         }
 
+        public IObservable<Sample> GetSamples()
+        {
+            return Controller.GetSampleSource()
+                .Where(sample => sample.Address.Equals(Address))
+                .Select(sample => sample.Sample);
+        }
+
+        public IObservable<byte[]> GetReceivedData()
+        {
+            return Controller.GetReceivedDataSource()
+                .Where(data => data.Address.Equals(Address))
+                .Select(data => data.Data);
+        }
+
+        public abstract Task TransmitDataAsync(byte[] data);
+
         protected void ExecuteAtCommand(AtCommand command)
         {
-            _controller.ExecuteAtCommand(command);
+            Controller.ExecuteAtCommand(command);
         }
 
         protected async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
             where TResponseData : AtCommandResponseFrameData
         {
-            return await _controller.ExecuteAtQueryAsync<TResponseData>(command, Address);
+            return await Controller.ExecuteAtQueryAsync<TResponseData>(command, Address);
         }
 
         protected virtual async Task ExecuteAtCommandAsync(AtCommand command)
         {
-            await _controller.ExecuteAtCommandAsync(command, Address);
+            await Controller.ExecuteAtCommandAsync(command, Address);
         }
 
-        public IObservable<Sample> GetSamples()
+        private void ControllerOnSampleReceived(object sender, SourcedSampleReceivedEventArgs e)
         {
-            return _controller.GetSampleSource().Where(sample => sample.Address.Equals(Address)).Select(sample => sample.Sample);
+            if (SampleReceived != null && e.Address.Equals(Address))
+                SampleReceived(this, new SampleReceivedEventArgs(e.DigitalSampleState, e.AnalogSamples));
+        }
+
+        private void ControllerOnDataReceived(object sender, SourcedDataReceivedEventArgs e)
+        {
+            if (DataReceived != null && e.Address.Equals(Address))
+                DataReceived(this, new DataReceivedEventArgs(e.Data));
         }
     }
 }

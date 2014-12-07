@@ -42,5 +42,10 @@ namespace XBee.Devices
         {
             await ExecuteAtCommandAsync(new SleepOptionsCommand(options));
         }
+
+        public override async Task TransmitDataAsync(byte[] data)
+        {
+            await Controller.TransmitDataAsync(Address.LongAddress, data);
+        }
     }
 }

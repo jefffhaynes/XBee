@@ -37,9 +37,9 @@ namespace XBee
 
         public event EventHandler<NodeDiscoveredEventArgs> NodeDiscovered;
 
-        public event EventHandler<DataReceivedEventArgs> DataReceived;
+        public event EventHandler<SourcedDataReceivedEventArgs> DataReceived;
 
-        public event EventHandler<SampleReceivedEventArgs> SampleReceived;
+        public event EventHandler<SourcedSampleReceivedEventArgs> SampleReceived;
 
         public async Task OpenAsync(string port, int baudRate)
         {
@@ -47,7 +47,14 @@ namespace XBee
             _connection.FrameReceived += OnFrameReceived;
             _connection.Open();
 
-            await Reset();
+            try
+            {
+                await Reset();
+            }
+            catch (TimeoutException e)
+            {
+                throw new InvalidOperationException("Couldn't communicate with device.  Ensure API mode is enabled.", e);
+            }
 
             /* Unfortunately the protocol changes based on what type of hardware we're using... */
             HardwareVersionResponseData response =
@@ -206,24 +213,30 @@ namespace XBee
 
         public async Task TransmitDataAsync(LongAddress address, byte[] data)
         {
-            if (HardwareVersion == HardwareVersion.XBeeSeries1 ||
-                HardwareVersion == HardwareVersion.XBeeProSeries1)
-            {
-                var transmitRequest = new TxRequestFrame(address, data);
-                TxStatusFrame response = await ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
+            var transmitRequest = new TxRequestFrame(address, data);
+            TxStatusFrame response = await ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
 
-                if (response.Status != DeliveryStatus.Success)
-                    throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
-            }
-            else
-            {
-                var transmitRequest = new TxRequestExtFrame(address, data);
-                TxStatusExtFrame response = await ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
+            if (response.Status != DeliveryStatus.Success)
+                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
+        }
 
-                if (response.DeliveryStatus != DeliveryStatusExt.Success)
-                    throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
-                        response.DeliveryStatus));
-            }
+        public async Task TransmitDataAsync(ShortAddress address, byte[] data)
+        {
+            var transmitRequest = new TxRequest16Frame(address, data);
+            TxStatusFrame response = await ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
+
+            if (response.Status != DeliveryStatus.Success)
+                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
+        }
+
+        public async Task TransmitDataExtAsync(LongAddress address, byte[] data)
+        {
+            var transmitRequest = new TxRequestExtFrame(address, data);
+            TxStatusExtFrame response = await ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
+
+            if (response.DeliveryStatus != DeliveryStatusExt.Success)
+                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
+                    response.DeliveryStatus));
         }
 
         public IObservable<SourcedSample> GetSampleSource()
@@ -331,7 +344,7 @@ namespace XBee
                 NodeAddress address = dataFrame.GetAddress();
 
                 if (DataReceived != null)
-                    DataReceived(this, new DataReceivedEventArgs(address, dataFrame.Data));
+                    DataReceived(this, new SourcedDataReceivedEventArgs(address, dataFrame.Data));
             }
             else if (content is IRxIndicatorSampleFrame)
             {
@@ -343,7 +356,7 @@ namespace XBee
 
                 if (SampleReceived != null)
                     SampleReceived(this,
-                        new SampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
+                        new SourcedSampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
             }
         }
 

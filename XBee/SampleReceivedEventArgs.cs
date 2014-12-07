@@ -9,14 +9,11 @@ namespace XBee
 {
     public class SampleReceivedEventArgs : EventArgs
     {
-        public SampleReceivedEventArgs(NodeAddress address, DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
+        public SampleReceivedEventArgs(DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
         {
-            Address = address;
             DigitalSampleState = digitalSampleState;
             AnalogSamples = new ReadOnlyCollection<AnalogSample>(analogSamples.ToList());
         }
-
-        public NodeAddress Address { get; private set; }
 
         public DigitalSampleState DigitalSampleState { get; private set; }
 
