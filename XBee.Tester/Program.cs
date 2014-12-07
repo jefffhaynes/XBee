@@ -45,7 +45,7 @@ namespace XBee.Tester
 
             await _xbee.OpenAsync("COM5", 9600);
 
-            _xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args);
+            //_xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args);
 
             //var coordinator = await _xbee.IsCoordinator();
 
@@ -97,9 +97,9 @@ namespace XBee.Tester
                 //await args.Node.SetAddress(new ShortAddress(0));
                 //await args.Node.WriteChanges();
 
-                //var samples = args.Node.GetSamples();
+                var samples = args.Node.GetSamples();
 
-                //await samples.ForEachAsync(sample => Console.WriteLine(sample.ToString()));
+                await samples.ForEachAsync(sample => Console.WriteLine(sample.ToString()));
 
                 //await args.Node.ForceSample();
             };

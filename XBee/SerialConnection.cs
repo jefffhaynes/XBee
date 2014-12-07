@@ -10,6 +10,7 @@ namespace XBee
     internal class SerialConnection : IDisposable
     {
         private readonly SerialPort _serialPort;
+        private readonly object _portLock = new object();
         private CancellationTokenSource _readCancellationTokenSource;
         private readonly FrameSerializer _frameSerializer = new FrameSerializer();
 
@@ -26,8 +27,11 @@ namespace XBee
 
         public void Send(FrameContent frameContent)
         {
-            var data = _frameSerializer.Serialize(new Frame(frameContent));
-            _serialPort.BaseStream.Write(data, 0, data.Length);
+            lock (_portLock)
+            {
+                var data = _frameSerializer.Serialize(new Frame(frameContent));
+                _serialPort.BaseStream.Write(data, 0, data.Length);
+            }
         }
 
         public event EventHandler<FrameReceivedEventArgs> FrameReceived;

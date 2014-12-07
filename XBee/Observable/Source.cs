@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XBee.Observable
 {
@@ -7,6 +8,7 @@ namespace XBee.Observable
     {
         private readonly List<IObserver<TSource>> _observers;
         private readonly object _observersLock = new object();
+        private bool _disposed;
 
         internal Source()
         {
@@ -24,7 +26,9 @@ namespace XBee.Observable
             return new AnonymousDisposable(() =>
             {
                 lock (_observersLock)
+                {
                     _observers.Remove(observer);
+                }
             });
         }
 
@@ -39,12 +43,19 @@ namespace XBee.Observable
 
         public void Dispose()
         {
+            if (_disposed) 
+                return;
+
             lock (_observersLock)
             {
-                foreach (var observer in _observers)
+                if (_disposed) return;
+
+                foreach (var observer in _observers.ToList())
                     observer.OnCompleted();
 
                 _observers.Clear();
+
+                _disposed = true;
             }
         }
     }
