@@ -23,18 +23,18 @@ namespace XBee
             var stream = new MemoryStream();
 
 #if DEBUG
-            serializer.MemberSerializing += (sender, args) =>
-            {
-                Console.CursorLeft = args.Context.Depth * 4;
-                Console.WriteLine("S-Start: {0}", args.MemberName);
-            };
+            //serializer.MemberSerializing += (sender, args) =>
+            //{
+            //    Console.CursorLeft = args.Context.Depth * 4;
+            //    Console.WriteLine("S-Start: {0}", args.MemberName);
+            //};
 
-            serializer.MemberSerialized += (sender, args) =>
-            {
-                Console.CursorLeft = args.Context.Depth * 4;
-                var value = args.Value ?? "null";
-                Console.WriteLine("S-End: {0} ({1})", args.MemberName, value);
-            };
+            //serializer.MemberSerialized += (sender, args) =>
+            //{
+            //    Console.CursorLeft = args.Context.Depth * 4;
+            //    var value = args.Value ?? "null";
+            //    Console.WriteLine("S-End: {0} ({1})", args.MemberName, value);
+            //};
 #endif
 
             serializer.Serialize(stream, frame,

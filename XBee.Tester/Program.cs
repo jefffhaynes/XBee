@@ -47,7 +47,7 @@ namespace XBee.Tester
 
             Console.WriteLine("Running {0}", _xbee.HardwareVersion);
 
-            //_xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args);
+            _xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args.Address);
 
             //var coordinator = await _xbee.IsCoordinator();
 

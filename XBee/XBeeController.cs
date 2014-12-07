@@ -277,7 +277,7 @@ namespace XBee
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
                     {
                         /* Devices have trouble resetting after ND for some reason... */
-                        await Task.Delay(10);
+                        await Task.Delay(100);
 
                         var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
                         XBeeNode node = await GetRemote(address);
