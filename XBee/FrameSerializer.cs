@@ -73,8 +73,6 @@ namespace XBee
                 var value = args.Value ?? "null";
                 Console.WriteLine("D-End: {0} ({1})", args.MemberName, value);
             };
-
-            Console.WriteLine("Deserializing using {0}", ControllerHardwareVersion);
 #endif
 
             var frame = serializer.Deserialize<Frame>(stream, 

@@ -18,7 +18,7 @@ namespace XBee
         private static readonly ConcurrentDictionary<byte, Action<CommandResponseFrameContent>> ExecuteCallbacks =
             new ConcurrentDictionary<byte, Action<CommandResponseFrameContent>>();
 
-        private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromMilliseconds(300);
+        private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(10);
         private readonly object _frameIdLock = new object();

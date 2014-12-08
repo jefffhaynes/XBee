@@ -64,7 +64,7 @@ namespace XBee.Tester
             //name = await _xbee.GetNodeIdentification();
 
             //var serialNumber = await _xbee.GetSerialNumber();
-            Discover();
+            //Discover();
         }
 
         private static async void Discover()
