@@ -30,6 +30,8 @@ namespace XBee.Tester
             //    Console.ReadKey();s
             //}
 
+            Console.SetBufferSize(80, 10000);
+
             MainAsync();
 
             Console.ReadKey();
@@ -47,7 +49,7 @@ namespace XBee.Tester
 
             Console.WriteLine("Running {0}", _xbee.HardwareVersion);
 
-            _xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args.Address);
+            //_xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args.Address);
 
             //var coordinator = await _xbee.IsCoordinator();
 
@@ -105,7 +107,7 @@ namespace XBee.Tester
 
                 var samples = args.Node.GetSamples();
 
-                await samples.ForEachAsync(sample => Console.WriteLine(sample.ToString()));
+                await samples.ForEachAsync(sample => Console.WriteLine("{0} ({1})", sample.ToString(), args.Name));
 
                 //await args.Node.ForceSample();
             };

@@ -9,6 +9,6 @@ namespace XBee
             ControllerHardwareVersion = controllerHardwareVersion;
         }
 
-        public HardwareVersion? ControllerHardwareVersion { get; private set; }
+        public HardwareVersion? ControllerHardwareVersion { get; set; }
     }
 }

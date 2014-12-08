@@ -18,11 +18,14 @@ namespace XBee
         private static readonly ConcurrentDictionary<byte, Action<CommandResponseFrameContent>> ExecuteCallbacks =
             new ConcurrentDictionary<byte, Action<CommandResponseFrameContent>>();
 
+        private static readonly ConcurrentDictionary<LongAddress, SemaphoreSlim> DeviceOperationLocks = 
+            new ConcurrentDictionary<LongAddress, SemaphoreSlim>(); 
+
         private static readonly SemaphoreSlim OperationLock = new SemaphoreSlim(1);
 
         private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromMilliseconds(300);
         private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(5);
-        private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(6);
+        private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(10);
         private readonly object _frameIdLock = new object();
 
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
@@ -90,7 +93,19 @@ namespace XBee
 
         public async Task Execute(FrameContent frame)
         {
-            await _connection.Send(frame);
+            if(!IsOpen)
+                throw new InvalidOperationException("Controller must be open to execute commands.");
+
+            //await OperationLock.WaitAsync();
+            try
+            {
+                await _connection.Send(frame);
+                //await Task.Delay(100);
+            }
+            finally
+            {
+                //OperationLock.Release();
+            }
         }
         
         public async Task ExecuteAtCommand(AtCommand command, NodeAddress address = null)
@@ -110,7 +125,7 @@ namespace XBee
         public async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout)
             where TResponseFrame : CommandResponseFrameContent
         {
-            await OperationLock.WaitAsync();
+            //await OperationLock.WaitAsync();
 
             try
             {
@@ -136,7 +151,7 @@ namespace XBee
             }
             finally
             {
-                OperationLock.Release();
+                //OperationLock.Release();
             }
         }
 
@@ -160,10 +175,22 @@ namespace XBee
             }
             else
             {
-                var remoteCommand = new RemoteAtCommandFrameContent(address, command);
-                RemoteAtCommandResponseFrame response =
-                    await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
-                responseContent = response.Content;
+                var operationLock = DeviceOperationLocks.GetOrAdd(address.LongAddress,
+                    longAddress => new SemaphoreSlim(1));
+
+                //await operationLock.WaitAsync();
+
+                try
+                {
+                    var remoteCommand = new RemoteAtCommandFrameContent(address, command);
+                    RemoteAtCommandResponseFrame response =
+                        await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
+                    responseContent = response.Content;
+                }
+                finally
+                {
+                    //operationLock.Release();
+                }
             }
 
             if (responseContent.Status != AtCommandStatus.Success)
@@ -174,30 +201,13 @@ namespace XBee
 
         public async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null)
         {
-            AtCommandResponseFrameContent responseContent;
-
-            if (address == null)
-            {
-                var atCommandFrame = new AtCommandFrameContent(command);
-                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame);
-                responseContent = response.Content;
-            }
-            else
-            {
-                var remoteCommand = new RemoteAtCommandFrameContent(address, command);
-                RemoteAtCommandResponseFrame response =
-                    await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
-                responseContent = response.Content;
-            }
-
-            if (responseContent.Status != AtCommandStatus.Success)
-                throw new AtCommandException(responseContent.Status);
+            await ExecuteAtQueryAsync<AtCommandResponseFrameData>(command, address);
         }
 
         public async Task ExecuteMultiQueryAsync<TResponseFrame>(CommandFrameContent frame,
             Action<TResponseFrame> callback, TimeSpan timeout) where TResponseFrame : CommandResponseFrameContent
         {
-            await OperationLock.WaitAsync();
+            //await OperationLock.WaitAsync();
 
             try
             {
@@ -223,7 +233,7 @@ namespace XBee
             }
             finally
             {
-                OperationLock.Release();
+                //OperationLock.Release();
             }
         }
 
@@ -276,11 +286,28 @@ namespace XBee
 
                     if (NodeDiscovered != null && !discoveryData.IsCoordinator)
                     {
-                        /* Devices have trouble resetting after ND for some reason... */
-                        await Task.Delay(100);
+                        //await Task.Delay(500);
 
                         var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
-                        XBeeNode node = await GetRemote(address);
+
+                        XBeeNode node = null;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            try
+                            {
+                                node = await GetRemote(address);
+                                break;
+                            }
+                            catch (TimeoutException)
+                            {
+                            }
+                            catch (AtCommandException)
+                            {
+                            }
+                        }
+
+                        if(node == null)
+                            throw new TimeoutException();
 
                         NodeDiscovered(this,
                             new NodeDiscoveredEventArgs(discoveryData.Name,
@@ -342,6 +369,8 @@ namespace XBee
                 var commandResponse = content as CommandResponseFrameContent;
 
                 byte frameId = commandResponse.FrameId;
+
+                Console.WriteLine("RX {0}", frameId);
 
                 TaskCompletionSource<CommandResponseFrameContent> taskCompletionSource;
                 if (ExecuteTaskCompletionSources.TryRemove(frameId, out taskCompletionSource))

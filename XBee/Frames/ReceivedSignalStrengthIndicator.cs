@@ -28,5 +28,10 @@ namespace XBee.Frames
                 return signalStrength;
             }
         }
+
+        public override string ToString()
+        {
+            return SignalStrength.ToString();
+        }
     }
 }

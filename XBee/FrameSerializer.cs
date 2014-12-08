@@ -9,7 +9,13 @@ namespace XBee
 {
     public class FrameSerializer
     {
-        public HardwareVersion? ControllerHardwareVersion { get; set; }
+        public HardwareVersion? ControllerHardwareVersion
+        {
+            get { return _serializationContext.ControllerHardwareVersion; }
+            set { _serializationContext.ControllerHardwareVersion = value; }
+        }
+
+        private readonly FrameContext _serializationContext = new FrameContext(null);
 
         public void Serialize(Stream stream, object graph)
         {
@@ -38,7 +44,7 @@ namespace XBee
 #endif
 
             serializer.Serialize(stream, frame,
-                new BinarySerializationContext(new FrameContext(ControllerHardwareVersion)));
+                new BinarySerializationContext(_serializationContext));
 
             var data = stream.ToArray();
 
@@ -67,10 +73,12 @@ namespace XBee
                 var value = args.Value ?? "null";
                 Console.WriteLine("D-End: {0} ({1})", args.MemberName, value);
             };
+
+            Console.WriteLine("Deserializing using {0}", ControllerHardwareVersion);
 #endif
 
-            var frame =  serializer.Deserialize<Frame>(stream, 
-                new BinarySerializationContext(new FrameContext(ControllerHardwareVersion)));
+            var frame = serializer.Deserialize<Frame>(stream, 
+                new BinarySerializationContext(_serializationContext));
 
             /* read checksum */
             stream.ReadByte();
