@@ -93,12 +93,12 @@ namespace XBee.Tester
 
                 //Console.WriteLine("reset");
 
-                await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel2, InputOutputConfiguration.DigitalIn);
-                await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel3, InputOutputConfiguration.AnalogIn);
+                //await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel2, InputOutputConfiguration.DigitalIn);
+                //await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel3, InputOutputConfiguration.AnalogIn);
 
-                await args.Node.SetChangeDetectionChannels(DigitalSampleChannels.Input2);
+                //await args.Node.SetChangeDetectionChannels(DigitalSampleChannels.Input2);
 
-                await args.Node.SetSampleRate(TimeSpan.FromSeconds(5));
+                //await args.Node.SetSampleRate(TimeSpan.FromSeconds(5));
 
 
                 //var address = await args.Node.GetAddress();
