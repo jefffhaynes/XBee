@@ -8,7 +8,7 @@
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for controlling XBee wireless modules.</description>
-    <releaseNotes>Bug fixes related to sampling.</releaseNotes>
+    <releaseNotes>Bug fixes.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>XBee Wireless</tags>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
