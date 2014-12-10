@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousDisposable.cs" />
+    <Compile Include="Devices\XBeeSeries2.cs" />
     <Compile Include="SourcedDataReceivedEventArgs.cs" />
     <Compile Include="Devices\XBeePro900HP.cs" />
     <Compile Include="Devices\XBeeSeries1.cs" />

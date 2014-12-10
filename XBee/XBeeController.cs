@@ -195,34 +195,6 @@ namespace XBee
             ExecuteCallbacks.TryRemove(frame.FrameId, out action);
         }
 
-        public async Task TransmitDataAsync(LongAddress address, byte[] data)
-        {
-            var transmitRequest = new TxRequestFrame(address, data);
-            TxStatusFrame response = await ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
-
-            if (response.Status != DeliveryStatus.Success)
-                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
-        }
-
-        public async Task TransmitDataAsync(ShortAddress address, byte[] data)
-        {
-            var transmitRequest = new TxRequest16Frame(address, data);
-            TxStatusFrame response = await ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
-
-            if (response.Status != DeliveryStatus.Success)
-                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
-        }
-
-        public async Task TransmitDataExtAsync(LongAddress address, byte[] data)
-        {
-            var transmitRequest = new TxRequestExtFrame(address, data);
-            TxStatusExtFrame response = await ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
-
-            if (response.DeliveryStatus != DeliveryStatusExt.Success)
-                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
-                    response.DeliveryStatus));
-        }
-
         public IObservable<SourcedSample> GetSampleSource()
         {
             return _sampleSource;
@@ -266,9 +238,12 @@ namespace XBee
                         if(node == null)
                             throw new TimeoutException();
 
+                        var signalStrength = discoveryData.ReceivedSignalStrengthIndicator == null
+                            ? (SignalStrength?) null
+                            : discoveryData.ReceivedSignalStrengthIndicator.SignalStrength;
+
                         NodeDiscovered(this,
-                            new NodeDiscoveredEventArgs(discoveryData.Name,
-                                discoveryData.ReceivedSignalStrengthIndicator.SignalStrength,
+                            new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
                                 node));
                     }
                 }), NetworkDiscoveryTimeout);
@@ -298,9 +273,9 @@ namespace XBee
                 case HardwareVersion.XBeeProSeries1:
                     return new XBeeSeries1(this, HardwareVersion.XBeeProSeries1, address);
                 case HardwareVersion.XBeeProS2:
-                    return new XBeeSeries1(this, HardwareVersion.XBeeProS2, address);
+                    return new XBeeSeries2(this, HardwareVersion.XBeeProS2, address);
                 case HardwareVersion.XBeeProS2B:
-                    return new XBeeSeries1(this, HardwareVersion.XBeeProS2B, address);
+                    return new XBeeSeries2(this, HardwareVersion.XBeeProS2B, address);
                 case HardwareVersion.XBeePro900:
                     return new XBeePro900HP(this, HardwareVersion.XBeePro900, address);
                 case HardwareVersion.XBeePro900HP:

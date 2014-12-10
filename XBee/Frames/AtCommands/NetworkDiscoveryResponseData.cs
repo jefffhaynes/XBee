@@ -14,6 +14,8 @@ namespace XBee.Frames.AtCommands
 
         public string Name { get; set; }
 
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2B, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900HP, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
         public NetworkDiscoveryResponseDataExtendedInfo ExtendedInfo { get; set; }
 

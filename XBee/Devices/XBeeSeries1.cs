@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
@@ -45,7 +46,14 @@ namespace XBee.Devices
 
         public override async Task TransmitDataAsync(byte[] data)
         {
-            await Controller.TransmitDataAsync(Address.LongAddress, data);
+            if (Address == null)
+                throw new InvalidOperationException("Can't send data to local device.");
+
+            var transmitRequest = new TxRequestFrame(Address.LongAddress, data);
+            TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
+
+            if (response.Status != DeliveryStatus.Success)
+                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
         }
     }
 }

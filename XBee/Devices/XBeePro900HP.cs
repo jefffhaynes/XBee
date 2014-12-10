@@ -46,7 +46,15 @@ namespace XBee.Devices
 
         public override async Task TransmitDataAsync(byte[] data)
         {
-            await Controller.TransmitDataExtAsync(Address.LongAddress, data);
+            if (Address == null)
+                throw new InvalidOperationException("Can't send data to local device.");
+
+            var transmitRequest = new TxRequestExtFrame(Address.LongAddress, data);
+            TxStatusExtFrame response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
+
+            if (response.DeliveryStatus != DeliveryStatusExt.Success)
+                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
+                    response.DeliveryStatus));
         }
 
         public async Task<SleepOptionsExt> GetSleepOptions()

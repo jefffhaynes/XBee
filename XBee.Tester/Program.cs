@@ -64,7 +64,7 @@ namespace XBee.Tester
             //name = await _xbee.GetNodeIdentification();
 
             //var serialNumber = await _xbee.GetSerialNumber();
-            //Discover();
+            Discover();
         }
 
         private static async void Discover()
@@ -77,7 +77,7 @@ namespace XBee.Tester
             {
                 Console.WriteLine("Discovered '{0}'", args.Name);
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
-                //await _xbee.TransmitDataAsync(args.Address, Encoding.ASCII.GetBytes("Hello!"));
+                await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
                 //Console.WriteLine("Ack from '{0}'!", args.Name);
 
                 //var changeDetection = await args.Node.GetChangeDetectionChannels();
