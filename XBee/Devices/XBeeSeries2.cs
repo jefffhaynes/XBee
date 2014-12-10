@@ -8,7 +8,7 @@ namespace XBee.Devices
     public class XBeeSeries2 : XBeeNode
     {
         internal XBeeSeries2(XBeeController controller,
-            HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2, 
+            HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2,
             NodeAddress address = null) : base(controller, hardwareVersion, address)
         {
         }
@@ -24,6 +24,15 @@ namespace XBee.Devices
             if (response.DeliveryStatus != DeliveryStatusExt.Success)
                 throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
                     response.DeliveryStatus));
+        }
+
+        public async Task<AssociationIndicator> GetAssociation()
+        {
+            PrimitiveResponseData<AssociationIndicator> response = await
+                    Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
+                        new AssociationIndicationCommand());
+
+            return response.Value;
         }
     }
 }

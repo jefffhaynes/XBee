@@ -13,6 +13,7 @@ namespace XBee.Frames
 
         public AtCommandStatus Status { get; set; }
 
+        [Subtype("AtCommand", "AI", typeof(PrimitiveResponseData<AssociationIndicator>))]
         [Subtype("AtCommand", "MY", typeof(PrimitiveResponseData<ShortAddress>))]
         [Subtype("AtCommand", "DH", typeof(PrimitiveResponseData<uint>))]
         [Subtype("AtCommand", "DL", typeof(PrimitiveResponseData<uint>))]

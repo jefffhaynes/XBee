@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XBee.Devices;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
@@ -77,7 +78,12 @@ namespace XBee.Tester
             {
                 Console.WriteLine("Discovered '{0}'", args.Name);
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
-                await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
+                //await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
+
+                var node = args.Node as XBeeSeries2;
+
+                var ai = await node.GetAssociation();
+
                 //Console.WriteLine("Ack from '{0}'!", args.Name);
 
                 //var changeDetection = await args.Node.GetChangeDetectionChannels();
@@ -101,8 +107,8 @@ namespace XBee.Tester
                 //await args.Node.SetSampleRate(TimeSpan.FromSeconds(5));
 
 
-                //var address = await args.Node.GetAddress();
-                //await args.Node.SetAddress(new ShortAddress(0));
+                //var address = await args.Node.GetDestinationAddress();
+                //await args.Node.SetDestinationAddress(new ShortAddress(0));
                 //await args.Node.WriteChanges();
 
                 var samples = args.Node.GetSamples();

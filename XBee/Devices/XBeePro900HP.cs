@@ -5,7 +5,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
-    internal class XBeePro900HP : XBeeNode
+    internal class XBeePro900HP : XBeeSeries2
     {
         internal XBeePro900HP(XBeeController controller, 
             HardwareVersion hardwareVersion = HardwareVersion.XBeePro900HP,
@@ -13,7 +13,7 @@ namespace XBee.Devices
         {
         }
 
-        public override async Task<NodeAddress> GetAddress()
+        public override async Task<NodeAddress> GetDestinationAddress()
         {
             var high = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
             var low = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand());
@@ -42,19 +42,6 @@ namespace XBee.Devices
         public override async Task SetChangeDetectionChannels(DigitalSampleChannels channels)
         {
             await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
-        }
-
-        public override async Task TransmitDataAsync(byte[] data)
-        {
-            if (Address == null)
-                throw new InvalidOperationException("Can't send data to local device.");
-
-            var transmitRequest = new TxRequestExtFrame(Address.LongAddress, data);
-            TxStatusExtFrame response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
-
-            if (response.DeliveryStatus != DeliveryStatusExt.Success)
-                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
-                    response.DeliveryStatus));
         }
 
         public async Task<SleepOptionsExt> GetSleepOptions()

@@ -53,7 +53,7 @@ namespace XBee
             await ExecuteAtCommandAsync(new NodeIdentifierCommand(id));
         }
 
-        public virtual async Task<NodeAddress> GetAddress()
+        public virtual async Task<NodeAddress> GetDestinationAddress()
         {
             PrimitiveResponseData<uint> high =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
@@ -68,7 +68,7 @@ namespace XBee
             return new NodeAddress(address, source.Value);
         }
 
-        public async Task SetAddress(LongAddress address)
+        public async Task SetDestinationAddress(LongAddress address)
         {
             await ExecuteAtCommandAsync(new DestinationAddressHighCommand(address.High));
             Address.LongAddress.High = address.High;
@@ -76,7 +76,7 @@ namespace XBee
             Address.LongAddress.Low = address.Low;
         }
 
-        public async Task SetAddress(ShortAddress address)
+        public async Task SetNetworkAddress(ShortAddress address)
         {
             await ExecuteAtCommandAsync(new SourceAddressCommand(address));
         }
