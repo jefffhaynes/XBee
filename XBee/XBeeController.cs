@@ -85,7 +85,7 @@ namespace XBee
             //HardwareVersionResponseData version =
             //    await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address);
 
-            return CreateNode(HardwareVersion, address);
+            return await Task.FromResult(CreateNode(HardwareVersion, address));
         }
 
         public async Task Execute(FrameContent frame)

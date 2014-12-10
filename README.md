@@ -3,7 +3,7 @@ XBee
 
 .NET library for [XBee wireless controllers](http://www.digi.com/xbee/)
 
- * Support for Series1 and 900HP
+ * Support for Series1, Series 2, and 900HP
  * Simple async/await command and query model
  * [Rx](https://rx.codeplex.com/)  support for received data and sampling.
 
