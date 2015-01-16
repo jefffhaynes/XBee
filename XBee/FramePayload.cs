@@ -14,8 +14,10 @@ namespace XBee
             Content = content;
         }
 
+        [FieldOrder(0)]
         public FrameType FrameType { get; set; }
 
+        [FieldOrder(1)]
         [Subtype("FrameType", FrameType.ModemStatus, typeof(ModemStatusFrame))]
         [Subtype("FrameType", FrameType.AtCommand, typeof(AtCommandFrameContent))]
         [Subtype("FrameType", FrameType.AtCommandResponse, typeof(AtCommandResponseFrame))]

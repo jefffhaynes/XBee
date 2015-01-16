@@ -9,6 +9,40 @@ namespace XBee
 {
     public class FrameSerializer
     {
+        private readonly BinarySerializer _serializer = new BinarySerializer { Endianness = Endianness.Big };
+        private readonly BinarySerializer _deserializer = new BinarySerializer { Endianness = Endianness.Big };
+
+#if DEBUG
+        public FrameSerializer()
+        {
+            _serializer.MemberSerializing += (sender, args) =>
+            {
+                Console.CursorLeft = args.Context.Depth * 4;
+                Console.WriteLine("S-Start: {0}", args.MemberName);
+            };
+
+            _serializer.MemberSerialized += (sender, args) =>
+            {
+                Console.CursorLeft = args.Context.Depth * 4;
+                var value = args.Value ?? "null";
+                Console.WriteLine("S-End: {0} ({1})", args.MemberName, value);
+            };
+
+            _deserializer.MemberDeserializing += (sender, args) =>
+            {
+                Console.CursorLeft = args.Context.Depth * 4;
+                Console.WriteLine("D-Start: {0}", args.MemberName);
+            };
+
+            _deserializer.MemberDeserialized += (sender, args) =>
+            {
+                Console.CursorLeft = args.Context.Depth * 4;
+                var value = args.Value ?? "null";
+                Console.WriteLine("D-End: {0} ({1})", args.MemberName, value);
+            };
+        }
+#endif
+
         public HardwareVersion? ControllerHardwareVersion
         {
             get { return _serializationContext.ControllerHardwareVersion; }
@@ -19,32 +53,14 @@ namespace XBee
 
         public void Serialize(Stream stream, object graph)
         {
-            var serializer = CreateSerializer();
-            serializer.Serialize(stream, graph);
+            _serializer.Serialize(stream, graph);
         }
 
         public byte[] Serialize(Frame frame)
         {
-            var serializer = CreateSerializer();
             var stream = new MemoryStream();
 
-#if DEBUG
-            //serializer.MemberSerializing += (sender, args) =>
-            //{
-            //    Console.CursorLeft = args.Context.Depth * 4;
-            //    Console.WriteLine("S-Start: {0}", args.MemberName);
-            //};
-
-            //serializer.MemberSerialized += (sender, args) =>
-            //{
-            //    Console.CursorLeft = args.Context.Depth * 4;
-            //    var value = args.Value ?? "null";
-            //    Console.WriteLine("S-End: {0} ({1})", args.MemberName, value);
-            //};
-#endif
-
-            serializer.Serialize(stream, frame,
-                new BinarySerializationContext(_serializationContext));
+            _serializer.Serialize(stream, frame, _serializationContext);
 
             var data = stream.ToArray();
 
@@ -58,35 +74,12 @@ namespace XBee
 
         public Frame Deserialize(Stream stream)
         {
-            var serializer = CreateSerializer();
-
-#if DEBUG
-            serializer.MemberDeserializing += (sender, args) =>
-            {
-                Console.CursorLeft = args.Context.Depth * 4;
-                Console.WriteLine("D-Start: {0}", args.MemberName);
-            };
-
-            serializer.MemberDeserialized += (sender, args) =>
-            {
-                Console.CursorLeft = args.Context.Depth * 4;
-                var value = args.Value ?? "null";
-                Console.WriteLine("D-End: {0} ({1})", args.MemberName, value);
-            };
-#endif
-
-            var frame = serializer.Deserialize<Frame>(stream, 
-                new BinarySerializationContext(_serializationContext));
+            var frame = _deserializer.Deserialize<Frame>(stream, _serializationContext);
 
             /* read checksum */
             stream.ReadByte();
 
             return frame;
-        }
-
-        private BinarySerializer CreateSerializer()
-        {
-            return new BinarySerializer { Endianness = Endianness.Big };
         }
     }
 }

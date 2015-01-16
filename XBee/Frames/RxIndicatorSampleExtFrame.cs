@@ -7,18 +7,25 @@ namespace XBee.Frames
 {
     public class RxIndicatorSampleExtFrame : CommandFrameContent, IRxIndicatorSampleFrame
     {
+        [FieldOrder(0)]
         public LongAddress Source { get; set; }
 
+        [FieldOrder(1)]
         public ShortAddress ShortAddress { get; set; }
 
+        [FieldOrder(2)]
         public ReceiveOptionsExt ReceiveOptions { get; set; }
 
+        [FieldOrder(3)]
         public byte SampleCount { get; set; }
 
+        [FieldOrder(4)]
         public DigitalSampleChannels DigitalChannels { get; set; }
 
+        [FieldOrder(5)]
         public AnalogSampleChannels AnalogChannels { get; set; }
 
+        [FieldOrder(6)]
         [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input0,
             ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input0)]
         [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input1,
@@ -47,6 +54,7 @@ namespace XBee.Frames
             ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input12)]
         public DigitalSampleState DigitalSampleState { get; set; }
 
+        [FieldOrder(7)]
         [SerializeWhen("AnalogSampleChannels", AnalogSampleChannels.Input0,
             ConverterType = typeof (BitwiseAndConverter), ConverterParameter = AnalogSampleChannels.Input0)]
         [SerializeWhen("AnalogSampleChannels", AnalogSampleChannels.Input1,

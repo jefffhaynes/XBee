@@ -15,10 +15,13 @@ namespace XBee
             Payload = new FramePayload(content);
         }
 
+        [FieldOrder(0)]
         public StartDelimiter StartDelimiter { get; set; }
 
+        [FieldOrder(1)]
         public ushort Length { get; set; }
 
+        [FieldOrder(2)]
         [FieldLength("Length")]
         public FramePayload Payload { get; set; }
     }

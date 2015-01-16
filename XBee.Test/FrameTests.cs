@@ -111,29 +111,29 @@ namespace XBee.Test
             _frameSerializer.Deserialize(new MemoryStream(data));
         }
 
-        [TestMethod]
-        public void RxIndicatorSampleFrameTest()
-        {
-            var data = new byte[]
-            {
-                0x7e, 0x00, 0x16, 0x82,
-                0x76, 0x54, 0x32, 0x10, 
-                0x76, 0x54, 0x32, 0x10, 
-                0x1b, 0x00, 0x01, 0x0e,
-                0x58, 0x00, 0x18, 0x00, 
-                0x46, 0x01, 0x54, 0x02, 
-                0x0a, 0x10
-            };
+        //[TestMethod]
+        //public void RxIndicatorSampleFrameTest()
+        //{
+        //    var data = new byte[]
+        //    {
+        //        0x7e, 0x00, 0x16, 0x82,
+        //        0x76, 0x54, 0x32, 0x10, 
+        //        0x76, 0x54, 0x32, 0x10, 
+        //        0x1b, 0x00, 0x01, 0x0e,
+        //        0x58, 0x00, 0x18, 0x00, 
+        //        0x46, 0x01, 0x54, 0x02, 
+        //        0x0a, 0x10
+        //    };
 
-            var frame = _frameSerializer.Deserialize(new MemoryStream(data));
+        //    var frame = _frameSerializer.Deserialize(new MemoryStream(data));
 
-            var content = frame.Payload.Content as RxIndicatorSampleFrame;
+        //    var content = frame.Payload.Content as RxIndicatorSampleFrame;
 
-            Assert.IsNotNull(content);
-            Assert.AreEqual(content.AnalogSamples.Count, 3);
-            Assert.AreEqual(content.AnalogSamples[0], 0x46);
-            Assert.AreEqual(content.AnalogSamples[1], 0x154);
-            Assert.AreEqual(content.AnalogSamples[2], 0x20a);
-        }
+        //    Assert.IsNotNull(content);
+        //    Assert.AreEqual(content.AnalogSamples.Count, 3);
+        //    Assert.AreEqual(content.AnalogSamples[0], 0x46);
+        //    Assert.AreEqual(content.AnalogSamples[1], 0x154);
+        //    Assert.AreEqual(content.AnalogSamples[2], 0x20a);
+        //}
     }
 }

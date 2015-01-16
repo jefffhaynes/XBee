@@ -1,4 +1,6 @@
-﻿namespace XBee.Frames
+﻿using BinarySerialization;
+
+namespace XBee.Frames
 {
     public class TxRequest16Frame : CommandFrameContent
     {
@@ -13,10 +15,13 @@
             Data = data;
         }
 
+        [FieldOrder(0)]
         public ShortAddress Destination { get; set; }
 
+        [FieldOrder(1)]
         public TransmitOptions Options { get; set; }
 
+        [FieldOrder(2)]
         public byte[] Data { get; set; }
     }
 }

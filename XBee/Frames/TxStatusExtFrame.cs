@@ -1,4 +1,6 @@
-﻿namespace XBee.Frames
+﻿using BinarySerialization;
+
+namespace XBee.Frames
 {
     public class TxStatusExtFrame : CommandResponseFrameContent
     {
@@ -7,12 +9,16 @@
             Reserved = ShortAddress.Broadcast;
         }
 
+        [FieldOrder(0)]
         public ShortAddress Reserved { get; set; }
 
+        [FieldOrder(1)]
         public byte RetryCount { get; set; }
 
+        [FieldOrder(2)]
         public DeliveryStatusExt DeliveryStatus { get; set; }
 
+        [FieldOrder(3)]
         public DiscoveryStatus DiscoveryStatus { get; set; }
     }
 }

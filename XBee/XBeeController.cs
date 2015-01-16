@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 using XBee.Devices;
@@ -18,8 +21,14 @@ namespace XBee
         private static readonly ConcurrentDictionary<byte, Action<CommandResponseFrameContent>> ExecuteCallbacks =
             new ConcurrentDictionary<byte, Action<CommandResponseFrameContent>>();
 
+#if !DEBUG
         private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(5);
+#else
+        private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(300);
+        private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(300);
+#endif
+
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(10);
         private readonly object _frameIdLock = new object();
 
@@ -61,14 +70,14 @@ namespace XBee
             _connection.FrameReceived += OnFrameReceived;
             _connection.Open();
 
-            try
-            {
-                await Reset();
-            }
-            catch (TimeoutException e)
-            {
-                throw new InvalidOperationException("Couldn't communicate with device.  Ensure API mode is enabled.", e);
-            }
+            //try
+            //{
+            //    await Reset();
+            //}
+            //catch (TimeoutException e)
+            //{
+            //    throw new InvalidOperationException("Couldn't communicate with device.  Ensure API mode is enabled.", e);
+            //}
 
             /* Unfortunately the protocol changes based on what type of hardware we're using... */
             HardwareVersionResponseData response =
@@ -79,7 +88,7 @@ namespace XBee
             Local = CreateNode(response.HardwareVersion);
         }
 
-        public async Task<XBeeNode> GetRemote(NodeAddress address)
+        public async Task<XBeeNode> GetRemoteAsync(NodeAddress address)
         {
             //TODO Get actual version for target device.  For some reason this call keeps timing out during discovery.
             //HardwareVersionResponseData version =
@@ -214,7 +223,7 @@ namespace XBee
                 {
                     var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
 
-                    if (NodeDiscovered != null && !discoveryData.IsCoordinator)
+                    if (NodeDiscovered != null && discoveryData != null && !discoveryData.IsCoordinator)
                     {
                         var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
 
@@ -224,7 +233,7 @@ namespace XBee
                         {
                             try
                             {
-                                node = await GetRemote(address);
+                                node = await GetRemoteAsync(address);
                                 break;
                             }
                             catch (TimeoutException)
@@ -247,6 +256,37 @@ namespace XBee
                                 node));
                     }
                 }), NetworkDiscoveryTimeout);
+        }
+
+        public static async Task<XBeeController> FindAndOpen(IEnumerable<string> ports, int baudRate)
+        {
+            var controller = new XBeeController();
+
+            foreach (var port in ports)
+            {
+                try
+                {
+                    await controller.OpenAsync(port, baudRate);
+                    return controller;
+                }
+                catch (InvalidOperationException)
+                {
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                }
+                catch (ArgumentException)
+                {
+                }
+                catch (IOException)
+                {
+                }
+            }
+
+            return null;
         }
 
         internal async Task Reset()

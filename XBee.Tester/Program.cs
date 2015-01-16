@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO.Ports;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,11 +44,13 @@ namespace XBee.Tester
 
         private static async void MainAsync()
         {
-            _xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
-
             //await _xbee.OpenAsync("COM4", 115200);
 
             await _xbee.OpenAsync("COM5", 9600);
+
+            //_xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
+
+            _xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
 
             Console.WriteLine("Running {0}", _xbee.HardwareVersion);
 
@@ -80,9 +84,20 @@ namespace XBee.Tester
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
                 //await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
 
-                var node = args.Node as XBeeSeries2;
+                //var node = args.Node as XBeeSeries2;
 
-                var ai = await node.GetAssociation();
+                //var stopwatch = new Stopwatch();
+                //stopwatch.Start();
+
+                //for (int i = 0; i < 100; i++)
+                //{
+                //    await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputConfiguration.DigitalLow);
+                //    await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputConfiguration.Disabled);
+                //}
+
+                //Console.WriteLine(TimeSpan.FromMilliseconds((double)stopwatch.ElapsedMilliseconds/100));
+
+                //var ai = await node.GetAssociation();
 
                 //Console.WriteLine("Ack from '{0}'!", args.Name);
 
@@ -111,9 +126,9 @@ namespace XBee.Tester
                 //await args.Node.SetDestinationAddress(new ShortAddress(0));
                 //await args.Node.WriteChanges();
 
-                var samples = args.Node.GetSamples();
+                //var samples = args.Node.GetSamples();
 
-                await samples.ForEachAsync(sample => Console.WriteLine("{0} ({1})", sample.ToString(), args.Name));
+                //await samples.ForEachAsync(sample => Console.WriteLine("{0} ({1})", sample.ToString(), args.Name));
 
                 //await args.Node.ForceSample();
             };

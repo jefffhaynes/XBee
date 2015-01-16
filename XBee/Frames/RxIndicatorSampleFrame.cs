@@ -7,16 +7,22 @@ namespace XBee.Frames
 {
     public class RxIndicatorSampleFrame : FrameContent, IRxIndicatorSampleFrame
     {
+        [FieldOrder(0)]
         public LongAddress Source { get; set; }
 
+        [FieldOrder(1)]
         public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
 
+        [FieldOrder(2)]
         public ReceiveOptions ReceiveOptions { get; set; }
 
+        [FieldOrder(3)]
         public byte SampleCount { get; set; }
 
+        [FieldOrder(4)]
         public SampleChannels Channels { get; set; }
 
+        [FieldOrder(5)]
         [SerializeWhen("Channels", SampleChannels.Digital0,
             ConverterType = typeof (BitwiseAndConverter), ConverterParameter = SampleChannels.Digital0)]
         [SerializeWhen("Channels", SampleChannels.Digital1,
@@ -37,6 +43,7 @@ namespace XBee.Frames
             ConverterType = typeof (BitwiseAndConverter), ConverterParameter = SampleChannels.Digital8)]
         public DigitalSampleState DigitalSampleState { get; set; }
 
+        [FieldOrder(6)]
         [FieldCount(Path = "Channels",
             ConverterType = typeof(BitCountingConverter), ConverterParameter = SampleChannels.AllAnalog)]
         public List<ushort> AnalogSamples { get; set; }

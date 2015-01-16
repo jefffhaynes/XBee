@@ -4,19 +4,24 @@ namespace XBee.Frames.AtCommands
 {
     public class NetworkDiscoveryResponseData : AtCommandResponseFrameData
     {
+        [FieldOrder(0)]
         public ShortAddress ShortAddress { get; set; }
 
+        [FieldOrder(1)]
         public LongAddress LongAddress { get; set; }
 
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeSeries1, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProSeries1, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
+        [FieldOrder(2)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
 
+        [FieldOrder(3)]
         public string Name { get; set; }
 
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2B, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900HP, AncestorType = typeof(FrameContext), Mode = RelativeSourceMode.FindAncestor)]
+        [FieldOrder(4)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2B, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900HP, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         public NetworkDiscoveryResponseDataExtendedInfo ExtendedInfo { get; set; }
 
         [Ignore]

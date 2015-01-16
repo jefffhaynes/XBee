@@ -5,6 +5,10 @@ namespace XBee.Frames.AtCommands
 {
     public class InputOutputConfigurationCommand : AtCommand
     {
+        public InputOutputConfigurationCommand()
+        {
+        }
+
         public InputOutputConfigurationCommand(InputOutputChannel channel) :
             base(string.Format("D{0}", (int)channel))
         {
