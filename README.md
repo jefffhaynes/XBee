@@ -1,7 +1,7 @@
 XBee
 ====
 
-.NET library for [XBee wireless controllers](http://www.digi.com/xbee/)
+.NET library for [XBee wireless controllers](http://www.digi.com/xbee/) available as a [nuget package](https://www.nuget.org/packages/XBee/).
 
  * Support for Series1, Series 2, and 900HP
  * Simple async/await command and query model
