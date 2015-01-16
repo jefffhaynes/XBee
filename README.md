@@ -5,7 +5,7 @@ XBee
 
  * Support for Series1, Series 2, and 900HP
  * Simple async/await command and query model
- * [Rx](https://rx.codeplex.com/)  support for received data and sampling.
+ * [.NET Rx](https://rx.codeplex.com/)  support for received data and sampling.
 
 
 Simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
