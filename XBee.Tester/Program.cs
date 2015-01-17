@@ -104,11 +104,16 @@ namespace XBee.Tester
                 //var changeDetection = await args.Node.GetChangeDetectionChannels();
                 //var ee = await args.Node.IsEncryptionEnabled();
 
-                //for (int i = 0; i < 100; i++)
-                //{
-                //    var id = await args.Node.GetNodeIdentifier();
-                //    Console.WriteLine(id);
-                //}
+                await args.Node.SetNodeIdentifier("BOB");
+
+                for (int i = 0; i < 1; i++)
+                {
+                    var id = await args.Node.GetNodeIdentifier();
+                    Console.WriteLine(id);
+                }
+
+
+                await args.Node.SetNodeIdentifier("ED 1");
 
                 //await args.Node.Reset();
 
