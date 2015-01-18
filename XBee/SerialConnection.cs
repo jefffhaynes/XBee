@@ -26,11 +26,8 @@ namespace XBee
 
         public async Task Send(FrameContent frameContent)
         {
-           // lock (_portLock)
-            {
-                var data = _frameSerializer.Serialize(new Frame(frameContent));
-                await _serialPort.BaseStream.WriteAsync(data, 0, data.Length);
-            }
+            var data = _frameSerializer.Serialize(new Frame(frameContent));
+            await _serialPort.BaseStream.WriteAsync(data, 0, data.Length);
         }
 
         public event EventHandler<FrameReceivedEventArgs> FrameReceived;
@@ -38,6 +35,7 @@ namespace XBee
         public void Open()
         {
             _serialPort.Open();
+            _serialPort.ReadExisting();
 
             _readCancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _readCancellationTokenSource.Token;
