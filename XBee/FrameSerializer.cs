@@ -10,38 +10,34 @@ namespace XBee
     public class FrameSerializer
     {
         private readonly BinarySerializer _serializer = new BinarySerializer { Endianness = Endianness.Big };
-        private readonly BinarySerializer _deserializer = new BinarySerializer { Endianness = Endianness.Big };
 
-#if DEBUG
         public FrameSerializer()
         {
-            _serializer.MemberSerializing += (sender, args) =>
-            {
-                Console.CursorLeft = args.Context.Depth * 4;
-                Console.WriteLine("S-Start: {0}", args.MemberName);
-            };
-
-            _serializer.MemberSerialized += (sender, args) =>
-            {
-                Console.CursorLeft = args.Context.Depth * 4;
-                var value = args.Value ?? "null";
-                Console.WriteLine("S-End: {0} ({1})", args.MemberName, value);
-            };
-
-            _deserializer.MemberDeserializing += (sender, args) =>
-            {
-                Console.CursorLeft = args.Context.Depth * 4;
-                Console.WriteLine("D-Start: {0}", args.MemberName);
-            };
-
-            _deserializer.MemberDeserialized += (sender, args) =>
-            {
-                Console.CursorLeft = args.Context.Depth * 4;
-                var value = args.Value ?? "null";
-                Console.WriteLine("D-End: {0} ({1})", args.MemberName, value);
-            };
+            _serializer.MemberSerializing += OnMemberSerializing;
+            _serializer.MemberSerialized += OnMemberSerialized;
+            _serializer.MemberDeserializing += OnMemberDeserializing;
+            _serializer.MemberDeserialized += OnMemberDeserialized;
         }
-#endif
+
+        /// <summary>
+        ///     Occurrs after a member has been serialized.
+        /// </summary>
+        public event EventHandler<MemberSerializedEventArgs> MemberSerialized;
+
+        /// <summary>
+        ///     Occurrs after a member has been deserialized.
+        /// </summary>
+        public event EventHandler<MemberSerializedEventArgs> MemberDeserialized;
+
+        /// <summary>
+        ///     Occurrs before a member has been serialized.
+        /// </summary>
+        public event EventHandler<MemberSerializingEventArgs> MemberSerializing;
+
+        /// <summary>
+        ///     Occurrs before a member has been deserialized.
+        /// </summary>
+        public event EventHandler<MemberSerializingEventArgs> MemberDeserializing;
 
         public HardwareVersion? ControllerHardwareVersion
         {
@@ -74,12 +70,40 @@ namespace XBee
 
         public Frame Deserialize(Stream stream)
         {
-            var frame = _deserializer.Deserialize<Frame>(stream, _serializationContext);
+            var frame = _serializer.Deserialize<Frame>(stream, _serializationContext);
 
             /* read checksum */
             stream.ReadByte();
 
             return frame;
+        }
+
+        private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
+        {
+            var handler = MemberSerialized;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
+        {
+            var handler = MemberDeserialized;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
+        {
+            var handler = MemberSerializing;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
+        {
+            var handler = MemberDeserializing;
+            if (handler != null)
+                handler(sender, e);
         }
     }
 }

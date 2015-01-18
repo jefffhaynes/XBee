@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using BinarySerialization;
 using XBee.Devices;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
@@ -38,6 +39,27 @@ namespace XBee
         private byte _frameId = byte.MinValue;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
+
+        /// <summary>
+        ///     Occurrs after a member has been serialized.
+        /// </summary>
+        public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized;
+
+        /// <summary>
+        ///     Occurrs after a member has been deserialized.
+        /// </summary>
+        public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized;
+
+        /// <summary>
+        ///     Occurrs before a member has been serialized.
+        /// </summary>
+        public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing;
+
+        /// <summary>
+        ///     Occurrs before a member has been deserialized.
+        /// </summary>
+        public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing;
+
         public HardwareVersion HardwareVersion { get; private set; }
 
         public XBeeNode Local { get; private set; }
@@ -66,17 +88,14 @@ namespace XBee
                 throw new InvalidOperationException("The controller is already conntected, please close the existing connection.");
 
             _connection = new SerialConnection(port, baudRate);
+            
+            _connection.MemberSerializing += OnMemberSerializing;
+            _connection.MemberSerialized += OnMemberSerialized;
+            _connection.MemberDeserializing += OnMemberDeserializing;
+            _connection.MemberDeserialized += OnMemberDeserialized;
+
             _connection.FrameReceived += OnFrameReceived;
             _connection.Open();
-
-            //try
-            //{
-            //    await Reset();
-            //}
-            //catch (TimeoutException e)
-            //{
-            //    throw new InvalidOperationException("Couldn't communicate with device.  Ensure API mode is enabled.", e);
-            //}
 
             /* Unfortunately the protocol changes based on what type of hardware we're using... */
             HardwareVersionResponseData response =
@@ -397,9 +416,44 @@ namespace XBee
         {
             if (IsOpen)
             {
+                _connection.MemberSerializing -= OnMemberSerializing;
+                _connection.MemberSerialized -= OnMemberSerialized;
+                _connection.MemberDeserializing -= OnMemberDeserializing;
+                _connection.MemberDeserialized -= OnMemberDeserialized;
+
                 _connection.Dispose();
                 _connection = null;
             }
         }
+
+        private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
+        {
+            var handler = FrameMemberSerialized;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
+        {
+            var handler = FrameMemberDeserialized;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
+        {
+            var handler = FrameMemberSerializing;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+        private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
+        {
+            var handler = FrameMemberDeserializing;
+            if (handler != null)
+                handler(sender, e);
+        }
+
+
     }
 }
