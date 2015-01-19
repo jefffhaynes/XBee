@@ -47,17 +47,19 @@ namespace XBee.Tester
         {
             //await _xbee.OpenAsync("COM4", 115200);
 
-            await _xbee.OpenAsync("COM5", 9600);
+            //await _xbee.OpenAsync("COM5", 9600);
+
+            _xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
+
             _xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
             _xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
             _xbee.FrameMemberDeserializing += XbeeOnFrameMemberDeserializing;
             _xbee.FrameMemberDeserialized += XbeeOnFrameMemberDeserialized;
 
-            //_xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
 
-            _xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
+            //_xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
 
-            Console.WriteLine("Running {0}", _xbee.HardwareVersion);
+            //Console.WriteLine("Running {0}", _xbee.HardwareVersion);
 
             //_xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args.Address);
 
@@ -139,11 +141,11 @@ namespace XBee.Tester
 
                // await args.Node.SetNodeIdentifier("BOB");
 
-                for (int i = 0; i < 1; i++)
-                {
-                    var id = await args.Node.GetNodeIdentifier();
-                    Console.WriteLine(id);
-                }
+                //for (int i = 0; i < 1; i++)
+                //{
+                //    var id = await args.Node.GetNodeIdentifier();
+                //    Console.WriteLine(id);
+                //}
 
 
                // await args.Node.SetNodeIdentifier("ED 1");

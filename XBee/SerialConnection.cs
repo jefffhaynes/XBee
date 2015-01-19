@@ -61,7 +61,6 @@ namespace XBee
         public void Open()
         {
             _serialPort.Open();
-            _serialPort.ReadExisting();
 
             _readCancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _readCancellationTokenSource.Token;
@@ -82,7 +81,7 @@ namespace XBee
                         if (!cancellationToken.IsCancellationRequested)
                             throw;
                     }
-                    
+
                 }
             }, cancellationToken);
         }

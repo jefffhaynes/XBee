@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using BinarySerialization;
@@ -9,7 +8,8 @@ namespace XBee
 {
     public class FrameSerializer
     {
-        private readonly BinarySerializer _serializer = new BinarySerializer { Endianness = Endianness.Big };
+        private readonly FrameContext _serializationContext = new FrameContext(null);
+        private readonly BinarySerializer _serializer = new BinarySerializer {Endianness = Endianness.Big};
 
         public FrameSerializer()
         {
@@ -17,6 +17,12 @@ namespace XBee
             _serializer.MemberSerialized += OnMemberSerialized;
             _serializer.MemberDeserializing += OnMemberDeserializing;
             _serializer.MemberDeserialized += OnMemberDeserialized;
+        }
+
+        public HardwareVersion? ControllerHardwareVersion
+        {
+            get { return _serializationContext.ControllerHardwareVersion; }
+            set { _serializationContext.ControllerHardwareVersion = value; }
         }
 
         /// <summary>
@@ -39,29 +45,16 @@ namespace XBee
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> MemberDeserializing;
 
-        public HardwareVersion? ControllerHardwareVersion
-        {
-            get { return _serializationContext.ControllerHardwareVersion; }
-            set { _serializationContext.ControllerHardwareVersion = value; }
-        }
-
-        private readonly FrameContext _serializationContext = new FrameContext(null);
-
-        public void Serialize(Stream stream, object graph)
-        {
-            _serializer.Serialize(stream, graph);
-        }
-
         public byte[] Serialize(Frame frame)
         {
             var stream = new MemoryStream();
 
             _serializer.Serialize(stream, frame, _serializationContext);
 
-            var data = stream.ToArray();
+            byte[] data = stream.ToArray();
 
             /* Calculate and append checksum */
-            var crc = Checksum.Calculate(data.Skip(3).ToArray());
+            byte crc = Checksum.Calculate(data.Skip(3).ToArray());
             Array.Resize(ref data, data.Length + 1);
             data[data.Length - 1] = crc;
 
@@ -80,28 +73,28 @@ namespace XBee
 
         private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
         {
-            var handler = MemberSerialized;
+            EventHandler<MemberSerializedEventArgs> handler = MemberSerialized;
             if (handler != null)
                 handler(sender, e);
         }
 
         private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
         {
-            var handler = MemberDeserialized;
+            EventHandler<MemberSerializedEventArgs> handler = MemberDeserialized;
             if (handler != null)
                 handler(sender, e);
         }
 
         private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
         {
-            var handler = MemberSerializing;
+            EventHandler<MemberSerializingEventArgs> handler = MemberSerializing;
             if (handler != null)
                 handler(sender, e);
         }
 
         private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
         {
-            var handler = MemberDeserializing;
+            EventHandler<MemberSerializingEventArgs> handler = MemberDeserializing;
             if (handler != null)
                 handler(sender, e);
         }

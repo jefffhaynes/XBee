@@ -8,7 +8,7 @@
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for controlling XBee wireless modules.</description>
-    <releaseNotes>Added diagnostic events for tracing frame serialization and deserialization.</releaseNotes>
+    <releaseNotes>Changed the startup sequence so deserialization context is available for first operation.</releaseNotes>
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
