@@ -10,9 +10,31 @@ namespace XBee
 {
     internal class SerialConnection : IDisposable
     {
+        private readonly FrameSerializer _frameSerializer = new FrameSerializer();
+        private readonly object _readLock = new object();
         private readonly SerialPort _serialPort;
         private CancellationTokenSource _readCancellationTokenSource;
-        private readonly FrameSerializer _frameSerializer = new FrameSerializer();
+
+        public SerialConnection(string port, int baudRate)
+        {
+            _serialPort = new SerialPort(port, baudRate);
+
+            _frameSerializer.MemberSerializing += OnMemberSerializing;
+            _frameSerializer.MemberSerialized += OnMemberSerialized;
+            _frameSerializer.MemberDeserializing += OnMemberDeserializing;
+            _frameSerializer.MemberDeserialized += OnMemberDeserialized;
+        }
+
+        public HardwareVersion? CoordinatorHardwareVersion
+        {
+            get { return _frameSerializer.ControllerHardwareVersion; }
+            set { _frameSerializer.ControllerHardwareVersion = value; }
+        }
+
+        public void Dispose()
+        {
+            Close();
+        }
 
         /// <summary>
         ///     Occurrs after a member has been serialized.
@@ -34,25 +56,9 @@ namespace XBee
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> MemberDeserializing;
 
-        public SerialConnection(string port, int baudRate)
-        {
-            _serialPort = new SerialPort(port, baudRate);
-
-            _frameSerializer.MemberSerializing += OnMemberSerializing;
-            _frameSerializer.MemberSerialized += OnMemberSerialized;
-            _frameSerializer.MemberDeserializing += OnMemberDeserializing;
-            _frameSerializer.MemberDeserialized += OnMemberDeserialized;
-        }
-
-        public HardwareVersion? CoordinatorHardwareVersion
-        {
-            get { return _frameSerializer.ControllerHardwareVersion; }
-            set { _frameSerializer.ControllerHardwareVersion = value; }
-        }
-
         public async Task Send(FrameContent frameContent)
         {
-            var data = _frameSerializer.Serialize(new Frame(frameContent));
+            byte[] data = _frameSerializer.Serialize(new Frame(frameContent));
             await _serialPort.BaseStream.WriteAsync(data, 0, data.Length);
         }
 
@@ -61,66 +67,74 @@ namespace XBee
         public void Open()
         {
             _serialPort.Open();
+            StartReceive();
+        }
 
-            _readCancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _readCancellationTokenSource.Token;
-
-            Task.Run(() =>
+        public void StartReceive()
+        {
+            lock (_readLock)
             {
-                while (!cancellationToken.IsCancellationRequested)
+                using (_readCancellationTokenSource = new CancellationTokenSource())
                 {
-                    try
-                    {
-                        var frame = _frameSerializer.Deserialize(_serialPort.BaseStream);
+                    CancellationToken cancellationToken = _readCancellationTokenSource.Token;
 
-                        if (FrameReceived != null)
-                            FrameReceived(this, new FrameReceivedEventArgs(frame.Payload.Content));
-                    }
-                    catch (IOException)
+                    Task.Run(() =>
                     {
-                        if (!cancellationToken.IsCancellationRequested)
-                            throw;
-                    }
+                        while (!cancellationToken.IsCancellationRequested)
+                        {
+                            try
+                            {
+                                Frame frame = _frameSerializer.Deserialize(_serialPort.BaseStream);
 
+                                if (FrameReceived != null)
+                                    FrameReceived(this, new FrameReceivedEventArgs(frame.Payload.Content));
+                            }
+                            catch (IOException)
+                            {
+                                if (!cancellationToken.IsCancellationRequested)
+                                    throw;
+                            }
+                        }
+                    }, cancellationToken);
                 }
-            }, cancellationToken);
+            }
+        }
+
+        public void StopReceive()
+        {
+            _readCancellationTokenSource.Cancel();
         }
 
         public void Close()
         {
-            _readCancellationTokenSource.Cancel();
+            StopReceive();
             _serialPort.Close();
-        }
-
-        public void Dispose()
-        {
-            Close();
         }
 
         private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
         {
-            var handler = MemberSerialized;
+            EventHandler<MemberSerializedEventArgs> handler = MemberSerialized;
             if (handler != null)
                 handler(sender, e);
         }
 
         private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
         {
-            var handler = MemberDeserialized;
+            EventHandler<MemberSerializedEventArgs> handler = MemberDeserialized;
             if (handler != null)
                 handler(sender, e);
         }
 
         private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
         {
-            var handler = MemberSerializing;
+            EventHandler<MemberSerializingEventArgs> handler = MemberSerializing;
             if (handler != null)
                 handler(sender, e);
         }
 
         private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
         {
-            var handler = MemberDeserializing;
+            EventHandler<MemberSerializingEventArgs> handler = MemberDeserializing;
             if (handler != null)
                 handler(sender, e);
         }
