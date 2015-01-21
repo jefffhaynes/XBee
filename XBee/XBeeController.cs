@@ -104,8 +104,8 @@ namespace XBee
             _connection.CoordinatorHardwareVersion = HardwareVersion;
 
             /* We want the receiver to have the hardware version in context so cycle the connection */
-            _connection.StopReceive();
-            _connection.StartReceive();
+            _connection.Close();
+            _connection.Open();
 
             Local = CreateNode(response.HardwareVersion);
         }

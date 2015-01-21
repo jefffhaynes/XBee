@@ -10,8 +10,9 @@ namespace XBee
 {
     internal class SerialConnection : IDisposable
     {
+        private readonly AutoResetEvent _closeCompleteAutoResetEvent = new AutoResetEvent(true);
         private readonly FrameSerializer _frameSerializer = new FrameSerializer();
-        private readonly object _readLock = new object();
+
         private readonly SerialPort _serialPort;
         private CancellationTokenSource _readCancellationTokenSource;
 
@@ -67,47 +68,39 @@ namespace XBee
         public void Open()
         {
             _serialPort.Open();
-            StartReceive();
-        }
 
-        public void StartReceive()
-        {
-            lock (_readLock)
+            _readCancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = _readCancellationTokenSource.Token;
+
+            Task.Run(() =>
             {
-                using (_readCancellationTokenSource = new CancellationTokenSource())
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    CancellationToken cancellationToken = _readCancellationTokenSource.Token;
-
-                    Task.Run(() =>
+                    try
                     {
-                        while (!cancellationToken.IsCancellationRequested)
-                        {
-                            try
-                            {
-                                Frame frame = _frameSerializer.Deserialize(_serialPort.BaseStream);
+                        Frame frame = _frameSerializer.Deserialize(_serialPort.BaseStream);
 
-                                if (FrameReceived != null)
-                                    FrameReceived(this, new FrameReceivedEventArgs(frame.Payload.Content));
-                            }
-                            catch (IOException)
-                            {
-                                if (!cancellationToken.IsCancellationRequested)
-                                    throw;
-                            }
-                        }
-                    }, cancellationToken);
+                        if (FrameReceived != null)
+                            FrameReceived(this, new FrameReceivedEventArgs(frame.Payload.Content));
+                    }
+                    catch (IOException)
+                    {
+                        if (!cancellationToken.IsCancellationRequested)
+                            throw;
+                    }
                 }
-            }
-        }
-
-        public void StopReceive()
-        {
-            _readCancellationTokenSource.Cancel();
+// ReSharper disable MethodSupportsCancellation
+            }, cancellationToken).ContinueWith(new Action<Task>(task => _closeCompleteAutoResetEvent.Set()));
+// ReSharper restore MethodSupportsCancellation
         }
 
         public void Close()
         {
-            StopReceive();
+            _readCancellationTokenSource.Cancel();
+
+            _closeCompleteAutoResetEvent.WaitOne();
+
+            _readCancellationTokenSource.Dispose();
             _serialPort.Close();
         }
 
