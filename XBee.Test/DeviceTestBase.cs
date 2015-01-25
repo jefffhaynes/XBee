@@ -16,7 +16,7 @@ namespace XBee.Test
         {
             if (_device == null)
             {
-                var controller = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 115200);
+                var controller = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
                 _device = controller.Local as XBeeSeries1;
             }
 
