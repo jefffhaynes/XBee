@@ -45,17 +45,18 @@ namespace XBee.Tester
 
         private static async void MainAsync()
         {
-            //await _xbee.OpenAsync("COM4", 115200);
+            _xbee = new XBeeController();
 
             //await _xbee.OpenAsync("COM5", 9600);
 
-            _xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
+            //_xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 115200);
 
             _xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
             _xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
             _xbee.FrameMemberDeserializing += XbeeOnFrameMemberDeserializing;
             _xbee.FrameMemberDeserialized += XbeeOnFrameMemberDeserialized;
 
+            await _xbee.OpenAsync("COM4", 9600);
 
             //_xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.Ports;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using XBee.Devices;
@@ -15,8 +16,7 @@ namespace XBee.Test
         {
             if (_device == null)
             {
-                var controller = new XBeeController();
-                await controller.OpenAsync("COM5", 9600);
+                var controller = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 115200);
                 _device = controller.Local as XBeeSeries1;
             }
 
