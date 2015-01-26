@@ -29,7 +29,7 @@ namespace XBee
         private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(300);
 #endif
 
-        private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(30);
         private readonly object _frameIdLock = new object();
 
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
@@ -238,6 +238,11 @@ namespace XBee
 
         public async Task DiscoverNetwork()
         {
+            await DiscoverNetwork(NetworkDiscoveryTimeout);
+        }
+
+        public async Task DiscoverNetwork(TimeSpan timeout)
+        {
             var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
 
             await ExecuteMultiQueryAsync(atCommandFrame, new Action<AtCommandResponseFrame>(
@@ -277,7 +282,7 @@ namespace XBee
                             new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
                                 node));
                     }
-                }), NetworkDiscoveryTimeout);
+                }), timeout);
         }
 
         public static async Task<XBeeController> FindAndOpen(IEnumerable<string> ports, int baudRate)
@@ -382,6 +387,8 @@ namespace XBee
             {
                 var dataFrame = content as IRxIndicatorDataFrame;
                 NodeAddress address = dataFrame.GetAddress();
+
+                _receivedDataSource.Push(new SourcedData(address, dataFrame.Data));
 
                 if (DataReceived != null)
                     DataReceived(this, new SourcedDataReceivedEventArgs(address, dataFrame.Data));

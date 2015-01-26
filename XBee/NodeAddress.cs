@@ -41,7 +41,7 @@ namespace XBee
             if (LongAddress.Equals(LongAddress.Broadcast))
                 return ShortAddress.Equals(other.ShortAddress);
 
-            return LongAddress.Equals(other.LongAddress) && ShortAddress.Equals(other.ShortAddress);
+            return LongAddress.Equals(other.LongAddress);
         }
 
         public override string ToString()

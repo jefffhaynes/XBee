@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,18 +46,22 @@ namespace XBee.Tester
 
         private static async void MainAsync()
         {
-            _xbee = new XBeeController();
+            //_xbee = new XBeeController();
 
-            //await _xbee.OpenAsync("COM5", 9600);
+            ////await _xbee.OpenAsync("COM5", 9600);
 
-            //_xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 115200);
+            ////_xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 115200);
+
+
+
+            //await _xbee.OpenAsync("COM4", 115200);
+
+            _xbee = await XBeeController.FindAndOpen(new[] {"COM4"}, 115200);
 
             _xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
             _xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
             _xbee.FrameMemberDeserializing += XbeeOnFrameMemberDeserializing;
             _xbee.FrameMemberDeserialized += XbeeOnFrameMemberDeserialized;
-
-            await _xbee.OpenAsync("COM4", 9600);
 
             //_xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
 
@@ -107,6 +112,12 @@ namespace XBee.Tester
             Console.WriteLine("D-End: {0} ({1})", e.MemberName, value);
         }
 
+        private static async Task Toggle(XBeeSeries2 node, int iteration)
+        {
+            Console.WriteLine(iteration);
+            await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputConfiguration.DigitalLow);
+            await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputConfiguration.Disabled);
+        }
 
         private static async void Discover()
         {
@@ -120,10 +131,16 @@ namespace XBee.Tester
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
                 //await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
 
-                //var node = args.Node as XBeeSeries2;
+                var node = args.Node as XBeeSeries2;
+
+                var receivedData =
+                    node.GetReceivedData().Subscribe(data => Console.WriteLine("recieved {0} bytes", data.Length));
 
                 //var stopwatch = new Stopwatch();
                 //stopwatch.Start();
+
+                //var range = Enumerable.Range(0, 10);
+                //await Task.WhenAll(range.Select(i => Toggle(node, i)));
 
                 //for (int i = 0; i < 100; i++)
                 //{
@@ -140,7 +157,7 @@ namespace XBee.Tester
                 //var changeDetection = await args.Node.GetChangeDetectionChannels();
                 //var ee = await args.Node.IsEncryptionEnabled();
 
-               // await args.Node.SetNodeIdentifier("BOB");
+                // await args.Node.SetNodeIdentifier("BOB");
 
                 //for (int i = 0; i < 1; i++)
                 //{
@@ -149,7 +166,7 @@ namespace XBee.Tester
                 //}
 
 
-               // await args.Node.SetNodeIdentifier("ED 1");
+                // await args.Node.SetNodeIdentifier("ED 1");
 
                 //await args.Node.Reset();
 
