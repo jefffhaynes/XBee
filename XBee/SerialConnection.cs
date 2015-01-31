@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,11 +9,12 @@ namespace XBee
 {
     internal class SerialConnection : IDisposable
     {
-        private readonly AutoResetEvent _closeCompleteAutoResetEvent = new AutoResetEvent(true);
         private readonly FrameSerializer _frameSerializer = new FrameSerializer();
 
         private readonly SerialPort _serialPort;
         private CancellationTokenSource _readCancellationTokenSource;
+
+        private readonly object _openCloseLock = new object();
 
         public SerialConnection(string port, int baudRate)
         {
@@ -65,43 +65,58 @@ namespace XBee
 
         public event EventHandler<FrameReceivedEventArgs> FrameReceived;
 
+        private Task _receiveTask;
+
         public void Open()
         {
-            _serialPort.Open();
-
-            _readCancellationTokenSource = new CancellationTokenSource();
-            CancellationToken cancellationToken = _readCancellationTokenSource.Token;
-
-            Task.Run(() =>
+            lock (_openCloseLock)
             {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    try
-                    {
-                        Frame frame = _frameSerializer.Deserialize(_serialPort.BaseStream);
+                _serialPort.Open();
 
-                        if (FrameReceived != null)
-                            FrameReceived(this, new FrameReceivedEventArgs(frame.Payload.Content));
-                    }
-                    catch (IOException)
+                _readCancellationTokenSource = new CancellationTokenSource();
+                CancellationToken cancellationToken = _readCancellationTokenSource.Token;
+
+                _receiveTask = Task.Run(() =>
+                {
+                    while (!cancellationToken.IsCancellationRequested)
                     {
-                        if (!cancellationToken.IsCancellationRequested)
-                            throw;
+                        try
+                        {
+                            Frame frame = _frameSerializer.Deserialize(_serialPort.BaseStream);
+
+                            var handler = FrameReceived;
+                            if (handler != null)
+                                Task.Run(() => handler(this, new FrameReceivedEventArgs(frame.Payload.Content)),
+                                    cancellationToken).ConfigureAwait(false);
+                        }
+                        catch (Exception)
+                        {
+                            if (!cancellationToken.IsCancellationRequested)
+                                throw;
+                        }
                     }
-                }
 // ReSharper disable MethodSupportsCancellation
-            }, cancellationToken).ContinueWith(new Action<Task>(task => _closeCompleteAutoResetEvent.Set()));
+                }, cancellationToken);
 // ReSharper restore MethodSupportsCancellation
+
+                _receiveTask.ConfigureAwait(false);
+            }
         }
 
         public void Close()
         {
-            _readCancellationTokenSource.Cancel();
+            lock (_openCloseLock)
+            {
+                if (_receiveTask == null)
+                    return;
 
-            _closeCompleteAutoResetEvent.WaitOne();
+                _readCancellationTokenSource.Cancel();
+                _serialPort.Close();
+                _receiveTask.Wait();
+                _readCancellationTokenSource.Dispose();
 
-            _readCancellationTokenSource.Dispose();
-            _serialPort.Close();
+                _receiveTask = null;
+            }
         }
 
         private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)

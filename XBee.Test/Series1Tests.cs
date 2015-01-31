@@ -7,6 +7,12 @@ namespace XBee.Test
     public class Series1Tests : DeviceTestBase
     {
         [TestMethod]
+        public async Task OpenCloseTest()
+        {
+            await OpenCloseTestBase();
+        }
+
+        [TestMethod]
         public async Task LocalReadSerialNumberTest()
         {
             await LocalReadSerialNumberTestBase();

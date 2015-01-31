@@ -105,9 +105,13 @@ namespace XBee
 
             /* We want the receiver to have the hardware version in context so cycle the connection */
             _connection.Close();
+
+            /* Stupid serial ports... */
+            await Task.Delay(500);
+
             _connection.Open();
 
-            Local = CreateNode(response.HardwareVersion);
+            Local = CreateNode(HardwareVersion);
         }
 
         public async Task<XBeeNode> GetRemoteAsync(NodeAddress address)
@@ -464,7 +468,5 @@ namespace XBee
             if (handler != null)
                 handler(sender, e);
         }
-
-
     }
 }
