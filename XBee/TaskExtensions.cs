@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XBee
 {
-    public static class TaskExtensions
+    internal static class TaskExtensions
     {
         public static async Task Retry(Action action, Type expectedExceptionType, TimeSpan timeout)
         {
