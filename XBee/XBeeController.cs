@@ -88,30 +88,38 @@ namespace XBee
                 throw new InvalidOperationException("The controller is already conntected, please close the existing connection.");
 
             _connection = new SerialConnection(port, baudRate);
-            
-            _connection.MemberSerializing += OnMemberSerializing;
-            _connection.MemberSerialized += OnMemberSerialized;
-            _connection.MemberDeserializing += OnMemberDeserializing;
-            _connection.MemberDeserialized += OnMemberDeserialized;
 
-            _connection.FrameReceived += OnFrameReceived;
-            _connection.Open();
+            try
+            {
+                _connection.MemberSerializing += OnMemberSerializing;
+                _connection.MemberSerialized += OnMemberSerialized;
+                _connection.MemberDeserializing += OnMemberDeserializing;
+                _connection.MemberDeserialized += OnMemberDeserialized;
 
-            /* Unfortunately the protocol changes based on what type of hardware we're using... */
-            HardwareVersionResponseData response =
-                await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand());
-            HardwareVersion = response.HardwareVersion;
-            _connection.CoordinatorHardwareVersion = HardwareVersion;
+                _connection.FrameReceived += OnFrameReceived;
+                _connection.Open();
 
-            /* We want the receiver to have the hardware version in context so cycle the connection */
-            _connection.Close();
+                /* Unfortunately the protocol changes based on what type of hardware we're using... */
+                HardwareVersionResponseData response =
+                    await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand());
+                HardwareVersion = response.HardwareVersion;
+                _connection.CoordinatorHardwareVersion = HardwareVersion;
 
-            /* Stupid serial ports... */
-            await Task.Delay(500);
+                /* We want the receiver to have the hardware version in context so cycle the connection */
+                _connection.Close();
 
-            _connection.Open();
+                /* Stupid serial ports... */
+                await
+                    TaskExtensions.Retry(() => _connection.Open(), typeof (UnauthorizedAccessException),
+                        TimeSpan.FromSeconds(3));
 
-            Local = CreateNode(HardwareVersion);
+                Local = CreateNode(HardwareVersion);
+            }
+            catch (Exception)
+            {
+                Close();
+                throw;
+            }
         }
 
         public async Task<XBeeNode> GetRemoteAsync(NodeAddress address)
@@ -436,6 +444,7 @@ namespace XBee
                 _connection.MemberDeserializing -= OnMemberDeserializing;
                 _connection.MemberDeserialized -= OnMemberDeserialized;
 
+                _connection.Close();
                 _connection.Dispose();
                 _connection = null;
             }
