@@ -44,12 +44,16 @@ namespace XBee.Devices
             await ExecuteAtCommandAsync(new SleepOptionsCommand(options));
         }
 
-        public override async Task TransmitDataAsync(byte[] data)
+        public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
             if (Address == null)
                 throw new InvalidOperationException("Can't send data to local device.");
 
             var transmitRequest = new TxRequestFrame(Address.LongAddress, data);
+            
+            if(!enableAck)
+                transmitRequest.Options = TransmitOptions.DisableAck;
+
             TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
 
             if (response.Status != DeliveryStatus.Success)

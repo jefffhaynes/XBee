@@ -13,12 +13,16 @@ namespace XBee.Devices
         {
         }
 
-        public override async Task TransmitDataAsync(byte[] data)
+        public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
             if (Address == null)
                 throw new InvalidOperationException("Can't send data to local device.");
 
             var transmitRequest = new TxRequestExtFrame(Address.LongAddress, data);
+
+            if(!enableAck)
+                transmitRequest.Options = TransmitOptionsExt.DisableAck;
+
             TxStatusExtFrame response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
 
             if (response.DeliveryStatus != DeliveryStatusExt.Success)

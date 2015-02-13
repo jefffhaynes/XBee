@@ -187,7 +187,7 @@ namespace XBee
                 .Select(data => data.Data);
         }
 
-        public abstract Task TransmitDataAsync(byte[] data);
+        public abstract Task TransmitDataAsync(byte[] data, bool enableAck = true);
 
         protected async Task ExecuteAtCommand(AtCommand command)
         {
