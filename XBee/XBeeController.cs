@@ -23,10 +23,12 @@ namespace XBee
 
 #if !DEBUG
         private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(5);
-        private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan DefaultRemoteQueryTimeout = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan DefaultLocalQueryTimeout = TimeSpan.FromSeconds(1);
 #else
         private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(300);
-        private static readonly TimeSpan DefaultQueryTimeout = TimeSpan.FromSeconds(300);
+        private static readonly TimeSpan DefaultRemoteQueryTimeout = TimeSpan.FromSeconds(300);
+        private static readonly TimeSpan DefaultLocalQueryTimeout = TimeSpan.FromSeconds(300);
 #endif
 
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(30);
@@ -180,7 +182,7 @@ namespace XBee
         public Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame)
             where TResponseFrame : CommandResponseFrameContent
         {
-            return ExecuteQueryAsync<TResponseFrame>(frame, DefaultQueryTimeout);
+            return ExecuteQueryAsync<TResponseFrame>(frame, DefaultRemoteQueryTimeout);
         }
 
         public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
@@ -192,14 +194,14 @@ namespace XBee
             if (address == null)
             {
                 var atCommandFrame = new AtCommandFrameContent(command);
-                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame);
+                AtCommandResponseFrame response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame, DefaultLocalQueryTimeout);
                 responseContent = response.Content;
             }
             else
             {
                 var remoteCommand = new RemoteAtCommandFrameContent(address, command);
                 RemoteAtCommandResponseFrame response =
-                    await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand);
+                    await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand, DefaultRemoteQueryTimeout);
                 responseContent = response.Content;
             }
 
@@ -318,6 +320,9 @@ namespace XBee
                 {
                 }
                 catch (ArgumentException)
+                {
+                }
+                catch (TimeoutException)
                 {
                 }
                 catch (IOException)
