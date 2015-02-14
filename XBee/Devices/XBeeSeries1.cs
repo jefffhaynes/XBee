@@ -50,14 +50,20 @@ namespace XBee.Devices
                 throw new InvalidOperationException("Can't send data to local device.");
 
             var transmitRequest = new TxRequestFrame(Address.LongAddress, data);
-            
-            if(!enableAck)
+
+            if (!enableAck)
+            {
+
                 transmitRequest.Options = TransmitOptions.DisableAck;
+                await Controller.ExecuteAsync(transmitRequest);
+            }
+            else
+            {
+                TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
 
-            TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
-
-            if (response.Status != DeliveryStatus.Success)
-                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
+                if (response.Status != DeliveryStatus.Success)
+                    throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
+            }
         }
     }
 }

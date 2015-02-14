@@ -20,14 +20,19 @@ namespace XBee.Devices
 
             var transmitRequest = new TxRequestExtFrame(Address.LongAddress, data);
 
-            if(!enableAck)
+            if (!enableAck)
+            {
                 transmitRequest.Options = TransmitOptionsExt.DisableAck;
+                await Controller.ExecuteAsync(transmitRequest);
+            }
+            else
+            {
+                TxStatusExtFrame response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
 
-            TxStatusExtFrame response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
-
-            if (response.DeliveryStatus != DeliveryStatusExt.Success)
-                throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
-                    response.DeliveryStatus));
+                if (response.DeliveryStatus != DeliveryStatusExt.Success)
+                    throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
+                        response.DeliveryStatus));
+            }
         }
 
         public async Task<AssociationIndicator> GetAssociation()

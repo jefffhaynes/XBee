@@ -131,7 +131,7 @@ namespace XBee
             return await Task.FromResult(CreateNode(HardwareVersion, address));
         }
 
-        public async Task Execute(FrameContent frame)
+        public async Task ExecuteAsync(FrameContent frame)
         {
             if(!IsOpen)
                 throw new InvalidOperationException("Controller must be open to execute commands.");
@@ -144,12 +144,12 @@ namespace XBee
             if (address == null)
             {
                 var atCommandFrame = new AtCommandFrameContent(command);
-                await Execute(atCommandFrame);
+                await ExecuteAsync(atCommandFrame);
             }
             else
             {
                 var remoteCommand = new RemoteAtCommandFrameContent(address, command);
-                await Execute(remoteCommand);
+                await ExecuteAsync(remoteCommand);
             }
         }
 
@@ -166,7 +166,7 @@ namespace XBee
                     b => new TaskCompletionSource<CommandResponseFrameContent>(),
                     (b, source) => new TaskCompletionSource<CommandResponseFrameContent>());
 
-            await Execute(frame);
+            await ExecuteAsync(frame);
 
             if (await Task.WhenAny(taskCompletionSource.Task, delayTask) == taskCompletionSource.Task)
             {
@@ -230,7 +230,7 @@ namespace XBee
 
             ExecuteCallbacks.AddOrUpdate(frame.FrameId, b => callbackProxy, (b, source) => callbackProxy);
 
-            await Execute(frame);
+            await ExecuteAsync(frame);
 
             await Task.Delay(timeout);
 

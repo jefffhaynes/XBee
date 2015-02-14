@@ -56,7 +56,7 @@ namespace XBee.Tester
 
             //await _xbee.OpenAsync("COM4", 115200);
 
-            _xbee = await XBeeController.FindAndOpen(new[] {"COM4"}, 115200);
+            _xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
 
             _xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
             _xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
