@@ -13,6 +13,10 @@ namespace XBee.Devices
         {
         }
 
+        /// <summary>
+        /// Gets a value that indicates whether this node is a coordinator node.
+        /// </summary>
+        /// <returns>True if this is a coordinator node</returns>
         public virtual async Task<bool> IsCoordinator()
         {
             CoordinatorEnableResponseData response =
@@ -24,11 +28,18 @@ namespace XBee.Devices
             return response.EnableState.Value == CoordinatorEnableState.Coordinator;
         }
 
+        /// <summary>
+        /// Sets a value indicating whether this node is a coordinator node.
+        /// </summary>
+        /// <param name="enable">True if this is a coordinator node</param>
         public virtual async Task SetCoordinator(bool enable)
         {
             await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
         }
 
+        /// <summary>
+        /// Gets flags indicating the configured sleep options for this node.
+        /// </summary>
         public async Task<SleepOptions> GetSleepOptions()
         {
             var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand());
@@ -39,6 +50,10 @@ namespace XBee.Devices
             return response.Options.Value;
         }
 
+        /// <summary>
+        /// Sets flags indicating sleep options for this node.
+        /// </summary>
+        /// <param name="options">Sleep options</param>
         public async Task SetSleepOptions(SleepOptions options)
         {
             await ExecuteAtCommandAsync(new SleepOptionsCommand(options));

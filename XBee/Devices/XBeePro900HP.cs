@@ -23,6 +23,9 @@ namespace XBee.Devices
             return new NodeAddress(address);
         }
 
+        /// <summary>
+        /// Gets messaging options for this node.
+        /// </summary>
         public async Task<NodeMessagingOptions> GetNodeMessagingOptions()
         {
             CoordinatorEnableResponseData response = 
@@ -34,6 +37,10 @@ namespace XBee.Devices
             return response.Options.Value;
         }
 
+        /// <summary>
+        /// Sets messaging options for this node.
+        /// </summary>
+        /// <param name="options">Messaging options</param>
         public async Task SetNodeMessagingOptions(NodeMessagingOptions options)
         {
             await ExecuteAtCommandAsync(new CoordinatorEnableCommandExt(options));

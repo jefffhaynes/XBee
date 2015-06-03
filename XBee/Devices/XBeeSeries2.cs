@@ -35,6 +35,9 @@ namespace XBee.Devices
             }
         }
 
+        /// <summary>
+        /// Gets the network association state for this node.
+        /// </summary>
         public async Task<AssociationIndicator> GetAssociation()
         {
             PrimitiveResponseData<AssociationIndicator> response = await
