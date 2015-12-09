@@ -30,7 +30,7 @@ namespace XBee
         /// <summary>
         /// The address of this node.
         /// </summary>
-        public NodeAddress Address { get; private set; }
+        public NodeAddress Address { get; }
 
         /// <summary>
         /// Occurs when data is received from this node.

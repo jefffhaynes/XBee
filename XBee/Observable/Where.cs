@@ -31,17 +31,17 @@ namespace XBee.Observable
             public void OnNext(TSource value)
             {
                 if(_parent._predicate(value))
-                    _observer.OnNext(value);
+                    Observer.OnNext(value);
             }
 
             public void OnError(Exception error)
             {
-                _observer.OnError(error);
+                Observer.OnError(error);
             }
 
             public void OnCompleted()
             {
-                _observer.OnCompleted();
+                Observer.OnCompleted();
             }
         }
     }

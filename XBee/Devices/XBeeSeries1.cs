@@ -77,7 +77,7 @@ namespace XBee.Devices
                 TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
 
                 if (response.Status != DeliveryStatus.Success)
-                    throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
+                    throw new XBeeException($"Delivery failed with status code '{response.Status}'.");
             }
         }
     }
