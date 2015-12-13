@@ -144,7 +144,23 @@ namespace XBee
         /// </summary>
         /// <param name="address">The address of the remote node</param>
         /// <returns>The remote node</returns>
+        [Obsolete("Use GetRemoteNodeAsync")]
         public async Task<XBeeNode> GetRemoteAsync(NodeAddress address)
+        {
+            //TODO Get actual version for target device.  For some reason this call keeps timing out during discovery.
+            //TODO Consider doing deferred operation
+            //HardwareVersionResponseData version =
+            //    await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address);
+
+            return await Task.FromResult(CreateNode(HardwareVersion, address));
+        }
+
+        /// <summary>
+        /// Open a remote node.
+        /// </summary>
+        /// <param name="address">The address of the remote node</param>
+        /// <returns>The remote node</returns>
+        public async Task<XBeeNode> GetRemoteNodeAsync(NodeAddress address)
         {
             //TODO Get actual version for target device.  For some reason this call keeps timing out during discovery.
             //TODO Consider doing deferred operation
@@ -161,10 +177,21 @@ namespace XBee
         /// <returns></returns>
         public async Task ExecuteAsync(FrameContent frame)
         {
+            await ExecuteAsync(frame, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Send a frame to this node.
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task ExecuteAsync(FrameContent frame, CancellationToken cancellationToken)
+        {
             if(!IsOpen)
                 throw new InvalidOperationException("Controller must be open to execute commands.");
 
-            await _connection.Send(frame);
+            await _connection.Send(frame, cancellationToken);
         }
         
         /// <summary>
@@ -197,6 +224,19 @@ namespace XBee
         public async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout)
             where TResponseFrame : CommandResponseFrameContent
         {
+            return await ExecuteQueryAsync<TResponseFrame>(frame, timeout, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Send a frame to this node and wait for a response.
+        /// </summary>
+        /// <typeparam name="TResponseFrame">The expected response type</typeparam>
+        /// <param name="frame">The frame to send</param>
+        /// <param name="timeout">Timeout</param>
+        /// <returns>The response frame</returns>
+        public async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout, CancellationToken cancellationToken)
+            where TResponseFrame : CommandResponseFrameContent
+        {
             frame.FrameId = GetNextFrameId();
 
             var delayCancellationTokenSource = new CancellationTokenSource();
@@ -227,7 +267,20 @@ namespace XBee
         public Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame)
             where TResponseFrame : CommandResponseFrameContent
         {
-            return ExecuteQueryAsync<TResponseFrame>(frame, DefaultRemoteQueryTimeout);
+            return ExecuteQueryAsync<TResponseFrame>(frame, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Send a frame to this node and wait for a response using a default timeout.
+        /// </summary>
+        /// <typeparam name="TResponseFrame">The expected response type</typeparam>
+        /// <param name="frame">The frame to send</param>
+        /// <param name="cancellationToken">Used to cancel the operation</param>
+        /// <returns>The response frame</returns>
+        public Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, CancellationToken cancellationToken)
+            where TResponseFrame : CommandResponseFrameContent
+        {
+            return ExecuteQueryAsync<TResponseFrame>(frame, DefaultRemoteQueryTimeout, cancellationToken);
         }
 
         /// <summary>
@@ -348,12 +401,13 @@ namespace XBee
                         var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
 
                         /* For some reason it doesn't like answering us during ND */
+                        // TODO find better approach for this
                         XBeeNode node = null;
                         for (int i = 0; i < 5; i++)
                         {
                             try
                             {
-                                node = await GetRemoteAsync(address);
+                                node = await GetRemoteNodeAsync(address);
                                 break;
                             }
                             catch (TimeoutException)

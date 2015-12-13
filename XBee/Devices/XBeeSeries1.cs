@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
@@ -59,7 +60,7 @@ namespace XBee.Devices
             await ExecuteAtCommandAsync(new SleepOptionsCommand(options));
         }
 
-        public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
+        public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true)
         {
             if (Address == null)
                 throw new InvalidOperationException("Can't send data to local device.");
@@ -70,15 +71,20 @@ namespace XBee.Devices
             {
 
                 transmitRequest.Options = TransmitOptions.DisableAck;
-                await Controller.ExecuteAsync(transmitRequest);
+                await Controller.ExecuteAsync(transmitRequest, cancellationToken);
             }
             else
             {
-                TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
+                TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest, cancellationToken);
 
                 if (response.Status != DeliveryStatus.Success)
                     throw new XBeeException($"Delivery failed with status code '{response.Status}'.");
             }
+        }
+
+        public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
+        {
+            throw new NotImplementedException();
         }
     }
 }

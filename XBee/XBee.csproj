@@ -179,6 +179,7 @@
     <Compile Include="StartDelimiter.cs" />
     <Compile Include="XBeeException.cs" />
     <Compile Include="XBeeNode.cs" />
+    <Compile Include="XBeeStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nuget\XBee.dll.nuspec" />

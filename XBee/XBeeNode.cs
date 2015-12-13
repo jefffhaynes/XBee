@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
@@ -295,6 +297,23 @@ namespace XBee
         /// <param name="data">The data to send</param>
         /// <param name="enableAck">True to request an acknowledgement.  If an acknowledgement is requested and no acknowledgement is received a TimeoutException will be thrown.</param>
         public abstract Task TransmitDataAsync(byte[] data, bool enableAck = true);
+
+        /// <summary>
+        /// Send data to this node.  This can either be used in transparent serial mode or to communicate with programmable nodes.
+        /// </summary>
+        /// <param name="data">The data to send</param>
+        /// <param name="cancellationToken">Used to cancel the operation</param>
+        /// <param name="enableAck">True to request an acknowledgement.  If an acknowledgement is requested and no acknowledgement is received a TimeoutException will be thrown.</param>
+        public abstract Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true);
+
+        /// <summary>
+        /// Returns a stream that represents serial passthough on the node.
+        /// </summary>
+        /// <returns></returns>
+        public XBeeStream GetSerialStream()
+        {
+            return new XBeeStream(this);
+        }
 
         protected async Task ExecuteAtCommand(AtCommand command)
         {
