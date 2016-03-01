@@ -57,13 +57,13 @@ namespace XBee
         }
 
         [Ignore]
-        public int Channel { get; private set; }
+        public int Channel { get; }
 
         public ushort Value { get; set; }
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}", Channel, Value);
+            return $"{Channel}: {Value}";
         }
     }
 }

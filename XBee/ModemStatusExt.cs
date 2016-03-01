@@ -1,4 +1,4 @@
-﻿namespace XBee.Frames
+﻿namespace XBee
 {
     public enum ModemStatusExt : byte
     {
