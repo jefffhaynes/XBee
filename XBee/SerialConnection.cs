@@ -57,10 +57,16 @@ namespace XBee
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> MemberDeserializing;
 
+
         public async Task Send(FrameContent frameContent)
         {
+            await Send(frameContent, CancellationToken.None);
+        }
+
+        public async Task Send(FrameContent frameContent, CancellationToken cancellationToken)
+        {
             byte[] data = _frameSerializer.Serialize(new Frame(frameContent));
-            await _serialPort.BaseStream.WriteAsync(data, 0, data.Length);
+            await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken);
         }
 
         public event EventHandler<FrameReceivedEventArgs> FrameReceived;

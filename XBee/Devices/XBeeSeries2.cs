@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
@@ -15,6 +16,11 @@ namespace XBee.Devices
 
         public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
+            await TransmitDataAsync(data, CancellationToken.None, enableAck);
+        }
+
+        public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true)
+        {
             if (Address == null)
                 throw new InvalidOperationException("Can't send data to local device.");
 
@@ -23,18 +29,20 @@ namespace XBee.Devices
             if (!enableAck)
             {
                 transmitRequest.Options = TransmitOptionsExt.DisableAck;
-                await Controller.ExecuteAsync(transmitRequest);
+                await Controller.ExecuteAsync(transmitRequest, cancellationToken);
             }
             else
             {
-                TxStatusExtFrame response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest);
+                TxStatusExtFrame response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest, cancellationToken);
 
                 if (response.DeliveryStatus != DeliveryStatusExt.Success)
-                    throw new XBeeException(string.Format("Delivery failed with status code '{0}'.",
-                        response.DeliveryStatus));
+                    throw new XBeeException($"Delivery failed with status code '{response.DeliveryStatus}'.");
             }
         }
 
+        /// <summary>
+        /// Gets the network association state for this node.
+        /// </summary>
         public async Task<AssociationIndicator> GetAssociation()
         {
             PrimitiveResponseData<AssociationIndicator> response = await

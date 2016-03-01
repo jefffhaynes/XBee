@@ -8,7 +8,7 @@ namespace XBee.Converters
         public object Convert(object value, object parameter, BinarySerializationContext ctx)
         {
             if(parameter == null)
-                throw new ArgumentNullException("parameter", "Must specify a mask.");
+                throw new ArgumentNullException(nameof(parameter), "Must specify a mask.");
 
             var mask = System.Convert.ToInt32(parameter);
 

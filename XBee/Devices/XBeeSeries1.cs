@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
@@ -13,6 +14,10 @@ namespace XBee.Devices
         {
         }
 
+        /// <summary>
+        /// Gets a value that indicates whether this node is a coordinator node.
+        /// </summary>
+        /// <returns>True if this is a coordinator node</returns>
         public virtual async Task<bool> IsCoordinator()
         {
             CoordinatorEnableResponseData response =
@@ -24,11 +29,18 @@ namespace XBee.Devices
             return response.EnableState.Value == CoordinatorEnableState.Coordinator;
         }
 
+        /// <summary>
+        /// Sets a value indicating whether this node is a coordinator node.
+        /// </summary>
+        /// <param name="enable">True if this is a coordinator node</param>
         public virtual async Task SetCoordinator(bool enable)
         {
             await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
         }
 
+        /// <summary>
+        /// Gets flags indicating the configured sleep options for this node.
+        /// </summary>
         public async Task<SleepOptions> GetSleepOptions()
         {
             var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand());
@@ -39,12 +51,16 @@ namespace XBee.Devices
             return response.Options.Value;
         }
 
+        /// <summary>
+        /// Sets flags indicating sleep options for this node.
+        /// </summary>
+        /// <param name="options">Sleep options</param>
         public async Task SetSleepOptions(SleepOptions options)
         {
             await ExecuteAtCommandAsync(new SleepOptionsCommand(options));
         }
 
-        public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
+        public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true)
         {
             if (Address == null)
                 throw new InvalidOperationException("Can't send data to local device.");
@@ -55,15 +71,20 @@ namespace XBee.Devices
             {
 
                 transmitRequest.Options = TransmitOptions.DisableAck;
-                await Controller.ExecuteAsync(transmitRequest);
+                await Controller.ExecuteAsync(transmitRequest, cancellationToken);
             }
             else
             {
-                TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest);
+                TxStatusFrame response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest, cancellationToken);
 
                 if (response.Status != DeliveryStatus.Success)
-                    throw new XBeeException(string.Format("Delivery failed with status code '{0}'.", response.Status));
+                    throw new XBeeException($"Delivery failed with status code '{response.Status}'.");
             }
+        }
+
+        public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
+        {
+            throw new NotImplementedException();
         }
     }
 }
