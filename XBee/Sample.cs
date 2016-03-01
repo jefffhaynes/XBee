@@ -14,13 +14,13 @@ namespace XBee
             AnalogSamples = new ReadOnlyCollection<AnalogSample>(analogSamples.ToList());
         }
 
-        public DigitalSampleState DigitalSampleState { get; private set; }
+        public DigitalSampleState DigitalSampleState { get; }
 
-        public ReadOnlyCollection<AnalogSample> AnalogSamples { get; private set; }
+        public ReadOnlyCollection<AnalogSample> AnalogSamples { get; }
 
         public override string ToString()
         {
-            var builder = new StringBuilder(string.Format("DIO: {0}", DigitalSampleState));
+            var builder = new StringBuilder($"DIO: {DigitalSampleState}");
 
             if (AnalogSamples.Any())
             {

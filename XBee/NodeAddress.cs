@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
 
 namespace XBee
 {
@@ -28,10 +27,7 @@ namespace XBee
         public ShortAddress ShortAddress { get; set; }
 
 
-        public bool Is16BitDisabled
-        {
-            get { return ShortAddress.Equals(ShortAddress.Broadcast) || ShortAddress.Equals(ShortAddress.Disabled); }
-        }
+        public bool Is16BitDisabled => ShortAddress.Equals(ShortAddress.Broadcast) || ShortAddress.Equals(ShortAddress.Disabled);
 
         public bool Equals(NodeAddress other)
         {
@@ -46,7 +42,7 @@ namespace XBee
 
         public override string ToString()
         {
-            return string.Format("{0}, {1}", LongAddress, ShortAddress);
+            return $"{LongAddress}, {ShortAddress}";
         }
     }
 }

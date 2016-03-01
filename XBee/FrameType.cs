@@ -26,6 +26,7 @@
         SensorReadIndicator = 0x94,
         NodeIdentificationIndicator = 0x95,
         RemoteAtCommandResponse = 0x97,
+        ModemStatusExt = 0x98,
         FirmwareUpdateStatus = 0xa0,
         RouteRecordIndicator = 0xa1,
         ManytooneRouteRequestIndicator = 0xa3,

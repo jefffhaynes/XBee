@@ -25,7 +25,7 @@ namespace XBee
 
         public HardwareVersion HardwareVersion { get; private set; }
 
-        public NodeAddress Address { get; private set; }
+        public NodeAddress Address { get; }
 
         public event EventHandler<DataReceivedEventArgs> DataReceived;
 

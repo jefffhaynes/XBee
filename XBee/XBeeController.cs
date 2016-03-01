@@ -288,9 +288,7 @@ namespace XBee
                         if(node == null)
                             throw new TimeoutException();
 
-                        var signalStrength = discoveryData.ReceivedSignalStrengthIndicator == null
-                            ? (SignalStrength?) null
-                            : discoveryData.ReceivedSignalStrengthIndicator.SignalStrength;
+                        var signalStrength = discoveryData.ReceivedSignalStrengthIndicator?.SignalStrength;
 
                         NodeDiscovered(this,
                             new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
@@ -365,7 +363,7 @@ namespace XBee
                 case HardwareVersion.XBeePro900HP:
                     return new XBeePro900HP(this, HardwareVersion.XBeePro900HP, address);
                 default:
-                    throw new NotSupportedException(string.Format("{0} not supported.", hardwareVersion));
+                    throw new NotSupportedException($"{hardwareVersion} not supported.");
             }
         }
 
@@ -377,8 +375,7 @@ namespace XBee
             {
                 var modemStatusFrame = content as ModemStatusFrame;
 
-                if (_modemResetTaskCompletionSource != null)
-                    _modemResetTaskCompletionSource.SetResult(modemStatusFrame.ModemStatus);
+                _modemResetTaskCompletionSource?.SetResult(modemStatusFrame.ModemStatus);
             }
             else if (content is CommandResponseFrameContent)
             {
@@ -407,8 +404,7 @@ namespace XBee
 
                 _receivedDataSource.Push(new SourcedData(address, dataFrame.Data));
 
-                if (DataReceived != null)
-                    DataReceived(this, new SourcedDataReceivedEventArgs(address, dataFrame.Data));
+                DataReceived?.Invoke(this, new SourcedDataReceivedEventArgs(address, dataFrame.Data));
             }
             else if (content is IRxIndicatorSampleFrame)
             {
@@ -418,9 +414,8 @@ namespace XBee
 
                 _sampleSource.Push(new SourcedSample(address, sample));
 
-                if (SampleReceived != null)
-                    SampleReceived(this,
-                        new SourcedSampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
+                SampleReceived?.Invoke(this,
+                    new SourcedSampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
             }
         }
 
@@ -458,29 +453,25 @@ namespace XBee
         private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
         {
             var handler = FrameMemberSerialized;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
         {
             var handler = FrameMemberDeserialized;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
         {
             var handler = FrameMemberSerializing;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
         {
             var handler = FrameMemberDeserializing;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
     }
 }
