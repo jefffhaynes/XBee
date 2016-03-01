@@ -1,5 +1,4 @@
-﻿using System;
-using BinarySerialization;
+﻿using BinarySerialization;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
@@ -26,8 +25,8 @@ namespace XBee.Frames
         [Subtype("AtCommand", "HV", typeof(HardwareVersionResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "CE", typeof(CoordinatorEnableResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "NI", typeof(NodeIdentifierResponseData), BindingMode = BindingMode.OneWay)]
-        [Subtype("AtCommand", "SH", typeof(PrimitiveResponseData<UInt32>), BindingMode = BindingMode.OneWay)]
-        [Subtype("AtCommand", "SL", typeof(PrimitiveResponseData<UInt32>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "SH", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "SL", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "D0", typeof(InputOutputResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "D1", typeof(InputOutputResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "D2", typeof(InputOutputResponseData), BindingMode = BindingMode.OneWay)]

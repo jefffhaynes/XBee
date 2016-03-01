@@ -58,6 +58,9 @@
     <Compile Include="Devices\XBeeSeries2.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicationCommand.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicator.cs" />
+    <Compile Include="Frames\ModemStatusExt.cs" />
+    <Compile Include="Frames\OneWireSensor.cs" />
+    <Compile Include="Frames\SensorReadIndicatorFrame.cs" />
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="SourcedDataReceivedEventArgs.cs" />
     <Compile Include="Devices\XBeePro900HP.cs" />
