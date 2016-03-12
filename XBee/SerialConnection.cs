@@ -15,6 +15,7 @@ namespace XBee
         private CancellationTokenSource _readCancellationTokenSource;
 
         private readonly object _openCloseLock = new object();
+        private readonly SemaphoreSlim _writeSemaphoreSlim = new SemaphoreSlim(1);
 
         public SerialConnection(string port, int baudRate)
         {
@@ -66,7 +67,17 @@ namespace XBee
         public async Task Send(FrameContent frameContent, CancellationToken cancellationToken)
         {
             byte[] data = _frameSerializer.Serialize(new Frame(frameContent));
-            await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken);
+
+            await _writeSemaphoreSlim.WaitAsync(cancellationToken);
+
+            try
+            {
+                await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken);
+            }
+            finally
+            {
+                _writeSemaphoreSlim.Release();
+            }
         }
 
         public event EventHandler<FrameReceivedEventArgs> FrameReceived;

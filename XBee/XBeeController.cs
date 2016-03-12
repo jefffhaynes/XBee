@@ -247,7 +247,7 @@ namespace XBee
                     b => new TaskCompletionSource<CommandResponseFrameContent>(),
                     (b, source) => new TaskCompletionSource<CommandResponseFrameContent>());
 
-            await ExecuteAsync(frame);
+            await ExecuteAsync(frame, cancellationToken);
 
             if (await Task.WhenAny(taskCompletionSource.Task, delayTask) == taskCompletionSource.Task)
             {
