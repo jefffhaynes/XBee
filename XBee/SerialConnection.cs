@@ -27,6 +27,7 @@ namespace XBee
         private CancellationTokenSource _readCancellationTokenSource;
 
         private readonly object _openCloseLock = new object();
+        private readonly SemaphoreSlim _writeSemaphoreSlim = new SemaphoreSlim(1);
 
 #if WINDOWS_UWP
         public SerialConnection(SerialDevice device)
@@ -57,22 +58,22 @@ namespace XBee
         }
 
         /// <summary>
-        ///     Occurrs after a member has been serialized.
+        ///     Occurs after a member has been serialized.
         /// </summary>
         public event EventHandler<MemberSerializedEventArgs> MemberSerialized;
 
         /// <summary>
-        ///     Occurrs after a member has been deserialized.
+        ///     Occurs after a member has been deserialized.
         /// </summary>
         public event EventHandler<MemberSerializedEventArgs> MemberDeserialized;
 
         /// <summary>
-        ///     Occurrs before a member has been serialized.
+        ///     Occurs before a member has been serialized.
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> MemberSerializing;
 
         /// <summary>
-        ///     Occurrs before a member has been deserialized.
+        ///     Occurs before a member has been deserialized.
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> MemberDeserializing;
 
@@ -85,11 +86,22 @@ namespace XBee
         public async Task Send(FrameContent frameContent, CancellationToken cancellationToken)
         {
             byte[] data = _frameSerializer.Serialize(new Frame(frameContent));
+
+
+            await _writeSemaphoreSlim.WaitAsync(cancellationToken);
+
+            try
+            {
 #if WINDOWS_UWP
-            await _serialPort.OutputStream.WriteAsync(data.AsBuffer());
+                await _serialPort.OutputStream.WriteAsync(data.AsBuffer());
 #else
-            await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken);
+                await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken);
 #endif
+            }
+            finally
+            {
+                _writeSemaphoreSlim.Release();
+            }
         }
 
         public event EventHandler<FrameReceivedEventArgs> FrameReceived;
@@ -159,29 +171,25 @@ namespace XBee
         private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
         {
             EventHandler<MemberSerializedEventArgs> handler = MemberSerialized;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
         {
             EventHandler<MemberSerializedEventArgs> handler = MemberDeserialized;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
         {
             EventHandler<MemberSerializingEventArgs> handler = MemberSerializing;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
         {
             EventHandler<MemberSerializingEventArgs> handler = MemberDeserializing;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
     }
 }

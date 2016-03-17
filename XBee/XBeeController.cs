@@ -265,7 +265,7 @@ namespace XBee
                     b => new TaskCompletionSource<CommandResponseFrameContent>(),
                     (b, source) => new TaskCompletionSource<CommandResponseFrameContent>());
 
-            await ExecuteAsync(frame);
+            await ExecuteAsync(frame, cancellationToken);
 
             if (await Task.WhenAny(taskCompletionSource.Task, delayTask) == taskCompletionSource.Task)
             {
@@ -616,7 +616,7 @@ namespace XBee
                 _sampleSource.Push(new SourcedSample(address, sample));
 
                 SampleReceived?.Invoke(this,
-                    new SourcedSampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
+                        new SourcedSampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
             }
         }
 

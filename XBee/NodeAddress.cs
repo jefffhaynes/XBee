@@ -27,8 +27,7 @@ namespace XBee
         public ShortAddress ShortAddress { get; set; }
 
 
-        public bool Is16BitDisabled => 
-            ShortAddress.Equals(ShortAddress.Broadcast) || ShortAddress.Equals(ShortAddress.Disabled);
+        public bool Is16BitDisabled => ShortAddress.Equals(ShortAddress.Broadcast) || ShortAddress.Equals(ShortAddress.Disabled);
 
         public bool Equals(NodeAddress other)
         {

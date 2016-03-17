@@ -82,9 +82,9 @@ namespace XBee.Devices
             }
         }
 
-        public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
+        public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
-            throw new NotImplementedException();
+            await TransmitDataAsync(data, CancellationToken.None, enableAck);
         }
     }
 }

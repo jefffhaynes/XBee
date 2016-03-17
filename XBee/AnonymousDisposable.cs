@@ -19,10 +19,7 @@ namespace XBee
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _dispose == null; }
-        }
+        public bool IsDisposed => _dispose == null;
 
         /// <summary>
         /// Calls the disposal action if and only if the current instance hasn't been disposed yet.
@@ -32,10 +29,7 @@ namespace XBee
 #pragma warning disable 0420
             var dispose = Interlocked.Exchange(ref _dispose, null);
 #pragma warning restore 0420
-            if (dispose != null)
-            {
-                dispose();
-            }
+            dispose?.Invoke();
         }
     }
 }

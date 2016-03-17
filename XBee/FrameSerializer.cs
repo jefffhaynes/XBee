@@ -74,29 +74,25 @@ namespace XBee
         private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
         {
             EventHandler<MemberSerializedEventArgs> handler = MemberSerialized;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
         {
             EventHandler<MemberSerializedEventArgs> handler = MemberDeserialized;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
         {
             EventHandler<MemberSerializingEventArgs> handler = MemberSerializing;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
 
         private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
         {
             EventHandler<MemberSerializingEventArgs> handler = MemberDeserializing;
-            if (handler != null)
-                handler(sender, e);
+            handler?.Invoke(sender, e);
         }
     }
 }
