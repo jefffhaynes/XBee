@@ -10,6 +10,11 @@ using XBee.Frames;
 using XBee.Frames.AtCommands;
 using XBee.Observable;
 
+#if WINDOWS_UWP
+using Windows.Devices.Enumeration;
+using Windows.Devices.SerialCommunication;
+#endif
+
 namespace XBee
 {
     public class XBeeController : IDisposable
@@ -93,6 +98,14 @@ namespace XBee
         /// </summary>
         public event EventHandler<SourcedSampleReceivedEventArgs> SampleReceived;
 
+#if WINDOWS_UWP
+        /// <summary>
+        /// Open a local node.
+        /// </summary>
+        /// <param name="device">The serial device used to talk to the controller node</param>
+        /// <returns></returns>
+        public async Task OpenAsync(SerialDevice device)
+#else
         /// <summary>
         /// Open a local node.
         /// </summary>
@@ -100,11 +113,16 @@ namespace XBee
         /// <param name="baudRate">The baud rate, typically 9600 or 115200 depending on the model</param>
         /// <returns></returns>
         public async Task OpenAsync(string port, int baudRate)
+#endif
         {
-            if(IsOpen)
+            if (IsOpen)
                 throw new InvalidOperationException("The controller is already conntected, please close the existing connection.");
 
+#if WINDOWS_UWP
+            _connection = new SerialConnection(device);
+#else
             _connection = new SerialConnection(port, baudRate);
+#endif
 
             try
             {
@@ -430,6 +448,49 @@ namespace XBee
                 }), timeout);
         }
 
+#if WINDOWS_UWP
+        /// <summary>
+        /// Try to find and open a local node.
+        /// </summary>
+        /// <returns>The controller or null if no controller was found</returns>
+        public static async Task<XBeeController> FindAndOpen()
+        {
+            var controller = new XBeeController();
+
+            string aqs = SerialDevice.GetDeviceSelector();
+            var devices = await DeviceInformation.FindAllAsync(aqs);
+
+            foreach (var device in devices)
+            {
+                try
+                {
+                    var serialDevice = await SerialDevice.FromIdAsync(device.Id);
+                    await controller.OpenAsync(serialDevice);
+                    return controller;
+                }
+                catch (InvalidOperationException)
+                {
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                }
+                catch (ArgumentException)
+                {
+                }
+                catch (TimeoutException)
+                {
+                }
+                catch (IOException)
+                {
+                }
+            }
+
+            return null;
+        }
+#else
         /// <summary>
         /// Try to find and open a local node.
         /// </summary>
@@ -469,6 +530,7 @@ namespace XBee
 
             return null;
         }
+#endif
 
         internal async Task Reset()
         {

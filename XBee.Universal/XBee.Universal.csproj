@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C8607ECB-63EE-4CBF-864B-6BAF62A179AF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XBee</RootNamespace>
+    <AssemblyName>XBee.Universal</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <PlatformTarget>ARM</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <PlatformTarget>ARM</PlatformTarget>
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\XBee\AnalogSample.cs">
+      <Link>AnalogSample.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\AnonymousDisposable.cs">
+      <Link>AnonymousDisposable.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Checksum.cs">
+      <Link>Checksum.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\CommandFrameContent.cs">
+      <Link>CommandFrameContent.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\CommandResponseFrameContent.cs">
+      <Link>CommandResponseFrameContent.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Converters\BitCountingConverter.cs">
+      <Link>Converters\BitCountingConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Converters\BitwiseAndConverter.cs">
+      <Link>Converters\BitwiseAndConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\DataReceivedEventArgs.cs">
+      <Link>DataReceivedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Devices\XBeePro900HP.cs">
+      <Link>Devices\XBeePro900HP.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Devices\XBeeSeries1.cs">
+      <Link>Devices\XBeeSeries1.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Devices\XBeeSeries2.cs">
+      <Link>Devices\XBeeSeries2.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\EnumExtensions.cs">
+      <Link>EnumExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frame.cs">
+      <Link>Frame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\FrameContent.cs">
+      <Link>FrameContent.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\FrameContext.cs">
+      <Link>FrameContext.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\FramePayload.cs">
+      <Link>FramePayload.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\FrameReceivedEventArgs.cs">
+      <Link>FrameReceivedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\FrameSerializer.cs">
+      <Link>FrameSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AnalogSampleChannels.cs">
+      <Link>Frames\AnalogSampleChannels.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommand.cs">
+      <Link>Frames\AtCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommandException.cs">
+      <Link>Frames\AtCommandException.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommandFrameContent.cs">
+      <Link>Frames\AtCommandFrameContent.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommandResponseFrame.cs">
+      <Link>Frames\AtCommandResponseFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommandResponseFrameContent.cs">
+      <Link>Frames\AtCommandResponseFrameContent.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommandResponseFrameData.cs">
+      <Link>Frames\AtCommandResponseFrameData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommandStatus.cs">
+      <Link>Frames\AtCommandStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\AssociationIndicationCommand.cs">
+      <Link>Frames\AtCommands\AssociationIndicationCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\AssociationIndicator.cs">
+      <Link>Frames\AtCommands\AssociationIndicator.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\CoordinatorEnableCommand.cs">
+      <Link>Frames\AtCommands\CoordinatorEnableCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\CoordinatorEnableCommandExt.cs">
+      <Link>Frames\AtCommands\CoordinatorEnableCommandExt.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\CoordinatorEnableResponseData.cs">
+      <Link>Frames\AtCommands\CoordinatorEnableResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\CoordinatorEnableState.cs">
+      <Link>Frames\AtCommands\CoordinatorEnableState.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\DestinationAddressHighCommand.cs">
+      <Link>Frames\AtCommands\DestinationAddressHighCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\DestinationAddressLowCommand.cs">
+      <Link>Frames\AtCommands\DestinationAddressLowCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\DeviceType.cs">
+      <Link>Frames\AtCommands\DeviceType.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\EncryptionEnableCommand.cs">
+      <Link>Frames\AtCommands\EncryptionEnableCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\EncryptionKeyCommand.cs">
+      <Link>Frames\AtCommands\EncryptionKeyCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\ForceSampleCommand.cs">
+      <Link>Frames\AtCommands\ForceSampleCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\HardwareVersion.cs">
+      <Link>Frames\AtCommands\HardwareVersion.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\HardwareVersionCommand.cs">
+      <Link>Frames\AtCommands\HardwareVersionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\HardwareVersionResponseData.cs">
+      <Link>Frames\AtCommands\HardwareVersionResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\InputOutputChangeDetectionCommand.cs">
+      <Link>Frames\AtCommands\InputOutputChangeDetectionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\InputOutputChangeDetectionCommandExt.cs">
+      <Link>Frames\AtCommands\InputOutputChangeDetectionCommandExt.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\InputOutputChangeDetectionResponseData.cs">
+      <Link>Frames\AtCommands\InputOutputChangeDetectionResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\InputOutputChannel.cs">
+      <Link>Frames\AtCommands\InputOutputChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\InputOutputConfiguration.cs">
+      <Link>Frames\AtCommands\InputOutputConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\InputOutputConfigurationCommand.cs">
+      <Link>Frames\AtCommands\InputOutputConfigurationCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\InputOutputResponseData.cs">
+      <Link>Frames\AtCommands\InputOutputResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\NetworkDiscoveryCommand.cs">
+      <Link>Frames\AtCommands\NetworkDiscoveryCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\NetworkDiscoveryResponseData.cs">
+      <Link>Frames\AtCommands\NetworkDiscoveryResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\NetworkDiscoveryResponseDataExtendedInfo.cs">
+      <Link>Frames\AtCommands\NetworkDiscoveryResponseDataExtendedInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\NodeIdentifierCommand.cs">
+      <Link>Frames\AtCommands\NodeIdentifierCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\NodeIdentifierResponseData.cs">
+      <Link>Frames\AtCommands\NodeIdentifierResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\NodeMessagingOptions.cs">
+      <Link>Frames\AtCommands\NodeMessagingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\PrimitiveResponseData.cs">
+      <Link>Frames\AtCommands\PrimitiveResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\ResetCommand.cs">
+      <Link>Frames\AtCommands\ResetCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SampleRateCommand.cs">
+      <Link>Frames\AtCommands\SampleRateCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SampleRateResponseData.cs">
+      <Link>Frames\AtCommands\SampleRateResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SerialNumberHighCommand.cs">
+      <Link>Frames\AtCommands\SerialNumberHighCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SerialNumberLowCommand.cs">
+      <Link>Frames\AtCommands\SerialNumberLowCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SleepMode.cs">
+      <Link>Frames\AtCommands\SleepMode.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SleepModeCommand.cs">
+      <Link>Frames\AtCommands\SleepModeCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SleepOptions.cs">
+      <Link>Frames\AtCommands\SleepOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SleepOptionsCommand.cs">
+      <Link>Frames\AtCommands\SleepOptionsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SleepOptionsCommandExt.cs">
+      <Link>Frames\AtCommands\SleepOptionsCommandExt.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SleepOptionsExt.cs">
+      <Link>Frames\AtCommands\SleepOptionsExt.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SleepOptionsResponseData.cs">
+      <Link>Frames\AtCommands\SleepOptionsResponseData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\SourceAddressCommand.cs">
+      <Link>Frames\AtCommands\SourceAddressCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\AtCommands\WriteCommand.cs">
+      <Link>Frames\AtCommands\WriteCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\DeliveryStatus.cs">
+      <Link>Frames\DeliveryStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\DeliveryStatusExt.cs">
+      <Link>Frames\DeliveryStatusExt.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\DigitalSampleChannels.cs">
+      <Link>Frames\DigitalSampleChannels.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\DigitalSampleState.cs">
+      <Link>Frames\DigitalSampleState.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\DiscoveryStatus.cs">
+      <Link>Frames\DiscoveryStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\IRxIndicatorDataFrame.cs">
+      <Link>Frames\IRxIndicatorDataFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\IRxIndicatorFrame.cs">
+      <Link>Frames\IRxIndicatorFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\IRxIndicatorSampleFrame.cs">
+      <Link>Frames\IRxIndicatorSampleFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\ModemStatusFrame.cs">
+      <Link>Frames\ModemStatusFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\ReceivedSignalStrengthIndicator.cs">
+      <Link>Frames\ReceivedSignalStrengthIndicator.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\ReceiveOptions.cs">
+      <Link>Frames\ReceiveOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\ReceiveOptionsExt.cs">
+      <Link>Frames\ReceiveOptionsExt.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RemoteAtCommandFrameContent.cs">
+      <Link>Frames\RemoteAtCommandFrameContent.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RemoteAtCommandOptions.cs">
+      <Link>Frames\RemoteAtCommandOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RemoteAtCommandResponseFrame.cs">
+      <Link>Frames\RemoteAtCommandResponseFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RxIndicator16Frame.cs">
+      <Link>Frames\RxIndicator16Frame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RxIndicator16SampleFrame.cs">
+      <Link>Frames\RxIndicator16SampleFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RxIndicatorExplicitExtFrame.cs">
+      <Link>Frames\RxIndicatorExplicitExtFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RxIndicatorExtFrame.cs">
+      <Link>Frames\RxIndicatorExtFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RxIndicatorFrame.cs">
+      <Link>Frames\RxIndicatorFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RxIndicatorSampleExtFrame.cs">
+      <Link>Frames\RxIndicatorSampleExtFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\RxIndicatorSampleFrame.cs">
+      <Link>Frames\RxIndicatorSampleFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\SampleChannels.cs">
+      <Link>Frames\SampleChannels.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\TransmitOptions.cs">
+      <Link>Frames\TransmitOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\TransmitOptionsExt.cs">
+      <Link>Frames\TransmitOptionsExt.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\TxRequest16Frame.cs">
+      <Link>Frames\TxRequest16Frame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\TxRequestExtFrame.cs">
+      <Link>Frames\TxRequestExtFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\TxRequestFrame.cs">
+      <Link>Frames\TxRequestFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\TxStatusExtFrame.cs">
+      <Link>Frames\TxStatusExtFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Frames\TxStatusFrame.cs">
+      <Link>Frames\TxStatusFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\FrameType.cs">
+      <Link>FrameType.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\LongAddress.cs">
+      <Link>LongAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\ModemStatus.cs">
+      <Link>ModemStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\NodeAddress.cs">
+      <Link>NodeAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\NodeDiscoveredEventArgs.cs">
+      <Link>NodeDiscoveredEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Observable\ObservableExtensions.cs">
+      <Link>Observable\ObservableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Observable\Producer.cs">
+      <Link>Observable\Producer.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Observable\Select.cs">
+      <Link>Observable\Select.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Observable\Sink.cs">
+      <Link>Observable\Sink.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Observable\Source.cs">
+      <Link>Observable\Source.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Observable\Where.cs">
+      <Link>Observable\Where.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\Sample.cs">
+      <Link>Sample.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\SampleReceivedEventArgs.cs">
+      <Link>SampleReceivedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\SerialConnection.cs">
+      <Link>SerialConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\ShortAddress.cs">
+      <Link>ShortAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\SignalStrength.cs">
+      <Link>SignalStrength.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\SourcedData.cs">
+      <Link>SourcedData.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\SourcedDataReceivedEventArgs.cs">
+      <Link>SourcedDataReceivedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\SourcedSample.cs">
+      <Link>SourcedSample.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\SourcedSampleReceivedEventArgs.cs">
+      <Link>SourcedSampleReceivedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\StartDelimiter.cs">
+      <Link>StartDelimiter.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\TaskExtensions.cs">
+      <Link>TaskExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\XBeeController.cs">
+      <Link>XBeeController.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\XBeeException.cs">
+      <Link>XBeeException.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\XBeeNode.cs">
+      <Link>XBeeNode.cs</Link>
+    </Compile>
+    <Compile Include="..\XBee\XBeeStream.cs">
+      <Link>XBeeStream.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\XBee.Universal.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BinarySerializer.Universal">
+      <HintPath>..\..\BinarySerializer\BinarySerializer.Universal\bin\x86\Debug\BinarySerializer.Universal.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,9 +1,16 @@
 ﻿using System;
-using System.IO.Ports;
+using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using BinarySerialization;
 using XBee.Frames.AtCommands;
+
+#if WINDOWS_UWP
+using Windows.Devices.SerialCommunication;
+#else
+using System.IO.Ports;
+#endif
 
 namespace XBee
 {
@@ -11,14 +18,26 @@ namespace XBee
     {
         private readonly FrameSerializer _frameSerializer = new FrameSerializer();
 
+#if WINDOWS_UWP
+        private readonly SerialDevice _serialPort;
+#else
         private readonly SerialPort _serialPort;
+#endif
+
         private CancellationTokenSource _readCancellationTokenSource;
 
         private readonly object _openCloseLock = new object();
 
+#if WINDOWS_UWP
+        public SerialConnection(SerialDevice device)
+        {
+            _serialPort = device;
+#else
         public SerialConnection(string port, int baudRate)
         {
+            
             _serialPort = new SerialPort(port, baudRate);
+#endif
 
             _frameSerializer.MemberSerializing += OnMemberSerializing;
             _frameSerializer.MemberSerialized += OnMemberSerialized;
@@ -66,7 +85,11 @@ namespace XBee
         public async Task Send(FrameContent frameContent, CancellationToken cancellationToken)
         {
             byte[] data = _frameSerializer.Serialize(new Frame(frameContent));
+#if WINDOWS_UWP
+            await _serialPort.OutputStream.WriteAsync(data.AsBuffer());
+#else
             await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken);
+#endif
         }
 
         public event EventHandler<FrameReceivedEventArgs> FrameReceived;
@@ -77,8 +100,9 @@ namespace XBee
         {
             lock (_openCloseLock)
             {
+#if !WINDOWS_UWP
                 _serialPort.Open();
-
+#endif
                 _readCancellationTokenSource = new CancellationTokenSource();
                 CancellationToken cancellationToken = _readCancellationTokenSource.Token;
 
@@ -88,8 +112,11 @@ namespace XBee
                     {
                         try
                         {
+#if WINDOWS_UWP
+                            Frame frame = _frameSerializer.Deserialize(_serialPort.InputStream.AsStreamForRead());
+#else
                             Frame frame = _frameSerializer.Deserialize(_serialPort.BaseStream);
-
+#endif
                             var handler = FrameReceived;
                             if (handler != null)
                                 Task.Run(() => handler(this, new FrameReceivedEventArgs(frame.Payload.Content)),
@@ -117,7 +144,11 @@ namespace XBee
                     return;
 
                 _readCancellationTokenSource.Cancel();
+
+#if !WINDOWS_UWP
                 _serialPort.Close();
+#endif
+
                 _receiveTask.Wait();
                 _readCancellationTokenSource.Dispose();
 
