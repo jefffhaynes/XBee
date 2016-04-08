@@ -41,8 +41,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BinarySerializer, Version=4.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BinarySerializer.4.6.3\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\BinarySerializer.dll</HintPath>
+    <Reference Include="BinarySerializer, Version=4.6.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BinarySerializer.4.6.5\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\BinarySerializer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

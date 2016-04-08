@@ -31,7 +31,7 @@ namespace XBee.Frames.AtCommands
                 var interval = value.TotalMilliseconds;
 
                 if(interval > ushort.MaxValue)
-                    throw new ArgumentOutOfRangeException("value", interval, "Must be less than 0xFFFF");
+                    throw new ArgumentOutOfRangeException(nameof(value), interval, "Must be less than 0xFFFF");
 
                 Parameter = (ushort)interval;
             }
