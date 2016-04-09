@@ -83,6 +83,8 @@ namespace XBee.Tester
 
             //var serialNumber = await _xbee.GetSerialNumber();
             Discover();
+
+
         }
 
 
@@ -131,10 +133,10 @@ namespace XBee.Tester
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
                 //await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
 
-                var node = args.Node as XBeeSeries2;
+                //var node = args.Node as XBeeSeries2;
 
-                var receivedData =
-                    node.GetReceivedData().Subscribe(data => Console.WriteLine("recieved {0} bytes", data.Length));
+                //var receivedData =
+                //    node.GetReceivedData().Subscribe(data => Console.WriteLine("recieved {0} bytes", data.Length));
 
                 //var stopwatch = new Stopwatch();
                 //stopwatch.Start();
@@ -165,8 +167,11 @@ namespace XBee.Tester
                 //    Console.WriteLine(id);
                 //}
 
+                if (args.Name == "ED1")
+                    return;
 
-                // await args.Node.SetNodeIdentifier("ED 1");
+                await Task.Delay(1000);
+                await args.Node.SetNodeIdentifier("BOB");
 
                 //await args.Node.Reset();
 

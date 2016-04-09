@@ -9,6 +9,7 @@ namespace XBee
 
         public ShortAddress()
         {
+            Value = Disabled.Value;
         }
 
         public ShortAddress(ushort value)

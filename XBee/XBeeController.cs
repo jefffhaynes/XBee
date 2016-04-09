@@ -322,6 +322,9 @@ namespace XBee
             }
             else
             {
+                if(address.ShortAddress.Value == 0)
+                    address.ShortAddress = ShortAddress.Disabled;
+
                 var remoteCommand = new RemoteAtCommandFrameContent(address, command);
                 RemoteAtCommandResponseFrame response =
                     await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand, DefaultRemoteQueryTimeout);
