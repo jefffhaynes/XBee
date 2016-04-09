@@ -322,8 +322,7 @@ namespace XBee
             }
             else
             {
-                if(address.ShortAddress.Value == 0)
-                    address.ShortAddress = ShortAddress.Disabled;
+                address.ShortAddress = address.LongAddress.IsBroadcast ? ShortAddress.Broadcast : ShortAddress.Disabled;
 
                 var remoteCommand = new RemoteAtCommandFrameContent(address, command);
                 RemoteAtCommandResponseFrame response =
