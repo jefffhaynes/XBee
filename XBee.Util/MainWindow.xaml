@@ -4,14 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:util="clr-namespace:XBee.Util"
+        xmlns:controls="clr-namespace:XBee.Util.Controls"
         mc:Ignorable="d"
+        Background="{StaticResource PanelHorizontalLineBrushKey}"
         Title="XBee Utility" Height="350" Width="525" d:DataContext="{d:DesignInstance util:ViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="Discover" Command="{Binding DiscoverCommand, IsAsync=True}" Margin="6"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Command="{Binding DiscoverCommand, IsAsync=True}" Margin="6" Background="Transparent">
+            <controls:XBeeGlyph/>
+        </Button>
         <TextBox Grid.Row="1" Margin="6" IsReadOnly="True" Text="{Binding Log, Mode=OneWay}"/>
     </Grid>
 </Window>
