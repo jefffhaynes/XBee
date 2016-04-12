@@ -22,8 +22,7 @@ namespace XBee.Test
                 var expected = expectedValue[i];
                 var actual = actualValue[i];
 
-                Assert.AreEqual(expected, actual,
-                    string.Format("Value at position {0} does not match expected value.", i));
+                Assert.AreEqual(expected, actual, $"Value at position {i} does not match expected value.");
             }
         }
 

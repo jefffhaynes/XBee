@@ -8,9 +8,6 @@ namespace XBee.Frames.AtCommands
         public ushort Value { get; set; }
 
         [Ignore]
-        public TimeSpan Interval
-        {
-            get { return TimeSpan.FromMilliseconds(Value); }
-        }
+        public TimeSpan Interval => TimeSpan.FromMilliseconds(Value);
     }
 }

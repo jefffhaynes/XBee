@@ -322,6 +322,8 @@ namespace XBee
             }
             else
             {
+                address.ShortAddress = address.LongAddress.IsBroadcast ? ShortAddress.Broadcast : ShortAddress.Disabled;
+
                 var remoteCommand = new RemoteAtCommandFrameContent(address, command);
                 RemoteAtCommandResponseFrame response =
                     await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand, DefaultRemoteQueryTimeout);

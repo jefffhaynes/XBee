@@ -1,4 +1,5 @@
 ﻿using System;
+using BinarySerialization;
 
 namespace XBee
 {
@@ -9,6 +10,7 @@ namespace XBee
 
         public ShortAddress()
         {
+            Value = Disabled.Value;
         }
 
         public ShortAddress(ushort value)
@@ -27,5 +29,11 @@ namespace XBee
         {
             return Value.ToString("X4");
         }
+
+        [Ignore]
+        public bool IsBroadcast => Value == Broadcast.Value;
+
+        [Ignore]
+        public bool IsDisabled => Value == Disabled.Value;
     }
 }

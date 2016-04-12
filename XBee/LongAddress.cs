@@ -50,5 +50,11 @@ namespace XBee
         {
             return Value.ToString("X16");
         }
+
+        [Ignore]
+        public bool IsBroadcast => Value == Broadcast.Value;
+
+        [Ignore]
+        public bool IsCoordinator => Value == CoordinatorAddress.Value;
     }
 }

@@ -5,7 +5,7 @@ using XBee.Converters;
 
 namespace XBee.Frames
 {
-    public class RxIndicatorSampleExtFrame : CommandFrameContent, IRxIndicatorSampleFrame
+    public class RxIndicatorSampleExtFrame : FrameContent, IRxIndicatorSampleFrame
     {
         [FieldOrder(0)]
         public LongAddress Source { get; set; }
@@ -55,16 +55,8 @@ namespace XBee.Frames
         public DigitalSampleState DigitalSampleState { get; set; }
 
         [FieldOrder(7)]
-        [SerializeWhen("AnalogSampleChannels", AnalogSampleChannels.Input0,
-            ConverterType = typeof (BitwiseAndConverter), ConverterParameter = AnalogSampleChannels.Input0)]
-        [SerializeWhen("AnalogSampleChannels", AnalogSampleChannels.Input1,
-            ConverterType = typeof (BitwiseAndConverter), ConverterParameter = AnalogSampleChannels.Input1)]
-        [SerializeWhen("AnalogSampleChannels", AnalogSampleChannels.Input2,
-            ConverterType = typeof (BitwiseAndConverter), ConverterParameter = AnalogSampleChannels.Input2)]
-        [SerializeWhen("AnalogSampleChannels", AnalogSampleChannels.Input3,
-            ConverterType = typeof (BitwiseAndConverter), ConverterParameter = AnalogSampleChannels.Input3)]
-        [FieldCount(Path = "AnalogSampleChannels",
-            ConverterType = typeof (BitCountingConverter), ConverterParameter = AnalogSampleChannels.All)]
+        [FieldCount(Path = "AnalogChannels",
+            ConverterType = typeof(BitCountingConverter), ConverterParameter = AnalogSampleChannels.All)]
         public List<ushort> AnalogSamples { get; set; }
 
 
