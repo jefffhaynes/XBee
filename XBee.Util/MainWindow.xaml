@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Command="{Binding DiscoverCommand, IsAsync=True}" Margin="6" Background="Transparent">
-            <controls:XBeeGlyph/>
+            <controls:XBeeGlyphControl Text="C"/>
         </Button>
         <TextBox Grid.Row="1" Margin="6" IsReadOnly="True" Text="{Binding Log, Mode=OneWay}"/>
     </Grid>

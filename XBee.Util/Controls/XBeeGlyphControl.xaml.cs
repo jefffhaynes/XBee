@@ -4,17 +4,14 @@ using System.Windows.Controls;
 
 namespace XBee.Util.Controls
 {
-    /// <summary>
-    /// Interaction logic for XBeeGlyph.xaml
-    /// </summary>
-    public partial class XBeeGlyph : UserControl
+    public partial class XBeeGlyphControl : UserControl
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            "Text", typeof (string), typeof (XBeeGlyph), new PropertyMetadata(default(string), PropertyChangedCallback));
+            "Text", typeof (string), typeof (XBeeGlyphControl), new PropertyMetadata("?", PropertyChangedCallback));
 
         private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            var control = (XBeeGlyph)dependencyObject;
+            var control = (XBeeGlyphControl)dependencyObject;
             control.XBeeTextBlock.Text = (string)dependencyPropertyChangedEventArgs.NewValue;
         }
 
@@ -24,7 +21,7 @@ namespace XBee.Util.Controls
             set { SetValue(TextProperty, value); }
         }
 
-        public XBeeGlyph()
+        public XBeeGlyphControl()
         {
             InitializeComponent();
         }
