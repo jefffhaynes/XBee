@@ -48,22 +48,22 @@ namespace XBee
 
 
         /// <summary>
-        ///     Occurrs after a member has been serialized.
+        ///     Occurs after a member has been serialized.
         /// </summary>
         public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized;
 
         /// <summary>
-        ///     Occurrs after a member has been deserialized.
+        ///     Occurs after a member has been deserialized.
         /// </summary>
         public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized;
 
         /// <summary>
-        ///     Occurrs before a member has been serialized.
+        ///     Occurs before a member has been serialized.
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing;
 
         /// <summary>
-        ///     Occurrs before a member has been deserialized.
+        ///     Occurs before a member has been deserialized.
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing;
 
@@ -251,6 +251,7 @@ namespace XBee
         /// <typeparam name="TResponseFrame">The expected response type</typeparam>
         /// <param name="frame">The frame to send</param>
         /// <param name="timeout">Timeout</param>
+        /// <param name="cancellationToken">A cancellation token used to cancel the query.</param>
         /// <returns>The response frame</returns>
         public async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout, CancellationToken cancellationToken)
             where TResponseFrame : CommandResponseFrameContent
@@ -352,7 +353,7 @@ namespace XBee
         /// </summary>
         /// <typeparam name="TResponseFrame">The expected response type</typeparam>
         /// <param name="frame">The frame to send.</param>
-        /// <param name="callback">This will be called when a response is recieved within the timeout period.</param>
+        /// <param name="callback">This will be called when a response is received within the timeout period.</param>
         /// <param name="timeout">The amount of time to wait before responses will be ignored</param>
         public async Task ExecuteMultiQueryAsync<TResponseFrame>(CommandFrameContent frame,
             Action<TResponseFrame> callback, TimeSpan timeout) where TResponseFrame : CommandResponseFrameContent
