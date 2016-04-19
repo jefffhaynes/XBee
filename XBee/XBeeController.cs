@@ -89,7 +89,7 @@ namespace XBee
         public event EventHandler<NodeDiscoveredEventArgs> NodeDiscovered;
 
         /// <summary>
-        /// Occurs when data is recieved from a node.
+        /// Occurs when data is received from a node.
         /// </summary>
         public event EventHandler<SourcedDataReceivedEventArgs> DataReceived;
 
