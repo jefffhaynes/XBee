@@ -29,6 +29,18 @@ namespace XBee.Test
             controller.Close();
         }
 
+        public async Task OpenCloseCycleTestBase()
+        {
+            var controller = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
+            controller.Close();
+
+            for (int i = 0; i < 10; i++)
+            {
+                await controller.OpenAsync();
+                controller.Close();
+            }
+        }
+
         public async Task LocalReadSerialNumberTestBase()
         {
             var device = await GetDevice();

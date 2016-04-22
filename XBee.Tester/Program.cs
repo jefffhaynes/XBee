@@ -129,7 +129,7 @@ namespace XBee.Tester
 
             _xbee.NodeDiscovered += async (sender, args) =>
             {
-                Console.WriteLine("Discovered '{0}'", args.Name);
+                Console.WriteLine("---------------- Discovered '{0}'", args.Name);
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
                 //await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
 
@@ -167,11 +167,11 @@ namespace XBee.Tester
                 //    Console.WriteLine(id);
                 //}
 
-                if (args.Name == "ED1")
-                    return;
+                //if (args.Name == "ED1")
+                //    return;
 
-                await Task.Delay(1000);
-                await args.Node.SetNodeIdentifier("BOB");
+                //await Task.Delay(1000);
+                //await args.Node.SetNodeIdentifier("BOB");
 
                 //await args.Node.Reset();
 

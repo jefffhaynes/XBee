@@ -13,6 +13,12 @@ namespace XBee.Test
         }
 
         [TestMethod]
+        public async Task OpenCloseCycleTest()
+        {
+            await OpenCloseCycleTestBase();
+        }
+
+        [TestMethod]
         public async Task LocalReadSerialNumberTest()
         {
             await LocalReadSerialNumberTestBase();

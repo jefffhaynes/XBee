@@ -77,6 +77,7 @@ namespace XBee
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> MemberDeserializing;
 
+        public bool IsOpen => _serialPort.IsOpen;
 
         public async Task Send(FrameContent frameContent)
         {
@@ -131,12 +132,14 @@ namespace XBee
 #endif
                             var handler = FrameReceived;
                             if (handler != null)
-                                Task.Run(() => handler(this, new FrameReceivedEventArgs(frame.Payload.Content)),
-                                    cancellationToken).ConfigureAwait(false);
+                                Task.Run(() =>
+                                {
+                                    handler(this, new FrameReceivedEventArgs(frame.Payload.Content));
+                                },cancellationToken).ConfigureAwait(false);
                         }
                         catch (Exception)
                         {
-                            if (!cancellationToken.IsCancellationRequested)
+                            if (!cancellationToken.IsCancellationRequested && !_isClosing)
                                 throw;
                         }
                     }
@@ -148,10 +151,14 @@ namespace XBee
             }
         }
 
+        private bool _isClosing;
+
         public void Close()
         {
             lock (_openCloseLock)
             {
+                _isClosing = true;
+
                 if (_receiveTask == null)
                     return;
 
@@ -161,10 +168,19 @@ namespace XBee
                 _serialPort.Close();
 #endif
 
-                _receiveTask.Wait();
+                try
+                {
+                    _receiveTask.Wait();
+                }
+                catch (AggregateException)
+                {
+                }
+
                 _readCancellationTokenSource.Dispose();
 
                 _receiveTask = null;
+
+                _isClosing = false;
             }
         }
 
