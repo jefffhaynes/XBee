@@ -677,6 +677,8 @@ namespace XBee
                     return new XBeeSeries1(this, Frames.AtCommands.HardwareVersion.XBeeSeries1, address);
                 case Frames.AtCommands.HardwareVersion.XBeeProSeries1:
                     return new XBeeSeries1(this, Frames.AtCommands.HardwareVersion.XBeeProSeries1, address);
+                case Frames.AtCommands.HardwareVersion.ZNetZigBeeS2:
+                    return new XBeeSeries2(this, Frames.AtCommands.HardwareVersion.ZNetZigBeeS2, address);
                 case Frames.AtCommands.HardwareVersion.XBeeProS2:
                     return new XBeeSeries2(this, Frames.AtCommands.HardwareVersion.XBeeProS2, address);
                 case Frames.AtCommands.HardwareVersion.XBeeProS2B:
