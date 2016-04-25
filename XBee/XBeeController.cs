@@ -233,22 +233,45 @@ namespace XBee
         }
 
         /// <summary>
-        ///     Create a node.
+        /// Create a node.
         /// </summary>
-        /// <param name="address">The address of the remote node</param>
-        /// <returns>The remote node</returns>
-        public async Task<XBeeNode> GetNodeAsync(NodeAddress address)
+        /// <param name="address">The address of the node or null for the controller node.</param>
+        /// <param name="autodetectHardwareVersion">If true query node for hardware version.  Otherwise assume controller version.</param>
+        /// <returns>The specified node.</returns>
+        public async Task<XBeeNode> GetNodeAsync(NodeAddress address = null, bool autodetectHardwareVersion = true)
         {
-            if (!IsOpen)
-                throw new InvalidOperationException("Connection closed.");
+            await Initialize();
 
             if (address == null)
                 return Local;
 
-            var version = await
-                TaskExtensions.Retry(async () => await GetHardwareVersion(address), TimeSpan.FromSeconds(5),
-                    typeof (TimeoutException), typeof (AtCommandException));
+            HardwareVersion version;
 
+            if (autodetectHardwareVersion)
+            {
+                if (!IsOpen)
+                    throw new InvalidOperationException("Connection closed.");
+
+                version = await
+                    TaskExtensions.Retry(async () => await GetHardwareVersion(address), TimeSpan.FromSeconds(5),
+                        typeof(TimeoutException), typeof(AtCommandException));
+            }
+            else
+            {
+                version = Local.HardwareVersion;
+            }
+
+            return await Task.FromResult(CreateNode(version, address));
+        }
+
+        /// <summary>
+        /// Create a node.
+        /// </summary>
+        /// <param name="address">The address of the node or null for the controller node.</param>
+        /// <param name="version">The hardware version to use for the specified node.</param>
+        /// <returns>The specified node.</returns>
+        public async Task<XBeeNode> GetNodeAsync(NodeAddress address, HardwareVersion version)
+        {
             return await Task.FromResult(CreateNode(version, address));
         }
 

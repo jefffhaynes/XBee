@@ -196,7 +196,7 @@ namespace XBee.Tester
                 //await args.Node.ForceSample();
             };
 
-            await _xbee.DiscoverNetwork();
+            //await _xbee.DiscoverNetwork();
 
             //await _xbee.ExecuteMultiQueryAsync(new NetworkDiscoveryCommand(), new Action<AtCommandResponseFrame>(
             //    async frame =>
