@@ -9,6 +9,6 @@ namespace XBee
             Data = data;
         }
 
-        public byte[] Data { get; private set; }
+        public byte[] Data { get; }
     }
 }

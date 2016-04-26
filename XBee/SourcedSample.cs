@@ -1,15 +1,12 @@
 ﻿namespace XBee
 {
-    public class SourcedSample
+    public class SourcedSample : Sourced
     {
-        internal SourcedSample(NodeAddress address, Sample sample)
+        internal SourcedSample(NodeAddress address, Sample sample) : base(address)
         {
-            Address = address;
             Sample = sample;
         }
 
-        public NodeAddress Address { get; private set; }
-
-        public Sample Sample { get; private set; }
+        public Sample Sample { get; }
     }
 }

@@ -9,7 +9,7 @@ namespace XBee
 {
     public class SampleReceivedEventArgs : EventArgs
     {
-        public SampleReceivedEventArgs(DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
+        internal SampleReceivedEventArgs(DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
         {
             DigitalSampleState = digitalSampleState;
             AnalogSamples = new ReadOnlyCollection<AnalogSample>(analogSamples.ToList());

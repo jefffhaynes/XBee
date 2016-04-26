@@ -62,11 +62,17 @@
     <Compile Include="Frames\ModemStatusData\EmberStatus.cs" />
     <Compile Include="Frames\ModemStatusData\ModemStatusExtData.cs" />
     <Compile Include="Frames\ModemStatusData\RejoinModemStatusData.cs" />
+    <Compile Include="Frames\ModemStatusData\JoiningModemStatusData.cs" />
     <Compile Include="Frames\ModemStatusData\StackStatusModemStatusData.cs" />
     <Compile Include="Frames\ModemStatusExtFrame.cs" />
     <Compile Include="ModemStatusExt.cs" />
     <Compile Include="Frames\OneWireSensor.cs" />
     <Compile Include="Frames\SensorReadIndicatorFrame.cs" />
+    <Compile Include="SensorSampleReceivedEventArgs.cs" />
+    <Compile Include="SensorSample.cs" />
+    <Compile Include="Sourced.cs" />
+    <Compile Include="SourcedSensorSampleReceivedEventArgs.cs" />
+    <Compile Include="SourcedSensorSample.cs" />
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="SourcedDataReceivedEventArgs.cs" />
     <Compile Include="Devices\XBeePro900HP.cs" />

@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class SensorReadIndicatorFrame : FrameContent
+    public class SensorReadIndicatorFrame : FrameContent, IRxIndicatorFrame
     {
         [FieldOrder(0)]
         public LongAddress Source { get; set; }
@@ -40,6 +40,11 @@ namespace XBee.Frames
                     return (double) TemperatureValue/16;
                 return -(double) (TemperatureValue & 0x7FF)/16;
             }
+        }
+
+        public NodeAddress GetAddress()
+        {
+            return new NodeAddress(Source, ShortAddress);
         }
     }
 }

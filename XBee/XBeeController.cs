@@ -46,26 +46,102 @@ namespace XBee
         private byte _frameId = byte.MinValue;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
+        private EventHandler<MemberSerializedEventArgs> _frameMemberSerialized;
+        private EventHandler<MemberSerializedEventArgs> _frameMemberDeserialized;
+        private EventHandler<MemberSerializingEventArgs> _frameMemberSerializing;
+        private EventHandler<MemberSerializingEventArgs> _frameMemberDeserializing;
+
+        // ReSharper disable DelegateSubtraction
 
         /// <summary>
         ///     Occurs after a member has been serialized.
         /// </summary>
-        public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized;
+        public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized
+        {
+            add
+            {
+                _frameMemberSerialized += value;
+                var connection = _connection;
+                if (connection != null)
+                    connection.MemberSerialized += _frameMemberSerialized;
+            }
+
+            remove
+            {
+                _frameMemberSerialized -= value;
+                var connection = _connection;
+                if (connection != null)
+                    connection.MemberSerialized -= _frameMemberSerialized;
+            }
+        }
 
         /// <summary>
         ///     Occurs after a member has been deserialized.
         /// </summary>
-        public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized;
+        public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized
+        {
+            add
+            {
+                _frameMemberDeserialized += value;
+                var connection = _connection;
+                if (connection != null)
+                    connection.MemberDeserialized += _frameMemberDeserialized;
+            }
+
+            remove
+            {
+                _frameMemberDeserialized -= value;
+                var connection = _connection;
+                if (connection != null)
+                    connection.MemberDeserialized -= _frameMemberDeserialized;
+            }
+        }
 
         /// <summary>
         ///     Occurs before a member has been serialized.
         /// </summary>
-        public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing;
+        public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing
+        {
+            add
+            {
+                _frameMemberSerializing += value;
+                var connection = _connection;
+                if (connection != null)
+                    connection.MemberSerializing += _frameMemberSerializing;
+            }
+
+            remove
+            {
+                _frameMemberSerializing -= value;
+                var connection = _connection;
+                if (connection != null)
+                    connection.MemberSerializing -= _frameMemberSerializing;
+            }
+        }
 
         /// <summary>
         ///     Occurs before a member has been deserialized.
         /// </summary>
-        public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing;
+        public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing
+        {
+            add
+            {
+                _frameMemberDeserializing += value;
+                var connection = _connection;
+                if (connection != null)
+                    connection.MemberDeserializing += _frameMemberDeserializing;
+            }
+
+            remove
+            {
+                _frameMemberDeserializing -= value;
+                var connection = _connection;
+                if (connection != null)
+                    connection.MemberDeserializing -= _frameMemberDeserializing;
+            }
+        }
+
+        // ReSharper restore DelegateSubtraction
 
         public HardwareVersion? HardwareVersion { get; private set; }
 
@@ -107,6 +183,11 @@ namespace XBee
         ///     Occurs when a sample is received from a node.
         /// </summary>
         public event EventHandler<SourcedSampleReceivedEventArgs> SampleReceived;
+
+        /// <summary>
+        ///     Occurs when a sensor sample is received from a node.
+        /// </summary>
+        public event EventHandler<SourcedSensorSampleReceivedEventArgs> SensorSampleReceived;
 
 #if WINDOWS_UWP
     /// <summary>
@@ -164,10 +245,17 @@ namespace XBee
         {
             _connection = new SerialConnection(port, baudRate);
 
-            _connection.MemberSerializing += OnMemberSerializing;
-            _connection.MemberSerialized += OnMemberSerialized;
-            _connection.MemberDeserializing += OnMemberDeserializing;
-            _connection.MemberDeserialized += OnMemberDeserialized;
+            if (_frameMemberDeserialized != null)
+                _connection.MemberDeserialized += _frameMemberDeserialized;
+
+            if (_frameMemberDeserializing != null)
+                _connection.MemberDeserializing += _frameMemberDeserializing;
+
+            if (_frameMemberSerialized != null)
+                _connection.MemberSerialized += _frameMemberSerialized;
+
+            if (_frameMemberDeserialized != null)
+                _connection.MemberDeserialized += _frameMemberDeserialized;
 
             _connection.FrameReceived += OnFrameReceived;
         }
@@ -744,6 +832,23 @@ namespace XBee
                 SampleReceived?.Invoke(this,
                     new SourcedSampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
             }
+            else if (content is SensorReadIndicatorFrame)
+            {
+                var sensorFrame = content as SensorReadIndicatorFrame;
+                var sensorSample = new SensorSample(sensorFrame.OneWireSensor, 
+                    sensorFrame.SensorValueA, 
+                    sensorFrame.SensorValueB, 
+                    sensorFrame.SensorValueC, 
+                    sensorFrame.SensorValueD, 
+                    sensorFrame.TemperatureCelsius);
+
+                var address = sensorFrame.GetAddress();
+
+                SensorSampleReceived?.Invoke(this,
+                    new SourcedSensorSampleReceivedEventArgs(address, sensorSample.OneWireSensor,
+                        sensorSample.SensorValueA, sensorSample.SensorValueB, sensorSample.SensorValueC,
+                        sensorSample.SensorValueD, sensorSample.TemperatureCelsius));
+            }
         }
 
         private byte GetNextFrameId()
@@ -766,26 +871,6 @@ namespace XBee
         {
             if (IsOpen)
                 _connection.Close();
-        }
-
-        private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
-        {
-            FrameMemberSerialized?.Invoke(sender, e);
-        }
-
-        private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
-        {
-            FrameMemberDeserialized?.Invoke(sender, e);
-        }
-
-        private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
-        {
-            FrameMemberSerializing?.Invoke(sender, e);
-        }
-
-        private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
-        {
-            FrameMemberDeserializing?.Invoke(sender, e);
         }
     }
 }

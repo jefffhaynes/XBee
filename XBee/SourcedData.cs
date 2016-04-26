@@ -1,15 +1,12 @@
 ﻿namespace XBee
 {
-    public class SourcedData
+    public class SourcedData : Sourced
     {
-        internal SourcedData(NodeAddress address, byte[] data)
+        internal SourcedData(NodeAddress address, byte[] data) : base(address)
         {
-            Address = address;
             Data = data;
         }
-
-        public NodeAddress Address { get; private set; }
-
-        public byte[] Data { get; private set; }
+        
+        public byte[] Data { get; }
     }
 }
