@@ -72,6 +72,9 @@ namespace XBee.Frames
 
         private IEnumerable<AnalogSample> GetAnalogSamples()
         {
+            if (AnalogSamples == null)
+                return Enumerable.Empty<AnalogSample>();
+
             IEnumerable<AnalogSampleChannels> analogChannels =
                 (AnalogChannels & AnalogSampleChannels.All).GetFlagValues();
             return AnalogSamples.Zip(analogChannels, (sample, channel) => new AnalogSample(channel, sample));

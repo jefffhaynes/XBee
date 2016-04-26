@@ -58,16 +58,16 @@ namespace XBee.Tester
 
             _xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
 
-            _xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
-            _xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
-            _xbee.FrameMemberDeserializing += XbeeOnFrameMemberDeserializing;
-            _xbee.FrameMemberDeserialized += XbeeOnFrameMemberDeserialized;
+            //_xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
+            //_xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
+            //_xbee.FrameMemberDeserializing += XbeeOnFrameMemberDeserializing;
+            //_xbee.FrameMemberDeserialized += XbeeOnFrameMemberDeserialized;
 
             //_xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
 
             //Console.WriteLine("Running {0}", _xbee.HardwareVersion);
 
-            //_xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args.Address);
+            _xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample: {0}: {1} + {2} analog samples", args.Address, args.DigitalSampleState, args.AnalogSamples.Count);
 
             //var coordinator = await _xbee.IsCoordinator();
 
