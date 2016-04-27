@@ -66,6 +66,7 @@ While the controller represents the API, if we want to control the node itself w
 
 ```c#
 var localNode = controller.Local;
+// or var localNode = await controller.GetNodeAsync(null);
 var serialNumber = await localNode.GetSerialNumber();
 // etc
 ```
