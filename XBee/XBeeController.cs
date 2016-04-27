@@ -384,7 +384,7 @@ namespace XBee
         /// </summary>
         /// <param name="frame"></param>
         /// <returns></returns>
-        public async Task ExecuteAsync(FrameContent frame)
+        internal async Task ExecuteAsync(FrameContent frame)
         {
             await ExecuteAsync(frame, CancellationToken.None);
         }
@@ -395,7 +395,7 @@ namespace XBee
         /// <param name="frame"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task ExecuteAsync(FrameContent frame, CancellationToken cancellationToken)
+        internal async Task ExecuteAsync(FrameContent frame, CancellationToken cancellationToken)
         {
             if (!IsOpen)
                 throw new InvalidOperationException("Controller must be open to execute commands.");
@@ -409,7 +409,7 @@ namespace XBee
         /// <param name="command"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        public async Task ExecuteAtCommand(AtCommand command, NodeAddress address = null)
+        internal async Task ExecuteAtCommand(AtCommand command, NodeAddress address = null)
         {
             if (address == null)
             {
@@ -430,7 +430,7 @@ namespace XBee
         /// <param name="frame">The frame to send</param>
         /// <param name="timeout">Timeout</param>
         /// <returns>The response frame</returns>
-        public async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout)
+        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout)
             where TResponseFrame : CommandResponseFrameContent
         {
             return await ExecuteQueryAsync<TResponseFrame>(frame, timeout, CancellationToken.None);
@@ -444,7 +444,7 @@ namespace XBee
         /// <param name="timeout">Timeout</param>
         /// <param name="cancellationToken">A cancellation token used to cancel the query.</param>
         /// <returns>The response frame</returns>
-        public async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout,
+        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout,
             CancellationToken cancellationToken)
             where TResponseFrame : CommandResponseFrameContent
         {
@@ -475,7 +475,7 @@ namespace XBee
         /// <typeparam name="TResponseFrame">The expected response type</typeparam>
         /// <param name="frame">The frame to send</param>
         /// <returns>The response frame</returns>
-        public Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame)
+        internal Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame)
             where TResponseFrame : CommandResponseFrameContent
         {
             return ExecuteQueryAsync<TResponseFrame>(frame, CancellationToken.None);
@@ -488,7 +488,7 @@ namespace XBee
         /// <param name="frame">The frame to send</param>
         /// <param name="cancellationToken">Used to cancel the operation</param>
         /// <returns>The response frame</returns>
-        public Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame,
+        internal Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame,
             CancellationToken cancellationToken)
             where TResponseFrame : CommandResponseFrameContent
         {
@@ -502,7 +502,7 @@ namespace XBee
         /// <param name="command">The command to send</param>
         /// <param name="address">The address of the node.  If this is null the command will be sent to the local node.</param>
         /// <returns>The response data</returns>
-        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
+        internal async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
             NodeAddress address = null)
             where TResponseData : AtCommandResponseFrameData
         {
@@ -518,7 +518,7 @@ namespace XBee
         /// <param name="address">The address of the node.  If this is null the command will be sent to the local node.</param>
         /// <param name="timeout"></param>
         /// <returns>The response data</returns>
-        public async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
+        internal async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
             NodeAddress address, TimeSpan timeout)
             where TResponseData : AtCommandResponseFrameData
         {
@@ -552,7 +552,7 @@ namespace XBee
         /// <param name="command">The AT command to execute</param>
         /// <param name="address">The address of the node.  If this is null the command will be execute on the local node.</param>
         /// <returns></returns>
-        public async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null)
+        internal async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null)
         {
             await ExecuteAtQueryAsync<AtCommandResponseFrameData>(command, address);
         }
@@ -564,7 +564,7 @@ namespace XBee
         /// <param name="frame">The frame to send.</param>
         /// <param name="callback">This will be called when a response is received within the timeout period.</param>
         /// <param name="timeout">The amount of time to wait before responses will be ignored</param>
-        public async Task ExecuteMultiQueryAsync<TResponseFrame>(CommandFrameContent frame,
+        private async Task ExecuteMultiQueryAsync<TResponseFrame>(CommandFrameContent frame,
             Action<TResponseFrame> callback, TimeSpan timeout) where TResponseFrame : CommandResponseFrameContent
         {
             frame.FrameId = GetNextFrameId();
@@ -607,9 +607,9 @@ namespace XBee
         /// <summary>
         ///     Start network discovery.  The discovery of a node will result in a <see cref="NodeDiscovered" /> event.
         /// </summary>
-        public async Task DiscoverNetwork()
+        public async Task DiscoverNetworkAsync()
         {
-            await DiscoverNetwork(NetworkDiscoveryTimeout);
+            await DiscoverNetworkAsync(NetworkDiscoveryTimeout);
         }
 
         /// <summary>
@@ -617,7 +617,7 @@ namespace XBee
         /// </summary>
         /// <param name="timeout">The amount of time to wait until discovery responses are ignored</param>
         /// <remarks>During network discovery nodes may be unresponsive</remarks>
-        public async Task DiscoverNetwork(TimeSpan timeout)
+        public async Task DiscoverNetworkAsync(TimeSpan timeout)
         {
             var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
 
@@ -701,7 +701,7 @@ namespace XBee
         /// <param name="ports">Ports to scan</param>
         /// <param name="baudRate">Baud rate, typically 9600 or 115200</param>
         /// <returns>The controller or null if no controller was found</returns>
-        public static async Task<XBeeController> FindAndOpen(IEnumerable<string> ports, int baudRate)
+        public static async Task<XBeeController> FindAndOpenAsync(IEnumerable<string> ports, int baudRate)
         {
             foreach (var port in ports)
             {
@@ -733,6 +733,7 @@ namespace XBee
 
             return null;
         }
+
 #endif
 
         /// <summary>
@@ -741,9 +742,9 @@ namespace XBee
         /// <param name="ports">Ports to scan</param>
         /// <param name="baudRate">Baud rate, typically 9600 or 115200</param>
         /// <returns>The controller or null if no controller was found</returns>
-        public static async Task<XBeeController> Find(IEnumerable<string> ports, int baudRate)
+        public static async Task<XBeeController> FindAsync(IEnumerable<string> ports, int baudRate)
         {
-            var controller = await FindAndOpen(ports, baudRate);
+            var controller = await FindAndOpenAsync(ports, baudRate);
             controller.Close();
             return controller;
         }
@@ -879,5 +880,33 @@ namespace XBee
             if (IsOpen)
                 _connection.Close();
         }
+
+        #region Deprecated
+
+        [Obsolete("Use DiscoverNetworkAsync")]
+        public async Task DiscoverNetwork()
+        {
+            await DiscoverNetworkAsync();
+        }
+
+        [Obsolete("Use DiscoverNetworkAsync")]
+        public async Task DiscoverNetwork(TimeSpan timeout)
+        {
+            await DiscoverNetworkAsync(timeout);
+        }
+
+        [Obsolete("Use FindAsync")]
+        public static async Task<XBeeController> Find(IEnumerable<string> ports, int baudRate)
+        {
+            return await FindAsync(ports, baudRate);
+        }
+
+        [Obsolete("Use FindAndOpenAsync")]
+        public static async Task<XBeeController> FindAndOpen(IEnumerable<string> ports, int baudRate)
+        {
+            return await FindAndOpenAsync(ports, baudRate);
+        }
+
+        #endregion
     }
 }

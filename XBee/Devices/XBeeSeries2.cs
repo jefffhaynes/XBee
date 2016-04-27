@@ -43,7 +43,7 @@ namespace XBee.Devices
         /// <summary>
         /// Gets the network association state for this node.
         /// </summary>
-        public async Task<AssociationIndicator> GetAssociation()
+        public async Task<AssociationIndicator> GetAssociationAsync()
         {
             PrimitiveResponseData<AssociationIndicator> response = await
                     Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
@@ -51,5 +51,17 @@ namespace XBee.Devices
 
             return response.Value;
         }
+
+        #region Deprecated
+        
+        [Obsolete("Use GetAssociationAsync")]
+        public async Task<AssociationIndicator> GetAssociation()
+        {
+            return await GetAssociationAsync();
+        }
+
+        #endregion
+
+
     }
 }
