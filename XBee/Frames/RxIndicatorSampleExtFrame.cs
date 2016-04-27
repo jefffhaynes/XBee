@@ -7,6 +7,12 @@ namespace XBee.Frames
 {
     public class RxIndicatorSampleExtFrame : FrameContent, IRxIndicatorSampleFrame
     {
+        private const AnalogSampleChannels AllAnalogSampleChannels =
+            AnalogSampleChannels.Input0 |
+            AnalogSampleChannels.Input1 |
+            AnalogSampleChannels.Input2 |
+            AnalogSampleChannels.Input3;
+
         [FieldOrder(0)]
         public LongAddress Source { get; set; }
 
@@ -56,7 +62,7 @@ namespace XBee.Frames
 
         [FieldOrder(7)]
         [FieldCount(Path = "AnalogChannels",
-            ConverterType = typeof(BitCountingConverter), ConverterParameter = AnalogSampleChannels.All)]
+            ConverterType = typeof(BitCountingConverter), ConverterParameter = AllAnalogSampleChannels)]
         public List<ushort> AnalogSamples { get; set; }
 
 
@@ -76,7 +82,7 @@ namespace XBee.Frames
                 return Enumerable.Empty<AnalogSample>();
 
             IEnumerable<AnalogSampleChannels> analogChannels =
-                (AnalogChannels & AnalogSampleChannels.All).GetFlagValues();
+                (AnalogChannels & AllAnalogSampleChannels).GetFlagValues();
             return AnalogSamples.Zip(analogChannels, (sample, channel) => new AnalogSample(channel, sample));
         }
     }
