@@ -345,7 +345,7 @@ namespace XBee
         private void ControllerOnSampleReceived(object sender, SourcedSampleReceivedEventArgs e)
         {
             if (SampleReceived != null && e.Address.Equals(Address))
-                SampleReceived(this, new SampleReceivedEventArgs(e.DigitalSampleState, e.AnalogSamples));
+                SampleReceived(this, new SampleReceivedEventArgs(e.DigitalChannels, e.DigitalSampleState, e.AnalogChannels, e.AnalogSamples));
         }
 
         private void ControllerOnSensorSampleReceived(object sender, SourcedSensorSampleReceivedEventArgs e)

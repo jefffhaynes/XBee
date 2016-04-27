@@ -9,14 +9,33 @@ namespace XBee
 {
     public class SampleReceivedEventArgs : EventArgs
     {
-        internal SampleReceivedEventArgs(DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
+        internal SampleReceivedEventArgs(DigitalSampleChannels digitalChannels, DigitalSampleState digitalSampleState,
+            AnalogSampleChannels analogChannels, IEnumerable<AnalogSample> analogSamples)
         {
+            DigitalChannels = digitalChannels;
             DigitalSampleState = digitalSampleState;
+            AnalogChannels = analogChannels;
             AnalogSamples = new ReadOnlyCollection<AnalogSample>(analogSamples.ToList());
         }
 
+        /// <summary>
+        /// Bit-mask indicating which digital channels are included in the sample.
+        /// </summary>
+        public DigitalSampleChannels DigitalChannels { get; }
+
+        /// <summary>
+        /// Bit-mask indicating which digital channels are high.
+        /// </summary>
         public DigitalSampleState DigitalSampleState { get; }
 
+        /// <summary>
+        /// Bit-mask indicating which analog channels are included in the sample.
+        /// </summary>
+        public AnalogSampleChannels AnalogChannels { get; }
+
+        /// <summary>
+        /// Collection of analog readings with one reading per active analog channel.
+        /// </summary>
         public ReadOnlyCollection<AnalogSample> AnalogSamples { get; }
 
         public override string ToString()

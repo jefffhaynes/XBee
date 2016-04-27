@@ -830,7 +830,8 @@ namespace XBee
                 _sampleSource.Push(new SourcedSample(address, sample));
 
                 SampleReceived?.Invoke(this,
-                    new SourcedSampleReceivedEventArgs(address, sample.DigitalSampleState, sample.AnalogSamples));
+                    new SourcedSampleReceivedEventArgs(address, sample.DigitalChannels, sample.DigitalSampleState,
+                        sample.AnalogChannels, sample.AnalogSamples));
             }
             else if (content is SensorReadIndicatorFrame)
             {

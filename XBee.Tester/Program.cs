@@ -67,7 +67,7 @@ namespace XBee.Tester
 
             //Console.WriteLine("Running {0}", _xbee.HardwareVersion);
 
-            _xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample: {0}: {1} + {2} analog samples", args.Address, args.DigitalSampleState, args.AnalogSamples.Count);
+            _xbee.SampleReceived += (sender, args) => Console.WriteLine($"Sample: {args.Address}: {args.DigitalChannels}-{args.DigitalSampleState} + {string.Join(", ",args.AnalogSamples)}");
 
             //var coordinator = await _xbee.IsCoordinator();
 
