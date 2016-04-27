@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:util="clr-namespace:XBee.Util"
         xmlns:controls="clr-namespace:XBee.Util.Controls"
+        xmlns:xBee="clr-namespace:XBee;assembly=XBee"
+        xmlns:viewModels="clr-namespace:XBee.Util.ViewModels"
         mc:Ignorable="d"
-        Background="{StaticResource PanelHorizontalLineBrushKey}"
+        Background="{StaticResource BackgroundBrushKey}"
         Title="XBee Utility" Height="350" Width="525" d:DataContext="{d:DesignInstance util:ViewModel}">
     <Grid>
         <Grid.RowDefinitions>
@@ -19,8 +21,14 @@
         </Grid.ColumnDefinitions>
 
         <Button Command="{Binding DiscoverCommand, IsAsync=True}" Margin="6" Background="Transparent">
-            <controls:XBeeGlyphControl Text="C"/>
         </Button>
-        <TextBox Grid.Row="1" Margin="6" IsReadOnly="True" Text="{Binding Log, Mode=OneWay}"/>
+        
+        <TreeView Grid.Row="1" Background="{StaticResource PanelBackgroundBrushKey}">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type viewModels:Coordinator}" ItemsSource="{Binding EndPoints}">
+                    <controls:XBeeGlyphControl Text="C"/>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
     </Grid>
 </Window>

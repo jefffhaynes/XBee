@@ -4,6 +4,8 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
+        <SolidColorBrush x:Key="BackgroundBrushKey" Color="#2D2D30"/>
+        
         <SolidColorBrush x:Key="MenuTextBrushKey" Color="#FFEDEDED"/>
         <SolidColorBrush x:Key="MenuSelectedTextBrushKey" Color="#008EF8"/>
         <SolidColorBrush x:Key="MenuGrayBrushKey" Color="#FFC6C6C6"/>
