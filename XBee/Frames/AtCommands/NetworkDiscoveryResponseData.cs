@@ -19,8 +19,11 @@ namespace XBee.Frames.AtCommands
         public string Name { get; set; }
 
         [FieldOrder(4)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.ZNetZigBeeS2, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2B, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBee24S2C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900HP, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         public NetworkDiscoveryResponseDataExtendedInfo ExtendedInfo { get; set; }
 
@@ -29,7 +32,7 @@ namespace XBee.Frames.AtCommands
         {
             get
             {
-                if (LongAddress.Equals(LongAddress.CoordinatorAddress))
+                if (LongAddress.IsCoordinator)
                     return true;
 
                 return ExtendedInfo != null && ExtendedInfo.DeviceType == DeviceType.Coordinator;
