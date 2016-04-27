@@ -101,6 +101,10 @@ namespace XBee
                 analogChannels |= AnalogSampleChannels.Input2;
             if (channels.HasFlag(SampleChannels.Analog3))
                 analogChannels |= AnalogSampleChannels.Input3;
+            if (channels.HasFlag(SampleChannels.Analog4))
+                analogChannels |= AnalogSampleChannels.Input4;
+            if (channels.HasFlag(SampleChannels.Analog5))
+                analogChannels |= AnalogSampleChannels.Input5;
 
             return analogChannels;
         }
