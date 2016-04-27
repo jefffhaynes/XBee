@@ -73,7 +73,7 @@ var serialNumber = await localNode.GetSerialNumber();
 This allows us to treat the local node and remote nodes in the same fashion.
 
 ```c#
-var remoteNode = await controller.GetRemoteAsync(address);
+var remoteNode = await controller.GetNodeAsync(address);
 var serialNumber = await remoteNode.GetSerialNumber();
 ```
 
