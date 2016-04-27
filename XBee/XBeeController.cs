@@ -118,6 +118,12 @@ namespace XBee
             if (IsOpen)
                 throw new InvalidOperationException("The controller is already connected, please close the existing connection.");
 
+            if (_connection != null)
+            {
+                _connection.Open();
+                return;
+            }
+
 #if WINDOWS_UWP
             _connection = new SerialConnection(device);
 #else
