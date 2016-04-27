@@ -10,7 +10,7 @@ namespace XBee.Frames.AtCommands
         }
 
         public InputOutputConfigurationCommand(InputOutputChannel channel) :
-            base(string.Format("D{0}", (int)channel))
+            base($"D{(int) channel}")
         {
         }
 
