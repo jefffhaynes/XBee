@@ -68,6 +68,7 @@
     <Compile Include="ModemStatusExt.cs" />
     <Compile Include="Frames\OneWireSensor.cs" />
     <Compile Include="Frames\SensorReadIndicatorFrame.cs" />
+    <Compile Include="RxIndicatorSampleFrameContent.cs" />
     <Compile Include="SensorSampleReceivedEventArgs.cs" />
     <Compile Include="SensorSample.cs" />
     <Compile Include="Sourced.cs" />

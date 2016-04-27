@@ -62,7 +62,7 @@ namespace XBee.Frames
 
         public Sample GetSample()
         {
-            return new Sample(DigitalSampleState, GetAnalogSamples());
+            return new Sample(DigitalChannels, DigitalSampleState, AnalogChannels, GetAnalogSamples());
         }
 
         public NodeAddress GetAddress()

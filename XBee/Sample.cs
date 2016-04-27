@@ -8,13 +8,20 @@ namespace XBee
 {
     public class Sample
     {
-        internal Sample(DigitalSampleState digitalSampleState, IEnumerable<AnalogSample> analogSamples)
+        internal Sample(DigitalSampleChannels digitalChannels, DigitalSampleState digitalSampleState, 
+            AnalogSampleChannels analogChannels, IEnumerable<AnalogSample> analogSamples)
         {
+            DigitalChannels = digitalChannels;
             DigitalSampleState = digitalSampleState;
+            AnalogChannels = analogChannels;
             AnalogSamples = new ReadOnlyCollection<AnalogSample>(analogSamples.ToList());
         }
 
+        public DigitalSampleChannels DigitalChannels { get; }
+
         public DigitalSampleState DigitalSampleState { get; }
+
+        public AnalogSampleChannels AnalogChannels { get; }
 
         public ReadOnlyCollection<AnalogSample> AnalogSamples { get; }
 
