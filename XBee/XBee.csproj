@@ -58,6 +58,7 @@
     <Compile Include="Devices\XBeeSeries2.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicationCommand.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicator.cs" />
+    <Compile Include="Frames\AtCommands\OperatingChannelCommand.cs" />
     <Compile Include="Frames\ModemStatusData\EmberNetworkState.cs" />
     <Compile Include="Frames\ModemStatusData\EmberStatus.cs" />
     <Compile Include="Frames\ModemStatusData\ModemStatusExtData.cs" />
