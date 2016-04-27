@@ -3,6 +3,8 @@ XBee
 
 .NET library for [XBee wireless controllers](http://www.digi.com/xbee/) available as a [nuget package](https://www.nuget.org/packages/XBee/).
 
+ ***Note: For this library to function the connected XBee must be in API Mode 1***
+
  * Support for Series1, Series 2, and 900HP
  * Simple async/await command and query model
  * [.NET Rx](https://rx.codeplex.com/)  support for async receive and sampling.
