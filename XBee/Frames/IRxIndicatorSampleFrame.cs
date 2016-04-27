@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace XBee.Frames
+﻿namespace XBee.Frames
 {
     public interface IRxIndicatorSampleFrame : IRxIndicatorFrame
     {

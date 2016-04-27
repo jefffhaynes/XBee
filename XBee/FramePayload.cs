@@ -19,6 +19,7 @@ namespace XBee
 
         [FieldOrder(1)]
         [Subtype("FrameType", FrameType.ModemStatus, typeof(ModemStatusFrame))]
+        [Subtype("FrameType", FrameType.ModemStatusExt, typeof(ModemStatusExtFrame))]
         [Subtype("FrameType", FrameType.AtCommand, typeof(AtCommandFrameContent))]
         [Subtype("FrameType", FrameType.AtCommandResponse, typeof(AtCommandResponseFrame))]
         [Subtype("FrameType", FrameType.RemoteAtCommand, typeof(RemoteAtCommandFrameContent))]
@@ -35,7 +36,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.RxIndicatorSample, typeof(RxIndicatorSampleFrame))]
         [Subtype("FrameType", FrameType.RxIndicator16Sample, typeof(RxIndicator16SampleFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorSampleExt, typeof(RxIndicatorSampleExtFrame))]
-       // [Subtype("FrameType", FrameType.SensorReadIndicator, typeof(SensorReadIndicatorFrame))]
+        [Subtype("FrameType", FrameType.SensorReadIndicator, typeof(SensorReadIndicatorFrame))]
         public FrameContent Content { get; set; }
     }
 }

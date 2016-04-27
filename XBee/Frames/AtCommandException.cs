@@ -7,7 +7,7 @@ namespace XBee.Frames
         public AtCommandStatus CommandStatus { get; private set; }
 
         public AtCommandException(AtCommandStatus commandStatus) : 
-            base(string.Format("AT command failed with status '{0}'", commandStatus))
+            base($"AT command failed with status '{commandStatus}'")
         {
             CommandStatus = commandStatus;
         }

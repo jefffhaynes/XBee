@@ -7,6 +7,7 @@ XBee
  * Simple async/await command and query model
  * [.NET Rx](https://rx.codeplex.com/)  support for async receive and sampling.
 
+
 ###Features###
 
  * Local and remote device discovery
@@ -22,7 +23,7 @@ XBee
 
 Here is a simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
 
-<strong>Note that the connected XBee must be in API mode</strong>
+<strong>Note that the connected XBee must be in API Mode 1</strong>
 
 ```C#
 var controller = new XBeeController();
@@ -65,6 +66,7 @@ While the controller represents the API, if we want to control the node itself w
 
 ```c#
 var localNode = controller.Local;
+// or var localNode = await controller.GetNodeAsync(null);
 var serialNumber = await localNode.GetSerialNumber();
 // etc
 ```
@@ -72,7 +74,7 @@ var serialNumber = await localNode.GetSerialNumber();
 This allows us to treat the local node and remote nodes in the same fashion.
 
 ```c#
-var remoteNode = await controller.GetRemoteAsync(address);
+var remoteNode = await controller.GetNodeAsync(address);
 var serialNumber = await remoteNode.GetSerialNumber();
 ```
 

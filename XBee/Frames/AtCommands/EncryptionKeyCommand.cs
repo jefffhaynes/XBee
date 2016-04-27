@@ -14,10 +14,10 @@ namespace XBee.Frames.AtCommands
         public EncryptionKeyCommand(byte[] key) : this()
         {
             if(key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
 
             if(key.Length != KeyLength)
-                throw new ArgumentException(string.Format("Key length must be {0}", KeyLength), "key");
+                throw new ArgumentException($"Key length must be {KeyLength}", nameof(key));
 
             Key = key;
         }

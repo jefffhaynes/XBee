@@ -39,11 +39,6 @@ namespace XBee
             
             _serialPort = new SerialPort(port, baudRate);
 #endif
-
-            _frameSerializer.MemberSerializing += OnMemberSerializing;
-            _frameSerializer.MemberSerialized += OnMemberSerialized;
-            _frameSerializer.MemberDeserializing += OnMemberDeserializing;
-            _frameSerializer.MemberDeserialized += OnMemberDeserialized;
         }
 
         public HardwareVersion? CoordinatorHardwareVersion
@@ -60,23 +55,40 @@ namespace XBee
         /// <summary>
         ///     Occurs after a member has been serialized.
         /// </summary>
-        public event EventHandler<MemberSerializedEventArgs> MemberSerialized;
+        public event EventHandler<MemberSerializedEventArgs> MemberSerialized
+        {
+            add { _frameSerializer.MemberSerialized += value; }
+            remove { _frameSerializer.MemberSerialized -= value; }
+        }
 
         /// <summary>
         ///     Occurs after a member has been deserialized.
         /// </summary>
-        public event EventHandler<MemberSerializedEventArgs> MemberDeserialized;
+        public event EventHandler<MemberSerializedEventArgs> MemberDeserialized
+        {
+            add { _frameSerializer.MemberDeserialized += value; }
+            remove { _frameSerializer.MemberDeserialized -= value; }
+        }
 
         /// <summary>
         ///     Occurs before a member has been serialized.
         /// </summary>
-        public event EventHandler<MemberSerializingEventArgs> MemberSerializing;
+        public event EventHandler<MemberSerializingEventArgs> MemberSerializing
+        {
+            add { _frameSerializer.MemberSerializing += value; }
+            remove { _frameSerializer.MemberSerializing -= value; }
+        }
 
         /// <summary>
         ///     Occurs before a member has been deserialized.
         /// </summary>
-        public event EventHandler<MemberSerializingEventArgs> MemberDeserializing;
+        public event EventHandler<MemberSerializingEventArgs> MemberDeserializing
+        {
+            add { _frameSerializer.MemberDeserializing += value; }
+            remove { _frameSerializer.MemberDeserializing -= value; }
+        }
 
+        public bool IsOpen => _serialPort.IsOpen;
 
         public async Task Send(FrameContent frameContent)
         {
@@ -131,12 +143,14 @@ namespace XBee
 #endif
                             var handler = FrameReceived;
                             if (handler != null)
-                                Task.Run(() => handler(this, new FrameReceivedEventArgs(frame.Payload.Content)),
-                                    cancellationToken).ConfigureAwait(false);
+                                Task.Run(() =>
+                                {
+                                    handler(this, new FrameReceivedEventArgs(frame.Payload.Content));
+                                },cancellationToken).ConfigureAwait(false);
                         }
                         catch (Exception)
                         {
-                            if (!cancellationToken.IsCancellationRequested)
+                            if (!cancellationToken.IsCancellationRequested && !_isClosing)
                                 throw;
                         }
                     }
@@ -148,10 +162,14 @@ namespace XBee
             }
         }
 
+        private bool _isClosing;
+
         public void Close()
         {
             lock (_openCloseLock)
             {
+                _isClosing = true;
+
                 if (_receiveTask == null)
                     return;
 
@@ -161,35 +179,20 @@ namespace XBee
                 _serialPort.Close();
 #endif
 
-                _receiveTask.Wait();
+                try
+                {
+                    _receiveTask.Wait();
+                }
+                catch (AggregateException)
+                {
+                }
+
                 _readCancellationTokenSource.Dispose();
 
                 _receiveTask = null;
+
+                _isClosing = false;
             }
-        }
-
-        private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
-        {
-            EventHandler<MemberSerializedEventArgs> handler = MemberSerialized;
-            handler?.Invoke(sender, e);
-        }
-
-        private void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
-        {
-            EventHandler<MemberSerializedEventArgs> handler = MemberDeserialized;
-            handler?.Invoke(sender, e);
-        }
-
-        private void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
-        {
-            EventHandler<MemberSerializingEventArgs> handler = MemberSerializing;
-            handler?.Invoke(sender, e);
-        }
-
-        private void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
-        {
-            EventHandler<MemberSerializingEventArgs> handler = MemberDeserializing;
-            handler?.Invoke(sender, e);
         }
     }
 }

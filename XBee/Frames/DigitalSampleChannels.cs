@@ -18,7 +18,6 @@ namespace XBee.Frames
         Input9 = 0x200,
         Input10 = 0x400,
         Input11 = 0x800,
-        Input12 = 0x1000,
-        All = Input0 | Input1 | Input2 | Input3 | Input4 | Input5 | Input6 | Input7 | Input8 | Input9 | Input10 | Input11 | Input12,
+        Input12 = 0x1000
     }
 }

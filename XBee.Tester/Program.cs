@@ -67,7 +67,7 @@ namespace XBee.Tester
 
             //Console.WriteLine("Running {0}", _xbee.HardwareVersion);
 
-            //_xbee.SampleReceived += (sender, args) => Console.WriteLine("Sample recieved: {0}", args.Address);
+            _xbee.SampleReceived += (sender, args) => Console.WriteLine($"Sample: {args.Address}: {args.DigitalChannels}-{args.DigitalSampleState} + {string.Join(", ",args.AnalogSamples)}");
 
             //var coordinator = await _xbee.IsCoordinator();
 
@@ -129,7 +129,7 @@ namespace XBee.Tester
 
             _xbee.NodeDiscovered += async (sender, args) =>
             {
-                Console.WriteLine("Discovered '{0}'", args.Name);
+                Console.WriteLine("---------------- Discovered '{0}'", args.Name);
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
                 //await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
 
@@ -167,11 +167,11 @@ namespace XBee.Tester
                 //    Console.WriteLine(id);
                 //}
 
-                if (args.Name == "ED1")
-                    return;
+                //if (args.Name == "ED1")
+                //    return;
 
-                await Task.Delay(1000);
-                await args.Node.SetNodeIdentifier("BOB");
+                //await Task.Delay(1000);
+                //await args.Node.SetNodeIdentifier("BOB");
 
                 //await args.Node.Reset();
 
@@ -196,7 +196,7 @@ namespace XBee.Tester
                 //await args.Node.ForceSample();
             };
 
-            await _xbee.DiscoverNetwork();
+            //await _xbee.DiscoverNetwork();
 
             //await _xbee.ExecuteMultiQueryAsync(new NetworkDiscoveryCommand(), new Action<AtCommandResponseFrame>(
             //    async frame =>

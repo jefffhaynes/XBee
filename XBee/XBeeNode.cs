@@ -19,8 +19,9 @@ namespace XBee
             HardwareVersion = hardwareVersion;
             Address = address;
 
-            Controller.SampleReceived += ControllerOnSampleReceived;
             Controller.DataReceived += ControllerOnDataReceived;
+            Controller.SampleReceived += ControllerOnSampleReceived;
+            Controller.SensorSampleReceived += ControllerOnSensorSampleReceived;
         }
 
         /// <summary>
@@ -42,6 +43,11 @@ namespace XBee
         /// Occurs when a sample is received from this node.
         /// </summary>
         public event EventHandler<SampleReceivedEventArgs> SampleReceived;
+        
+        /// <summary>
+        /// Occurs when a sample is received from this node.
+        /// </summary>
+        public event EventHandler<SensorSampleReceivedEventArgs> SensorSampleReceived;
 
         /// <summary>
         /// Force a hardware reset of this node.
@@ -330,16 +336,24 @@ namespace XBee
             await Controller.ExecuteAtCommandAsync(command, Address);
         }
 
-        private void ControllerOnSampleReceived(object sender, SourcedSampleReceivedEventArgs e)
-        {
-            if (SampleReceived != null && e.Address.Equals(Address))
-                SampleReceived(this, new SampleReceivedEventArgs(e.DigitalSampleState, e.AnalogSamples));
-        }
-
         private void ControllerOnDataReceived(object sender, SourcedDataReceivedEventArgs e)
         {
             if (DataReceived != null && e.Address.Equals(Address))
                 DataReceived(this, new DataReceivedEventArgs(e.Data));
+        }
+        
+        private void ControllerOnSampleReceived(object sender, SourcedSampleReceivedEventArgs e)
+        {
+            if (SampleReceived != null && e.Address.Equals(Address))
+                SampleReceived(this, new SampleReceivedEventArgs(e.DigitalChannels, e.DigitalSampleState, e.AnalogChannels, e.AnalogSamples));
+        }
+
+        private void ControllerOnSensorSampleReceived(object sender, SourcedSensorSampleReceivedEventArgs e)
+        {
+            if (SensorSampleReceived != null && e.Address.Equals(Address))
+                SensorSampleReceived(this,
+                    new SensorSampleReceivedEventArgs(e.OneWireSensor, e.SensorValueA, e.SensorValueB, e.SensorValueC,
+                        e.SensorValueD, e.TemperatureCelsius));
         }
     }
 }

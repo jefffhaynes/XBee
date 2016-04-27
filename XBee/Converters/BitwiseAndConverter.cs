@@ -13,7 +13,7 @@ namespace XBee.Converters
             var mask = System.Convert.ToInt32(parameter);
 
             var operand = System.Convert.ToInt32(value);
-
+            
             return operand & mask;
         }
 

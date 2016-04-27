@@ -41,8 +41,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BinarySerializer, Version=4.6.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BinarySerializer.4.6.5\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\BinarySerializer.dll</HintPath>
+    <Reference Include="BinarySerializer, Version=4.7.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BinarySerializer.4.7.2\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\BinarySerializer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -58,15 +58,23 @@
     <Compile Include="Devices\XBeeSeries2.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicationCommand.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicator.cs" />
+    <Compile Include="Frames\AtCommands\OperatingChannelCommand.cs" />
     <Compile Include="Frames\ModemStatusData\EmberNetworkState.cs" />
     <Compile Include="Frames\ModemStatusData\EmberStatus.cs" />
     <Compile Include="Frames\ModemStatusData\ModemStatusExtData.cs" />
     <Compile Include="Frames\ModemStatusData\RejoinModemStatusData.cs" />
+    <Compile Include="Frames\ModemStatusData\JoiningModemStatusData.cs" />
     <Compile Include="Frames\ModemStatusData\StackStatusModemStatusData.cs" />
     <Compile Include="Frames\ModemStatusExtFrame.cs" />
     <Compile Include="ModemStatusExt.cs" />
     <Compile Include="Frames\OneWireSensor.cs" />
     <Compile Include="Frames\SensorReadIndicatorFrame.cs" />
+    <Compile Include="RxIndicatorSampleFrameContent.cs" />
+    <Compile Include="SensorSampleReceivedEventArgs.cs" />
+    <Compile Include="SensorSample.cs" />
+    <Compile Include="Sourced.cs" />
+    <Compile Include="SourcedSensorSampleReceivedEventArgs.cs" />
+    <Compile Include="SourcedSensorSample.cs" />
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="SourcedDataReceivedEventArgs.cs" />
     <Compile Include="Devices\XBeePro900HP.cs" />
