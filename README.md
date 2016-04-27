@@ -21,11 +21,9 @@ XBee
 
 ###Quick Start###
 
- ***Note: For this library to function the connected XBee must be in API Mode 1***
-
 Here is a simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
 
-<strong>Note that the connected XBee must be in API mode</strong>
+<strong>Note that the connected XBee must be in API Mode 1</strong>
 
 ```C#
 var controller = new XBeeController();
