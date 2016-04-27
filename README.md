@@ -7,7 +7,6 @@ XBee
  * Simple async/await command and query model
  * [.NET Rx](https://rx.codeplex.com/)  support for async receive and sampling.
 
- **Note: For this library to function the connected XBee must be in API Mode 1**
 
 ###Features###
 
