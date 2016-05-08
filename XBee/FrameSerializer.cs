@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using BinarySerialization;
+using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee
@@ -48,27 +48,15 @@ namespace XBee
         public byte[] Serialize(Frame frame)
         {
             var stream = new MemoryStream();
-
-            _serializer.Serialize(stream, frame, _serializationContext);
-
-            byte[] data = stream.ToArray();
-
-            /* Calculate and append checksum */
-            byte crc = Checksum.Calculate(data.Skip(3).ToArray());
-            Array.Resize(ref data, data.Length + 1);
-            data[data.Length - 1] = crc;
-
-            return data;
+            var frameContainer = new FrameContainer(frame);
+            _serializer.Serialize(stream, frameContainer, _serializationContext);
+            return stream.ToArray();
         }
 
         public Frame Deserialize(Stream stream)
         {
-            var frame = _serializer.Deserialize<Frame>(stream, _serializationContext);
-
-            /* read checksum */
-            stream.ReadByte();
-
-            return frame;
+            var frameContainer = _serializer.Deserialize<FrameContainer>(stream, _serializationContext);
+            return frameContainer.Frame;
         }
 
         private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
