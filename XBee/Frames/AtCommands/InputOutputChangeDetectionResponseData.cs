@@ -13,6 +13,7 @@ namespace XBee.Frames.AtCommands
         [FieldOrder(1)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900HP, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBee24C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         public DigitalSampleChannels? ChannelsExt { get; set; }
     }
 }
