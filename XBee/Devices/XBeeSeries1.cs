@@ -18,7 +18,7 @@ namespace XBee.Devices
         /// Gets a value that indicates whether this node is a coordinator node.
         /// </summary>
         /// <returns>True if this is a coordinator node</returns>
-        public virtual async Task<bool> IsCoordinator()
+        public virtual async Task<bool> IsCoordinatorAsync()
         {
             CoordinatorEnableResponseData response =
                 await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
@@ -28,12 +28,12 @@ namespace XBee.Devices
 
             return response.EnableState.Value == CoordinatorEnableState.Coordinator;
         }
-
+        
         /// <summary>
         /// Sets a value indicating whether this node is a coordinator node.
         /// </summary>
         /// <param name="enable">True if this is a coordinator node</param>
-        public virtual async Task SetCoordinator(bool enable)
+        public virtual async Task SetCoordinatorAsync(bool enable)
         {
             await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
         }
@@ -41,7 +41,7 @@ namespace XBee.Devices
         /// <summary>
         /// Gets flags indicating the configured sleep options for this node.
         /// </summary>
-        public async Task<SleepOptions> GetSleepOptions()
+        public async Task<SleepOptions> GetSleepOptionsAsync()
         {
             var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand());
 
@@ -55,7 +55,7 @@ namespace XBee.Devices
         /// Sets flags indicating sleep options for this node.
         /// </summary>
         /// <param name="options">Sleep options</param>
-        public async Task SetSleepOptions(SleepOptions options)
+        public async Task SetSleepOptionsAsync(SleepOptions options)
         {
             await ExecuteAtCommandAsync(new SleepOptionsCommand(options));
         }
@@ -86,5 +86,33 @@ namespace XBee.Devices
         {
             await TransmitDataAsync(data, CancellationToken.None, enableAck);
         }
+
+        #region Deprecated
+        
+        [Obsolete("Use IsCoordinatorAsync")]
+        public virtual async Task<bool> IsCoordinator()
+        {
+            return await IsCoordinatorAsync();
+        }
+        
+        [Obsolete("Use SetCoordinatorAsync")]
+        public virtual async Task SetCoordinator(bool enable)
+        {
+            await SetCoordinatorAsync(enable);
+        }
+
+        [Obsolete("Use GetSleepOptionsAsync")]
+        public async Task<SleepOptions> GetSleepOptions()
+        {
+            return await GetSleepOptionsAsync();
+        }
+
+        [Obsolete("Use SetSleepOptionsAsync")]
+        public async Task SetSleepOptions(SleepOptions options)
+        {
+            await SetSleepOptionsAsync(options);
+        }
+
+        #endregion
     }
 }
