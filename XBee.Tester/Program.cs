@@ -56,7 +56,7 @@ namespace XBee.Tester
 
             //await _xbee.OpenAsync("COM4", 115200);
 
-            _xbee = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
+            _xbee = await XBeeController.FindAndOpenAsync(SerialPort.GetPortNames(), 9600);
 
             _xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
             _xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
@@ -117,8 +117,8 @@ namespace XBee.Tester
         private static async Task Toggle(XBeeSeries2 node, int iteration)
         {
             Console.WriteLine(iteration);
-            await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputConfiguration.DigitalLow);
-            await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputConfiguration.Disabled);
+            await node.SetInputOutputConfigurationAsync(InputOutputChannel.Channel4, InputOutputConfiguration.DigitalLow);
+            await node.SetInputOutputConfigurationAsync(InputOutputChannel.Channel4, InputOutputConfiguration.Disabled);
         }
 
         private static async void Discover()
