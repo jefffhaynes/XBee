@@ -59,8 +59,7 @@
     <Compile Include="Frames\AtCommands\AssociationIndicationCommand.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicator.cs" />
     <Compile Include="Frames\AtCommands\OperatingChannelCommand.cs" />
-    <Compile Include="Frames\FrameContainer.cs" />
-    <Compile Include="Frames\ChecksumFieldValueAttribute.cs" />
+    <Compile Include="ChecksumFieldValueAttribute.cs" />
     <Compile Include="Frames\ModemStatusData\EmberNetworkState.cs" />
     <Compile Include="Frames\ModemStatusData\EmberStatus.cs" />
     <Compile Include="Frames\ModemStatusData\ModemStatusExtData.cs" />

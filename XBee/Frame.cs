@@ -23,6 +23,10 @@ namespace XBee
 
         [FieldOrder(2)]
         [FieldLength("Length")]
+        [ChecksumFieldValue("Checksum")]
         public FramePayload Payload { get; set; }
+
+        [FieldOrder(3)]
+        public byte Checksum { get; set; }
     }
 }

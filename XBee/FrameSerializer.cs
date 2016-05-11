@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using BinarySerialization;
-using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee
@@ -48,15 +47,13 @@ namespace XBee
         public byte[] Serialize(Frame frame)
         {
             var stream = new MemoryStream();
-            var frameContainer = new FrameContainer(frame);
-            _serializer.Serialize(stream, frameContainer, _serializationContext);
+            _serializer.Serialize(stream, frame, _serializationContext);
             return stream.ToArray();
         }
 
         public Frame Deserialize(Stream stream)
         {
-            var frameContainer = _serializer.Deserialize<FrameContainer>(stream, _serializationContext);
-            return frameContainer.Frame;
+            return _serializer.Deserialize<Frame>(stream, _serializationContext);
         }
 
         private void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
