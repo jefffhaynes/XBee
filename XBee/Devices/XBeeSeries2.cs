@@ -52,6 +52,11 @@ namespace XBee.Devices
             return response.Value;
         }
 
+        public override async Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)
+        {
+            await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
+        }
+
         #region Deprecated
         
         [Obsolete("Use GetAssociationAsync")]
