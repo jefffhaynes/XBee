@@ -37,6 +37,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.RxIndicator16Sample, typeof(RxIndicator16SampleFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorSampleExt, typeof(RxIndicatorSampleExtFrame))]
         [Subtype("FrameType", FrameType.SensorReadIndicator, typeof(SensorReadIndicatorFrame))]
+        [Subtype("FrameType", FrameType.FirmwareUpdateStatus, typeof(FirmwareUpdateStatusFrame))]
         public FrameContent Content { get; set; }
     }
 }
