@@ -60,6 +60,8 @@
     <Compile Include="Frames\AtCommands\AssociationIndicator.cs" />
     <Compile Include="Frames\AtCommands\OperatingChannelCommand.cs" />
     <Compile Include="ChecksumFieldValueAttribute.cs" />
+    <Compile Include="Frames\BootloaderMessageType.cs" />
+    <Compile Include="Frames\FirmwareUpdateStatusFrame.cs" />
     <Compile Include="Frames\ModemStatusData\EmberNetworkState.cs" />
     <Compile Include="Frames\ModemStatusData\EmberStatus.cs" />
     <Compile Include="Frames\ModemStatusData\ModemStatusExtData.cs" />

@@ -58,6 +58,10 @@ namespace XBee.Frames
             ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input11)]
         [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input12,
             ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input12)]
+        [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input13,
+            ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input13)]
+        [SerializeWhen("DigitalChannels", DigitalSampleChannels.Input14,
+            ConverterType = typeof(BitwiseAndConverter), ConverterParameter = DigitalSampleChannels.Input14)]
         public DigitalSampleState DigitalSampleState { get; set; }
 
         [FieldOrder(7)]

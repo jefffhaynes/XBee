@@ -11,6 +11,11 @@
         Channel6 = 6,
         Channel7 = 7,
         Channel8 = 8,
-        Channel9 = 9
+        Channel9 = 9,
+        Channel10 = 10,
+        Channel11 = 11,
+        Channel12 = 12,
+        Channel13 = 13,
+        Channel14 = 14
     }
 }
