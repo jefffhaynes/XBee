@@ -409,11 +409,14 @@ namespace XBee
         /// <param name="command"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        internal async Task ExecuteAtCommand(AtCommand command, NodeAddress address = null)
+        internal async Task ExecuteAtCommand(AtCommand command, NodeAddress address = null, bool queueLocal = false)
         {
             if (address == null)
             {
-                var atCommandFrame = new AtCommandFrameContent(command);
+                var atCommandFrame = queueLocal
+                    ? new AtQueuedCommandFrameContent(command)
+                    : new AtCommandFrameContent(command);
+
                 await ExecuteAsync(atCommandFrame);
             }
             else
@@ -501,13 +504,14 @@ namespace XBee
         /// <typeparam name="TResponseData">The expected response data type</typeparam>
         /// <param name="command">The command to send</param>
         /// <param name="address">The address of the node.  If this is null the command will be sent to the local node.</param>
+        /// <param name="queueLocal">Queue this command for deferred execution if issued to a local controller.</param>
         /// <returns>The response data</returns>
         internal async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
-            NodeAddress address = null)
+            NodeAddress address = null, bool queueLocal = false)
             where TResponseData : AtCommandResponseFrameData
         {
             var timeout = address == null ? DefaultLocalQueryTimeout : DefaultRemoteQueryTimeout;
-            return await ExecuteAtQueryAsync<TResponseData>(command, address, timeout);
+            return await ExecuteAtQueryAsync<TResponseData>(command, address, timeout, queueLocal);
         }
 
         /// <summary>
@@ -517,16 +521,17 @@ namespace XBee
         /// <param name="command">The command to send</param>
         /// <param name="address">The address of the node.  If this is null the command will be sent to the local node.</param>
         /// <param name="timeout"></param>
+        /// <param name="queueLocal">Queue this command for deferred execution if issued to a local controller.</param>
         /// <returns>The response data</returns>
         internal async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
-            NodeAddress address, TimeSpan timeout)
+            NodeAddress address, TimeSpan timeout, bool queueLocal = false)
             where TResponseData : AtCommandResponseFrameData
         {
             AtCommandResponseFrameContent responseContent;
 
             if (address == null)
             {
-                var atCommandFrame = new AtCommandFrameContent(command);
+                var atCommandFrame = queueLocal ? new AtQueuedCommandFrameContent(command) : new AtCommandFrameContent(command);
                 var response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame, timeout);
                 responseContent = response.Content;
             }
@@ -551,10 +556,11 @@ namespace XBee
         /// </summary>
         /// <param name="command">The AT command to execute</param>
         /// <param name="address">The address of the node.  If this is null the command will be execute on the local node.</param>
+        /// <param name="queueLocal">Queue this command for deferred execution if issued to a local controller.</param>
         /// <returns></returns>
-        internal async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null)
+        internal async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null, bool queueLocal = false)
         {
-            await ExecuteAtQueryAsync<AtCommandResponseFrameData>(command, address);
+            await ExecuteAtQueryAsync<AtCommandResponseFrameData>(command, address, queueLocal);
         }
 
         /// <summary>

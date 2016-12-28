@@ -5,5 +5,10 @@
         public OperatingChannelCommand() : base("CH")
         {
         }
+
+        public OperatingChannelCommand(byte channel) : this()
+        {
+            Parameter = channel;
+        }
     }
 }

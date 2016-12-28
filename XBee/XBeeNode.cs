@@ -83,6 +83,56 @@ namespace XBee
         }
 
         /// <summary>
+        /// Get the operating channel used between nodes.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<byte> GetChannel()
+        {
+            PrimitiveResponseData<byte> response =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new OperatingChannelCommand());
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Set the operating channel used between nodes.
+        /// </summary>
+        /// <returns></returns>
+        public async Task SetChannel(byte channel)
+        {
+            await ExecuteAtCommandAsync(new OperatingChannelCommand(channel));
+        }
+
+        /// <summary>
+        /// Get the baud rate configured for the serial interface on this node.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<uint> GetBaudRate()
+        {
+            var response = await ExecuteAtQueryAsync<BaudRateResponseData>(new BaudRateCommand());
+            return response.BaudRate;
+        }
+
+        /// <summary>
+        /// Set the baud rate for the serial interface on this node.
+        /// </summary>
+        /// <param name="baudRate"></param>
+        /// <returns></returns>
+        public async Task SetBaudRate(BaudRate baudRate)
+        {
+            await ExecuteAtCommandAsync(new BaudRateCommand(baudRate), true);
+        }
+
+        /// <summary>
+        /// Set a non-standard baud rate for the serial interface on this node.
+        /// </summary>
+        /// <param name="baudRate"></param>
+        /// <returns></returns>
+        public async Task SetBaudRate(int baudRate)
+        {
+            await ExecuteAtCommandAsync(new BaudRateCommand(baudRate), true);
+        }
+
+        /// <summary>
         /// Queries the long network address for this node.
         /// </summary>
         /// <returns>The long network address</returns>
@@ -308,11 +358,11 @@ namespace XBee
         /// </summary>
         /// <param name="data">The data to send</param>
         /// <param name="cancellationToken">Used to cancel the operation</param>
-        /// <param name="enableAck">True to request an acknowledgement.  If an acknowledgement is requested and no acknowledgement is received a TimeoutException will be thrown.</param>
+        /// <param name="enableAck">True to request an acknowledgment.  If an acknowledgment is requested and no acknowledgment is received a TimeoutException will be thrown.</param>
         public abstract Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true);
 
         /// <summary>
-        /// Returns a stream that represents serial passthough on the node.
+        /// Returns a stream that represents serial pass-though on the node.
         /// </summary>
         /// <returns></returns>
         public XBeeStream GetSerialStream()
@@ -331,9 +381,9 @@ namespace XBee
             return await Controller.ExecuteAtQueryAsync<TResponseData>(command, Address);
         }
 
-        protected virtual async Task ExecuteAtCommandAsync(AtCommand command)
+        protected virtual async Task ExecuteAtCommandAsync(AtCommand command, bool queueLocal = false)
         {
-            await Controller.ExecuteAtCommandAsync(command, Address);
+            await Controller.ExecuteAtCommandAsync(command, Address, queueLocal);
         }
 
         private void ControllerOnDataReceived(object sender, SourcedDataReceivedEventArgs e)

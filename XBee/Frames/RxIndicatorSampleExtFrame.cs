@@ -65,7 +65,7 @@ namespace XBee.Frames
         public DigitalSampleState DigitalSampleState { get; set; }
 
         [FieldOrder(7)]
-        [FieldCount(Path = "AnalogChannels",
+        [FieldCount("AnalogChannels",
             ConverterType = typeof(BitCountingConverter), ConverterParameter = AllAnalogSampleChannels)]
         public List<ushort> AnalogSamples { get; set; }
 

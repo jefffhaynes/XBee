@@ -5,7 +5,7 @@
         TxRequest = 0x00,
         TxRequest16 = 0x01,
         AtCommand = 0x08,
-        AtQueueCommand = 0x09,
+        AtQueuedCommand = 0x09,
         TxRequestExt = 0x10,
         TxRequestExplicit = 0x11,
         RemoteAtCommand = 0x17,

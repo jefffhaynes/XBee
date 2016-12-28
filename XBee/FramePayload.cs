@@ -21,6 +21,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.ModemStatus, typeof(ModemStatusFrame))]
         [Subtype("FrameType", FrameType.ModemStatusExt, typeof(ModemStatusExtFrame))]
         [Subtype("FrameType", FrameType.AtCommand, typeof(AtCommandFrameContent))]
+        [Subtype("FrameType", FrameType.AtQueuedCommand, typeof(AtQueuedCommandFrameContent))]
         [Subtype("FrameType", FrameType.AtCommandResponse, typeof(AtCommandResponseFrame))]
         [Subtype("FrameType", FrameType.RemoteAtCommand, typeof(RemoteAtCommandFrameContent))]
         [Subtype("FrameType", FrameType.RemoteAtCommandResponse, typeof(RemoteAtCommandResponseFrame))]

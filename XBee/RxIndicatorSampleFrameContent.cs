@@ -42,7 +42,7 @@ namespace XBee
         public DigitalSampleState DigitalSampleState { get; set; }
 
         [FieldOrder(5)]
-        [FieldCount(Path = "Channels",
+        [FieldCount("Channels",
             ConverterType = typeof(BitCountingConverter), ConverterParameter = SampleChannels.AllAnalog)]
         public List<ushort> AnalogSamples { get; set; }
 

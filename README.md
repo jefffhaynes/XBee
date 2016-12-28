@@ -103,7 +103,9 @@ Below is a table summarizing the commands supported by this library.
 |       | Description            | Query                            | Command                          | S1 | S2 | Pro900 |
 |-------|------------------------|----------------------------------|----------------------------------|:--:|:--:|:------:|
 | AI    | Association Indicator  | GetAssociationAsync              | SetAssociationAsync              |    | x  |        |
+| BD    | Interface Data Rate    | GetBaudRate                      | SetBaudRate                      | x  | x  |    x   |
 | CE    | Coordinator Enable     | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |
+| CH    | Channel                | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |
 | D(N)  | DIOn Configuration     | GetInputOutputConfigurationAsync | SetInputOutputConfigurationAsync | x  | x  |    x   |
 | DH/DL | Destination Address    | GetDestinationAddressAsync       | SetDestinationAddressAsync       | x  | x  |    x   |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync         | SetEncryptionEnabledAsync        | x  | x  |    x   |
