@@ -15,9 +15,9 @@ XBee
  * Pin configuration
  * Pin control
  * Pin monitoring
- * Digital and analog sample monitoring via events or Rx
+ * Digital and analog sample monitoring via events or [.NET Rx](https://rx.codeplex.com/)
  * Data transmit
- * Data receive via events or Rx
+ * Data receive via events or [.NET Rx](https://rx.codeplex.com/)
 
 ###Quick Start###
 
