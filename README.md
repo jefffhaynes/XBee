@@ -88,7 +88,7 @@ XBees are based on a sort of command-event model where the coordinator is either
 
 ####Commands####
 
-The first type of command is essentially GPIO (General Purpose Input/Output), although we'll ignore the input part for the moment.  Pins can now be set high or low on a node by configuring a pin to a fixed state.
+The first type of command is what XBee calls AT commands.  An example is a command that can be used to configure pins on the XBee, setting pins high or low or reserving them for input.
 
 ```c#
 await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputConfiguration.DigitalHigh);
@@ -96,11 +96,7 @@ await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputC
 
 This will force pin DIO4 high.  Note that which physical pin this translates to depends on the model.
 
-The second type of command involves sending arbitrary serial data to a node.  In the simplest case this can act as a transparent passthrough as most XBees will pass the serial data to their local UART.  However, in the case of programmable XBees it is possible to intercept the serial data and store it, interpret it, etc.
-
-```c#
-await node.TransmitDataAsync(Encoding.UTF8.GetBytes("Hello!"));
-```
+Below is a table summarizing the commands supported by this library.
 
 ####AT Commands####
 
@@ -126,6 +122,13 @@ await node.TransmitDataAsync(Encoding.UTF8.GetBytes("Hello!"));
 
 All other commands are currently unsupported but feel free to file an issue if you'd like to see something that isn't here.
 
+####Serial Data####
+
+The second type of command involves sending arbitrary serial data to a node.  In the simplest case this can act as a transparent passthrough as most XBees will pass the serial data to their local UART.  However, in the case of programmable XBees it is possible to intercept the serial data and store it, interpret it, etc.
+
+```c#
+await node.TransmitDataAsync(Encoding.UTF8.GetBytes("Hello!"));
+```
 
 ###Events###
 
