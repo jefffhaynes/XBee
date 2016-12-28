@@ -101,7 +101,7 @@ Below is a table summarizing the commands supported by this library.
 ####AT Commands####
 
 |       | Description            | Query                            | Command                          | S1 | S2 | Pro900 |
-|-------|------------------------|----------------------------------|----------------------------------|:--:|:--:|:------:|
+|:-----:|:-----------------------|:---------------------------------|:---------------------------------|:--:|:--:|:------:|
 | AI    | Association Indicator  | GetAssociationAsync              | SetAssociationAsync              |    | x  |        |
 | AP    | API Mode               | GetApiModeAsync                  | SetApiModeAsync                  | x  | x  |    x   |
 | BD    | Interface Data Rate    | GetBaudRateAsync                 | SetBaudRateAsync                 | x  | x  |    x   |
