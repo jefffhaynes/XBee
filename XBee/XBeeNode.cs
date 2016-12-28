@@ -106,7 +106,7 @@ namespace XBee
         /// Get the baud rate configured for the serial interface on this node.
         /// </summary>
         /// <returns></returns>
-        public async Task<uint> GetBaudRate()
+        public async Task<uint> GetBaudRateAsync()
         {
             var response = await ExecuteAtQueryAsync<BaudRateResponseData>(new BaudRateCommand());
             return response.BaudRate;
@@ -117,7 +117,7 @@ namespace XBee
         /// </summary>
         /// <param name="baudRate"></param>
         /// <returns></returns>
-        public async Task SetBaudRate(BaudRate baudRate)
+        public async Task SetBaudRateAsync(BaudRate baudRate)
         {
             await ExecuteAtCommandAsync(new BaudRateCommand(baudRate), true);
         }
@@ -127,9 +127,29 @@ namespace XBee
         /// </summary>
         /// <param name="baudRate"></param>
         /// <returns></returns>
-        public async Task SetBaudRate(int baudRate)
+        public async Task SetBaudRateAsync(int baudRate)
         {
             await ExecuteAtCommandAsync(new BaudRateCommand(baudRate), true);
+        }
+
+        /// <summary>
+        /// Get the configured API mode for this node.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ApiMode> GetApiModeAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ApiMode>>(new ApiEnableCommand());
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Set the configured API mode for this node.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        public async Task SetApiModeAsync(ApiMode mode)
+        {
+            await ExecuteAtCommandAsync(new ApiEnableCommand(mode));
         }
 
         /// <summary>

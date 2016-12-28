@@ -56,6 +56,8 @@
   <ItemGroup>
     <Compile Include="AnonymousDisposable.cs" />
     <Compile Include="Devices\XBeeSeries2.cs" />
+    <Compile Include="Frames\AtCommands\ApiMode.cs" />
+    <Compile Include="Frames\AtCommands\ApiEnableCommand.cs" />
     <Compile Include="Frames\AtCommands\BaudRate.cs" />
     <Compile Include="Frames\AtCommands\BaudRateCommand.cs" />
     <Compile Include="Frames\AtCommands\BaudRateResponseData.cs" />
