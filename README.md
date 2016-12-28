@@ -23,7 +23,7 @@ XBee
 
 Here is a simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
 
-<strong>The connected XBee must be in API Mode 1</strong>
+<strong>The locally connected XBee must be in API Mode 1</strong>
 
 ```C#
 var controller = new XBeeController();
