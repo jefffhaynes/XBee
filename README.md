@@ -104,25 +104,25 @@ await node.TransmitDataAsync(Encoding.UTF8.GetBytes("Hello!"));
 
 ####AT Commands####
 
-|       | Description            | Query                            | Command                          | Series 1 | Series 2 | Pro900 |
-|-------|------------------------|----------------------------------|----------------------------------|:--------:|:--------:|:------:|
-| AI    | Association Indicator  | GetAssociationAsync              | SetAssociationAsync              |          |    x     |        |
-| CE    | Coordinator Enable     | IsCoordinatorAsync               | SetCoordinatorAsync              |    x     |          |        |
-| D(N)  | DIOn Configuration     | GetInputOutputConfigurationAsync | SetInputOutputConfigurationAsync |    x     |    x     |    x   |
-| DH/DL | Destination Address    | GetDestinationAddressAsync       | SetDestinationAddressAsync       |    x     |    x     |    x   |
-| EE    | Encryption Enable      | IsEncryptionEnabledAsync         | SetEncryptionEnabledAsync        |    x     |    x     |    x   |
-| HV    | Hardware Version       | HardwareVersion                  | --                               |    x     |    x     |    x   |
-| IC    | Input Change           | GetChangeDetectionChannelsAsync  | SetChangeDetectionChannelsAsync  |    x     |    x     |    x   |
-| IR    | Sample Rate            | GetSampleRateAsync               | SetSampleRateAsync               |    x     |    x     |    x   |
-| IS    | Force Sample           | --                               | ForceSampleAsync                 |    x     |    x     |    x   |
-| KY    | Encryption Key         | --                               | SetEncryptionKeyAsync            |    x     |    x     |    x   |
-| MY    | Source Address         | GetNetworkAddressAsync           | SetNetworkAddressAsync           |    x     |    x     |    x   |
-| ND    | Node Discovery         | --                               | DiscoverNetworkAsync             |    x     |    x     |    x   |
-| NI    | Node Identifier        | GetNodeIdentifierAsync           | SetNodeIdentifierAsync           |    x     |    x     |    x   |
-| SH/SL | Serial Number          | GetSerialNumberAsync             | --                               |    x     |    x     |    x   |
-| SM    | Sleep Mode             | GetSleepModeAsync                | SetSleepModeAsync                |    x     |    x     |    x   |
-| SO    | Sleep Mode Options     | GetSleepOptionsAsync             | SetSleepOptionsAsync             |    x     |          |    x   |
-| WR    | Write Command          | --                               | WriteChangesAsync                |    x     |    x     |    x   |
+|       | Description            | Query                            | Command                          | S1 | S2 | Pro900 |
+|-------|------------------------|----------------------------------|----------------------------------|:--:|:--:|:------:|
+| AI    | Association Indicator  | GetAssociationAsync              | SetAssociationAsync              |    | x  |        |
+| CE    | Coordinator Enable     | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |
+| D(N)  | DIOn Configuration     | GetInputOutputConfigurationAsync | SetInputOutputConfigurationAsync | x  | x  |    x   |
+| DH/DL | Destination Address    | GetDestinationAddressAsync       | SetDestinationAddressAsync       | x  | x  |    x   |
+| EE    | Encryption Enable      | IsEncryptionEnabledAsync         | SetEncryptionEnabledAsync        | x  | x  |    x   |
+| HV    | Hardware Version       | HardwareVersion                  | --                               | x  | x  |    x   |
+| IC    | Input Change           | GetChangeDetectionChannelsAsync  | SetChangeDetectionChannelsAsync  | x  | x  |    x   |
+| IR    | Sample Rate            | GetSampleRateAsync               | SetSampleRateAsync               | x  | x  |    x   |
+| IS    | Force Sample           | --                               | ForceSampleAsync                 | x  | x  |    x   |
+| KY    | Encryption Key         | --                               | SetEncryptionKeyAsync            | x  | x  |    x   |
+| MY    | Source Address         | GetNetworkAddressAsync           | SetNetworkAddressAsync           | x  | x  |    x   |
+| ND    | Node Discovery         | --                               | DiscoverNetworkAsync             | x  | x  |    x   |
+| NI    | Node Identifier        | GetNodeIdentifierAsync           | SetNodeIdentifierAsync           | x  | x  |    x   |
+| SH/SL | Serial Number          | GetSerialNumberAsync             | --                               | x  | x  |    x   |
+| SM    | Sleep Mode             | GetSleepModeAsync                | SetSleepModeAsync                | x  | x  |    x   |
+| SO    | Sleep Mode Options     | GetSleepOptionsAsync             | SetSleepOptionsAsync             | x  |    |    x   |
+| WR    | Write Command          | --                               | WriteChangesAsync                | x  | x  |    x   |
 
 All other commands are currently unsupported but feel free to file an issue if you'd like to see something that isn't here.
 
