@@ -45,6 +45,7 @@ controller.NodeDiscovered += async (sender, args) =>
     args.Node.SampleReceived += (node, sample) => Console.WriteLine("Sample recieved: {0}", sample);
 }
 
+// open the connection to our coordinator
 await controller.OpenAsync("COM3", 9600);
 
 // now discover the network, which will trigger the NodeDiscovered callback for each node found
