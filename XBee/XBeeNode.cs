@@ -156,7 +156,7 @@ namespace XBee
         /// Used to explicitly exit command mode.
         /// </summary>
         /// <returns></returns>
-        public async Task ExitCommandMode()
+        public async Task ExitCommandModeAsync()
         {
             await ExecuteAtCommandAsync(new ExitCommandModeCommand());
         }

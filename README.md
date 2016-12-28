@@ -107,6 +107,7 @@ Below is a table summarizing the commands supported by this library.
 | BD    | Interface Data Rate    | GetBaudRateAsync                 | SetBaudRateAsync                 | x  | x  |    x   |
 | CE    | Coordinator Enable     | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |
 | CH    | Channel                | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |
+| CN    | Exit Command Mode      | --                               | ExitCommandModeAsync             | x  | x  |    x   |
 | D(N)  | DIO Configuration      | GetInputOutputConfigurationAsync | SetInputOutputConfigurationAsync | x  | x  |    x   |
 | DH/DL | Destination Address    | GetDestinationAddressAsync       | SetDestinationAddressAsync       | x  | x  |    x   |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync         | SetEncryptionEnabledAsync        | x  | x  |    x   |
