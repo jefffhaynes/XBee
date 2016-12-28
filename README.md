@@ -28,24 +28,31 @@ Here is a simple example with a coordinator on COM3 and an arbitrary number of e
 ```C#
 var controller = new XBeeController();
 
-controller.NodeDiscovered += (sender, args) => 
+// setup a simple callback for each time we discover a node
+controller.NodeDiscovered += async (sender, args) => 
 {
     Console.WriteLine("Discovered {0}", args.Name);
     
+	// setup some pins
     await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel2, InputOutputConfiguration.DigitalIn);
     await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel3, InputOutputConfiguration.AnalogIn);
     
-    await args.Node.SetChangeDetectionChannels(DigitalSampleChannels.Input2);
-    
+	// set sample rate
     await args.Node.SetSampleRate(TimeSpan.FromSeconds(5));
     
+	// register callback for sample recieved from this node
+	// TODO: in practice you would want to make sure you only subscribe once (or better yet use Rx)
     args.Node.SampleReceived += (node, sample) => Console.WriteLine("Sample recieved: {0}", sample);
 }
 
 await controller.OpenAsync("COM3", 9600);
+
+// now discover the network, which will trigger the NodeDiscovered callback for each node found
 await controller.DiscoverNetwork();
 
 Console.ReadKey();
+
+// wait for the samples to flow in...
 
 ```
 
