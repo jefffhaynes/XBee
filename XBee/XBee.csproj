@@ -61,6 +61,7 @@
     <Compile Include="Frames\AtCommands\BaudRate.cs" />
     <Compile Include="Frames\AtCommands\BaudRateCommand.cs" />
     <Compile Include="Frames\AtCommands\BaudRateResponseData.cs" />
+    <Compile Include="Frames\AtCommands\ExitCommandModeCommand.cs" />
     <Compile Include="Frames\AtQueuedCommandFrameContent.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicationCommand.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicator.cs" />

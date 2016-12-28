@@ -153,6 +153,15 @@ namespace XBee
         }
 
         /// <summary>
+        /// Used to explicitly exit command mode.
+        /// </summary>
+        /// <returns></returns>
+        public async Task ExitCommandMode()
+        {
+            await ExecuteAtCommandAsync(new ExitCommandModeCommand());
+        }
+
+        /// <summary>
         /// Queries the long network address for this node.
         /// </summary>
         /// <returns>The long network address</returns>
