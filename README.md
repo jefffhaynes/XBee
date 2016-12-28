@@ -60,7 +60,7 @@ if(controller != null)
 
 ###Nodes###
 
-The XBeeController class represents the local serial attached XBee API.  This would typically be a coordinator or coordinator-like device but could be any device to be controlled via a serial port.
+The XBeeController class represents the local serial attached XBee API.  This would typically be a coordinator but could be any device to be controlled via a serial port.
 
 While the controller represents the API, if we want to control the node itself we need to access the local node property.
 
