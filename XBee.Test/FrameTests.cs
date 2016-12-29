@@ -120,6 +120,26 @@ namespace XBee.Test
             Check(atCommandFrame, expectedValue);
         }
 
+        [TestMethod]
+        public void AtCommand_NonStandardBaudRate_FrameTest()
+        {
+            var atCommandFrame = new AtQueuedCommandFrameContent(new BaudRateCommand(30000)) { FrameId = 0x01 };
+
+            var expectedValue = new byte[] { 0x7e, 0x00, 0x06, 0x09, 0x01, 0x42, 0x44, 0x75, 0x30, 0xca };
+
+            Check(atCommandFrame, expectedValue);
+        }
+
+        [TestMethod]
+        public void AtCommand_LargeNonStandardBaudRate_FrameTest()
+        {
+            var atCommandFrame = new AtQueuedCommandFrameContent(new BaudRateCommand(3000000)) { FrameId = 0x01 };
+
+            var expectedValue = new byte[] {0x7e, 0x00, 0x08, 0x09, 0x01, 0x42, 0x44, 0x00, 0x2d, 0xc6, 0xc0, 0xbc};
+
+            Check(atCommandFrame, expectedValue);
+        }
+
         //[TestMethod]
         //public void RxIndicatorSampleFrameTest()
         //{
