@@ -110,6 +110,16 @@ namespace XBee.Test
             _frameSerializer.Deserialize(new MemoryStream(data));
         }
 
+        [TestMethod]
+        public void AtCommand_BaudRate_FrameTest()
+        {
+            var atCommandFrame = new AtQueuedCommandFrameContent(new BaudRateCommand(BaudRate.Baudrate115200)) { FrameId = 0x01 };
+
+            var expectedValue = new byte[] { 0x7e, 0x00, 0x05, 0x09, 0x01, 0x42, 0x44, 0x7, 0x68 };
+
+            Check(atCommandFrame, expectedValue);
+        }
+
         //[TestMethod]
         //public void RxIndicatorSampleFrameTest()
         //{
