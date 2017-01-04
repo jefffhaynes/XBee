@@ -86,7 +86,7 @@ namespace XBee
         /// Get the operating channel used between nodes.
         /// </summary>
         /// <returns></returns>
-        public async Task<byte> GetChannel()
+        public async Task<byte> GetChannelAsync()
         {
             PrimitiveResponseData<byte> response =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new OperatingChannelCommand());
@@ -97,7 +97,7 @@ namespace XBee
         /// Set the operating channel used between nodes.
         /// </summary>
         /// <returns></returns>
-        public async Task SetChannel(byte channel)
+        public async Task SetChannelAsync(byte channel)
         {
             await ExecuteAtCommandAsync(new OperatingChannelCommand(channel));
         }
@@ -165,7 +165,7 @@ namespace XBee
         /// Queries the long network address for this node.
         /// </summary>
         /// <returns>The long network address</returns>
-        public virtual async Task<NodeAddress> GetDestinationAddressAsync()
+        public virtual async Task<NodeAddress> GetAddressAsync()
         {
             PrimitiveResponseData<uint> high =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
@@ -197,7 +197,7 @@ namespace XBee
         /// </summary>
         /// <param name="address">The short network address</param>
         /// <returns></returns>
-        public async Task SetNetworkAddressAsync(ShortAddress address)
+        public async Task SetSourceAddressAsync(ShortAddress address)
         {
             await ExecuteAtCommandAsync(new SourceAddressCommand(address));
         }
@@ -455,10 +455,16 @@ namespace XBee
             await SetNodeIdentifierAsync(id);
         }
 
-        [Obsolete("Use GetDestinationAddressAsync")]
+        [Obsolete("Use GetAddressAsync")]
+        public virtual async Task<NodeAddress> GetDestinationAddressAsync()
+        {
+            return await GetAddressAsync();
+        }
+
+        [Obsolete("Use GetAddressAsync")]
         public virtual async Task<NodeAddress> GetDestinationAddress()
         {
-            return await GetDestinationAddressAsync();
+            return await GetAddressAsync();
         }
 
         [Obsolete("Use SetDestinationAddressAsync")]
