@@ -115,17 +115,17 @@ Below is a table summarizing the commands supported by this library.
 | AP    | API Mode               | GetApiModeAsync                  | SetApiModeAsync                  | x  | x  |    x   |
 | BD    | Interface Data Rate    | GetBaudRateAsync                 | SetBaudRateAsync                 | x  | x  |    x   |
 | CE    | Coordinator Enable     | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |
-| CH    | Channel                | GetChannelAsync                  | SetChannelAsync                  | x  |    |        |
+| CH    | Channel                | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |
 | CN    | Exit Command Mode      | --                               | ExitCommandModeAsync             | x  | x  |    x   |
 | D(N)  | DIO Configuration      | GetInputOutputConfigurationAsync | SetInputOutputConfigurationAsync | x  | x  |    x   |
-| DH/DL | Destination Address    | GetAddressAsync                  | SetDestinationAddressAsync       | x  | x  |    x   |
+| DH/DL | Destination Address    | GetDestinationAddressAsync       | SetDestinationAddressAsync       | x  | x  |    x   |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync         | SetEncryptionEnabledAsync        | x  | x  |    x   |
 | HV    | Hardware Version       | HardwareVersion (property)       | --                               | x  | x  |    x   |
 | IC    | Input Change           | GetChangeDetectionChannelsAsync  | SetChangeDetectionChannelsAsync  | x  | x  |    x   |
 | IR    | Sample Rate            | GetSampleRateAsync               | SetSampleRateAsync               | x  | x  |    x   |
 | IS    | Force Sample           | --                               | ForceSampleAsync                 | x  | x  |    x   |
 | KY    | Encryption Key         | --                               | SetEncryptionKeyAsync            | x  | x  |    x   |
-| MY    | Source Address         | GetAddressAsync                  | SetNetworkAddressAsync           | x  | x  |    x   |
+| MY    | Source Address         | GetNetworkAddressAsync           | SetNetworkAddressAsync           | x  | x  |    x   |
 | ND    | Node Discovery         | --                               | DiscoverNetworkAsync             | x  | x  |    x   |
 | NI    | Node Identifier        | GetNodeIdentifierAsync           | SetNodeIdentifierAsync           | x  | x  |    x   |
 | SH/SL | Serial Number          | GetSerialNumberAsync             | --                               | x  | x  |    x   |

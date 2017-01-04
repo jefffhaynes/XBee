@@ -86,7 +86,7 @@ namespace XBee
         /// Get the operating channel used between nodes.
         /// </summary>
         /// <returns></returns>
-        public async Task<byte> GetChannelAsync()
+        public async Task<byte> GetChannel()
         {
             PrimitiveResponseData<byte> response =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new OperatingChannelCommand());
@@ -97,7 +97,7 @@ namespace XBee
         /// Set the operating channel used between nodes.
         /// </summary>
         /// <returns></returns>
-        public async Task SetChannelAsync(byte channel)
+        public async Task SetChannel(byte channel)
         {
             await ExecuteAtCommandAsync(new OperatingChannelCommand(channel));
         }
@@ -165,7 +165,7 @@ namespace XBee
         /// Queries the long network address for this node.
         /// </summary>
         /// <returns>The long network address</returns>
-        public virtual async Task<NodeAddress> GetAddressAsync()
+        public virtual async Task<NodeAddress> GetDestinationAddressAsync()
         {
             PrimitiveResponseData<uint> high =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
@@ -191,7 +191,7 @@ namespace XBee
             await ExecuteAtCommandAsync(new DestinationAddressLowCommand(address.Low));
             Address.LongAddress.Low = address.Low;
         }
-
+        
         /// <summary>
         /// Queries the short network address of this node.
         /// </summary>
@@ -209,9 +209,9 @@ namespace XBee
         public async Task<LongAddress> GetSerialNumberAsync()
         {
             PrimitiveResponseData<uint> highAddress =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberHighCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberHighCommand());
             PrimitiveResponseData<uint> lowAddress =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberLowCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberLowCommand());
 
             return new LongAddress(highAddress.Value, lowAddress.Value);
         }
@@ -454,17 +454,11 @@ namespace XBee
         {
             await SetNodeIdentifierAsync(id);
         }
-        
-        [Obsolete("Use GetAddressAsync")]
-        public virtual async Task<NodeAddress> GetDestinationAddressAsync()
-        {
-            return await GetAddressAsync();
-        }
 
-        [Obsolete("Use GetAddressAsync")]
+        [Obsolete("Use GetDestinationAddressAsync")]
         public virtual async Task<NodeAddress> GetDestinationAddress()
         {
-            return await GetAddressAsync();
+            return await GetDestinationAddressAsync();
         }
 
         [Obsolete("Use SetDestinationAddressAsync")]
