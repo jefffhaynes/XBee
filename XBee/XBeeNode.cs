@@ -473,10 +473,16 @@ namespace XBee
             await SetDestinationAddressAsync(address);
         }
 
-        [Obsolete("Use SetNetworkAddressAsync")]
+        [Obsolete("Use SetSourceAddressAsync")]
         public async Task SetNetworkAddress(ShortAddress address)
         {
-            await SetNetworkAddressAsync(address);
+            await SetSourceAddressAsync(address);
+        }
+
+        [Obsolete("Use SetSourceAddressAsync")]
+        public async Task SetNetworkAddressAsync(ShortAddress address)
+        {
+            await SetSourceAddressAsync(address);
         }
 
         [Obsolete("Use GetSerialNumberAsync")]
