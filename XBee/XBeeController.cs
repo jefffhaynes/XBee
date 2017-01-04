@@ -631,7 +631,7 @@ namespace XBee
                 {
                     var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
 
-                    if (NodeDiscovered != null && discoveryData != null && !discoveryData.IsCoordinator)
+                    if (NodeDiscovered != null && discoveryData?.LongAddress != null && !discoveryData.IsCoordinator)
                     {
                         var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
 

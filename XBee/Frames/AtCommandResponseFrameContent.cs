@@ -15,7 +15,10 @@ namespace XBee.Frames
         public AtCommandStatus Status { get; set; }
 
         [FieldOrder(2)]
+        [Subtype("AtCommand", "AP", typeof(PrimitiveResponseData<ApiMode>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "AI", typeof(PrimitiveResponseData<AssociationIndicator>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "BD", typeof(BaudRateResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "CH", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "MY", typeof(PrimitiveResponseData<ShortAddress>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DH", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DL", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]

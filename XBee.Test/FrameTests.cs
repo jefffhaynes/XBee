@@ -140,6 +140,16 @@ namespace XBee.Test
             Check(atCommandFrame, expectedValue);
         }
 
+        [TestMethod]
+        public void AtCommand_BaudRateQuery_FrameTest()
+        {
+            var atCommandFrame = new AtCommandFrameContent(new BaudRateCommand()) { FrameId = 0x01 };
+
+            var expectedValue = new byte[] { 0x7e, 0x00, 0x04, 0x08, 0x01, 0x42, 0x44, 0x70 };
+
+            Check(atCommandFrame, expectedValue);
+        }
+
         //[TestMethod]
         //public void RxIndicatorSampleFrameTest()
         //{

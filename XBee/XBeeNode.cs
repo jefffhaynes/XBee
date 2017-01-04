@@ -209,9 +209,9 @@ namespace XBee
         public async Task<LongAddress> GetSerialNumberAsync()
         {
             PrimitiveResponseData<uint> highAddress =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberHighCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberHighCommand());
             PrimitiveResponseData<uint> lowAddress =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<UInt32>>(new SerialNumberLowCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberLowCommand());
 
             return new LongAddress(highAddress.Value, lowAddress.Value);
         }

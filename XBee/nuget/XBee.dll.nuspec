@@ -12,7 +12,7 @@
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
-      <dependency id="BinarySerializer" version="6.0" />
+      <dependency id="BinarySerializer" version="6.0.1" />
     </dependencies>
   </metadata>
 </package>

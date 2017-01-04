@@ -1,36 +1,21 @@
-﻿using System;
+﻿using System.IO;
 using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
     public class BaudRateResponseData : AtCommandResponseFrameData
     {
-        public byte[] BaudRateData { get; set; }
+        public uint BaudRateValue { get; set; }
 
         [Ignore]
         public uint BaudRate
         {
             get
             {
-                uint baudRate = 0;
+                if (BaudRateValue > byte.MaxValue)
+                    return BaudRateValue;
 
-                switch (BaudRateData.Length)
-                {
-                    case 1:
-                        baudRate = BaudRateData[0];
-                        break;
-                    case 2:
-                        baudRate = BitConverter.ToUInt16(BaudRateData, 0);
-                        break;
-                    case 4:
-                        baudRate = BitConverter.ToUInt32(BaudRateData, 0);
-                        break;
-                }
-
-                if (baudRate > byte.MaxValue)
-                    return baudRate;
-
-                var cannedBaudRate = (BaudRate) baudRate;
+                var cannedBaudRate = (BaudRate)BaudRateValue;
 
                 switch (cannedBaudRate)
                 {
@@ -50,9 +35,9 @@ namespace XBee.Frames.AtCommands
                         return 57600;
                     case AtCommands.BaudRate.Baudrate115200:
                         return 115200;
+                    default:
+                        throw new InvalidDataException("Unknown canned baud rate.");
                 }
-
-                return baudRate;
             }
         }
     }
