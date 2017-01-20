@@ -46,6 +46,11 @@ namespace XBee.Frames
         [Subtype("AtCommand", "PH", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "S#", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "IM", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "MN", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "MV", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "DB", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "IP", typeof(PrimitiveResponseData<InternetProtocol>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "TL", typeof(PrimitiveResponseData<SslProtocol>), BindingMode = BindingMode.OneWay)]
         public AtCommandResponseFrameData Data { get; set; }
     }
 }

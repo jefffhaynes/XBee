@@ -58,10 +58,10 @@ namespace XBee.Tester
 
             _xbee = await XBeeController.FindAndOpenAsync(SerialPort.GetPortNames(), 9600);
 
-            _xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
-            _xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
-            _xbee.FrameMemberDeserializing += XbeeOnFrameMemberDeserializing;
-            _xbee.FrameMemberDeserialized += XbeeOnFrameMemberDeserialized;
+            //_xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
+            //_xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
+            //_xbee.FrameMemberDeserializing += XbeeOnFrameMemberDeserializing;
+            //_xbee.FrameMemberDeserialized += XbeeOnFrameMemberDeserialized;
 
             //_xbee.DataReceived += (sender, eventArgs) => Console.WriteLine("Received {0} bytes", eventArgs.Data.Length);
 
@@ -94,6 +94,9 @@ namespace XBee.Tester
 
             var imei = await cellularNode.GetImeiAsync();
             Console.WriteLine(imei);
+
+            var networkOperator = await cellularNode.GetNetworkOperatorAsync();
+            Console.WriteLine(networkOperator);
         }
 
 
