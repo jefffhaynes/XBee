@@ -88,6 +88,10 @@ namespace XBee.Tester
             var phoneNumber = await cellularNode.GetPhoneNumberAsync();
 
             Console.WriteLine(phoneNumber);
+
+            var iccid = await cellularNode.GetIccidAsync();
+
+            Console.WriteLine(iccid);
         }
 
 

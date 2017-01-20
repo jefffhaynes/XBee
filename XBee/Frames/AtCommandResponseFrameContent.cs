@@ -43,7 +43,8 @@ namespace XBee.Frames
         [Subtype("AtCommand", "IR", typeof(SampleRateResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "IC", typeof(InputOutputChangeDetectionResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "EE", typeof(PrimitiveResponseData<bool>), BindingMode = BindingMode.OneWay)]
-        [Subtype("AtCommand", "PH", typeof(PrimitiveResponseData<string>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "PH", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "S#", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
         public AtCommandResponseFrameData Data { get; set; }
     }
 }
