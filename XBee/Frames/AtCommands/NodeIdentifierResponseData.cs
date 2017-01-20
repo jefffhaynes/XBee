@@ -6,7 +6,7 @@ namespace XBee.Frames.AtCommands
     public class NodeIdentifierResponseData : AtCommandResponseFrameData
     {
         [FieldLength(20)]
-        [SerializeAs(Encoding = "ascii")]
+        [FieldEncoding("ascii")]
         public string Id { get; set; }
     }
 }

@@ -41,8 +41,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BinarySerializer, Version=6.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BinarySerializer.6.0.1\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\BinarySerializer.dll</HintPath>
+    <Reference Include="BinarySerializer, Version=6.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BinarySerializer.6.0.2\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\BinarySerializer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousDisposable.cs" />
+    <Compile Include="Devices\XBeeCellular.cs" />
     <Compile Include="Devices\XBeeSeries2.cs" />
     <Compile Include="Frames\AtCommands\ApiMode.cs" />
     <Compile Include="Frames\AtCommands\ApiEnableCommand.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Frames\AtCommands\BaudRateCommand.cs" />
     <Compile Include="Frames\AtCommands\BaudRateResponseData.cs" />
     <Compile Include="Frames\AtCommands\ExitCommandModeCommand.cs" />
+    <Compile Include="Frames\AtCommands\PhoneNumberCommand.cs" />
     <Compile Include="Frames\AtQueuedCommandFrameContent.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicationCommand.cs" />
     <Compile Include="Frames\AtCommands\AssociationIndicator.cs" />

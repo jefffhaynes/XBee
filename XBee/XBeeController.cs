@@ -789,6 +789,8 @@ namespace XBee
                     return new XBeePro900HP(this, Frames.AtCommands.HardwareVersion.XBeePro900, address);
                 case Frames.AtCommands.HardwareVersion.XBeePro900HP:
                     return new XBeePro900HP(this, Frames.AtCommands.HardwareVersion.XBeePro900HP, address);
+                case Frames.AtCommands.HardwareVersion.XBeeCellular:
+                    return new XBeeCellular(this, Frames.AtCommands.HardwareVersion.XBeeCellular, address);
                 default:
                     throw new NotSupportedException($"{hardwareVersion} not supported.");
             }

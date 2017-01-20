@@ -82,9 +82,12 @@ namespace XBee.Tester
             //name = await _xbee.GetNodeIdentification();
 
             //var serialNumber = await _xbee.GetSerialNumber();
-            Discover();
+            //Discover();
 
+            var cellularNode = _xbee.Local as XBeeCellular;
+            var phoneNumber = await cellularNode.GetPhoneNumberAsync();
 
+            Console.WriteLine(phoneNumber);
         }
 
 
@@ -130,6 +133,8 @@ namespace XBee.Tester
             _xbee.NodeDiscovered += async (sender, args) =>
             {
                 Console.WriteLine("---------------- Discovered '{0}'", args.Name);
+                await args.Node.SetApiModeAsync(ApiMode.Enabled);
+
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
                 //await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
 
@@ -196,7 +201,7 @@ namespace XBee.Tester
                 //await args.Node.ForceSample();
             };
 
-            //await _xbee.DiscoverNetwork();
+            await _xbee.DiscoverNetworkAsync();
 
             //await _xbee.ExecuteMultiQueryAsync(new NetworkDiscoveryCommand(), new Action<AtCommandResponseFrame>(
             //    async frame =>
