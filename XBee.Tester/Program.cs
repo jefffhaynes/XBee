@@ -85,13 +85,15 @@ namespace XBee.Tester
             //Discover();
 
             var cellularNode = _xbee.Local as XBeeCellular;
-            var phoneNumber = await cellularNode.GetPhoneNumberAsync();
 
+            var phoneNumber = await cellularNode.GetPhoneNumberAsync();
             Console.WriteLine(phoneNumber);
 
             var iccid = await cellularNode.GetIccidAsync();
-
             Console.WriteLine(iccid);
+
+            var imei = await cellularNode.GetImeiAsync();
+            Console.WriteLine(imei);
         }
 
 

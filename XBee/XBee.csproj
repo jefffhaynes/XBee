@@ -63,6 +63,7 @@
     <Compile Include="Frames\AtCommands\BaudRateCommand.cs" />
     <Compile Include="Frames\AtCommands\BaudRateResponseData.cs" />
     <Compile Include="Frames\AtCommands\ExitCommandModeCommand.cs" />
+    <Compile Include="Frames\AtCommands\ImeiCommand.cs" />
     <Compile Include="Frames\AtCommands\IccidCommand.cs" />
     <Compile Include="Frames\AtCommands\PhoneNumberCommand.cs" />
     <Compile Include="Frames\AtCommands\StringResponseData.cs" />

@@ -27,7 +27,7 @@ namespace XBee.Devices
         /// <returns>Phone number as a string</returns>
         public async Task<string> GetPhoneNumberAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<string>>(new PhoneNumberCommand());
+            var response = await ExecuteAtQueryAsync<StringResponseData>(new PhoneNumberCommand());
             return response.Value;
         }
 
@@ -37,7 +37,17 @@ namespace XBee.Devices
         /// <returns></returns>
         public async Task<string> GetIccidAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<string>>(new IccidCommand());
+            var response = await ExecuteAtQueryAsync<StringResponseData>(new IccidCommand());
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Gets the International Mobile Equipment Identity (IMEI) of this device.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetImeiAsync()
+        {
+            var response = await ExecuteAtQueryAsync<StringResponseData>(new ImeiCommand());
             return response.Value;
         }
     }
