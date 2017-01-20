@@ -62,8 +62,12 @@
     <Compile Include="Frames\AtCommands\BaudRate.cs" />
     <Compile Include="Frames\AtCommands\BaudRateCommand.cs" />
     <Compile Include="Frames\AtCommands\BaudRateResponseData.cs" />
+    <Compile Include="Frames\AtCommands\CellularDeviceOption.cs" />
     <Compile Include="Frames\AtCommands\ExitCommandModeCommand.cs" />
     <Compile Include="Frames\AtCommands\InternetProtocol.cs" />
+    <Compile Include="Frames\AtCommands\CellularDeviceOptionCommand.cs" />
+    <Compile Include="Frames\AtCommands\TcpClientConnectionTimeoutResponseData.cs" />
+    <Compile Include="Frames\AtCommands\TcpClientConnectionTimeoutCommand.cs" />
     <Compile Include="Frames\AtCommands\SslProtocolCommand.cs" />
     <Compile Include="Frames\AtCommands\ModemFirmwareVersionCommand.cs" />
     <Compile Include="Frames\AtCommands\CellularSignalStrengthCommand.cs" />

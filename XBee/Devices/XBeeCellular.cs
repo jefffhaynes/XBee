@@ -120,5 +120,45 @@ namespace XBee.Devices
         {
             await ExecuteAtCommandAsync(new SslProtocolCommand(protocol));
         }
+
+        /// <summary>
+        /// Gets the configured TCP client connection timeout for the device.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<TimeSpan> GetTcpClientConnectionTimeoutAsync()
+        {
+            var response = await ExecuteAtQueryAsync<TcpClientConnectionTimeoutResponseData>(new TcpClientConnectionTimeoutCommand());
+            return response.Timeout;
+        }
+
+        /// <summary>
+        /// Sets the TCP client connection timeout for the device.
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public async Task SetTcpClientConnectionTimeoutAsync(TimeSpan timeout)
+        {
+            await ExecuteAtCommandAsync(new TcpClientConnectionTimeoutCommand(timeout));
+        }
+
+        /// <summary>
+        /// Gets the configured device option for this device.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CellularDeviceOption> GetDeviceOptionAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<CellularDeviceOption>>(new CellularDeviceOptionCommand());
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Sets the device option for this device.
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public async Task SetDeviceOptionAsync(CellularDeviceOption option)
+        {
+            await ExecuteAtCommandAsync(new CellularDeviceOptionCommand(option));
+        }
     }
 }

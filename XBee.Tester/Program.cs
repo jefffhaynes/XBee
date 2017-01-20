@@ -97,6 +97,10 @@ namespace XBee.Tester
 
             var networkOperator = await cellularNode.GetNetworkOperatorAsync();
             Console.WriteLine(networkOperator);
+
+            var tcpClientTimeout = await cellularNode.GetTcpClientConnectionTimeoutAsync();
+            Console.WriteLine(tcpClientTimeout);
+
         }
 
 
