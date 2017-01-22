@@ -18,6 +18,10 @@ namespace XBee.Frames
         [Subtype("AtCommand", "AP", typeof(PrimitiveResponseData<ApiMode>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "AI", typeof(PrimitiveResponseData<AssociationIndicator>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "BD", typeof(BaudRateResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "NB", typeof(PrimitiveResponseData<Parity>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "SB", typeof(PrimitiveResponseData<StopBits>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "RO", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "FT", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "CH", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "MY", typeof(PrimitiveResponseData<ShortAddress>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DH", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
@@ -53,6 +57,7 @@ namespace XBee.Frames
         [Subtype("AtCommand", "TL", typeof(PrimitiveResponseData<SslProtocol>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "TM", typeof(TcpClientConnectionTimeoutResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DO", typeof(PrimitiveResponseData<CellularDeviceOption>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "AN", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
         public AtCommandResponseFrameData Data { get; set; }
     }
 }

@@ -109,29 +109,33 @@ Below is a table summarizing the commands supported by this library.
 
 ####AT Commands####
 
-|       | Description            | Query                            | Command                          | S1 | S2 | Pro900 |
-|:-----:|:-----------------------|:---------------------------------|:---------------------------------|:--:|:--:|:------:|
-| AI    | Association Indicator  | GetAssociationAsync              | SetAssociationAsync              |    | x  |        |
-| AP    | API Mode               | GetApiModeAsync                  | SetApiModeAsync                  | x  | x  |    x   |
-| BD    | Interface Data Rate    | GetBaudRateAsync                 | SetBaudRateAsync                 | x  | x  |    x   |
-| CE    | Coordinator Enable     | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |
-| CH    | Channel                | GetChannelAsync                  | SetChannelAsync                  | x  |    |        |
-| CN    | Exit Command Mode      | --                               | ExitCommandModeAsync             | x  | x  |    x   |
-| D(N)  | DIO Configuration      | GetInputOutputConfigurationAsync | SetInputOutputConfigurationAsync | x  | x  |    x   |
-| DH/DL | Destination Address    | GetAddressAsync                  | SetDestinationAddressAsync       | x  | x  |    x   |
-| EE    | Encryption Enable      | IsEncryptionEnabledAsync         | SetEncryptionEnabledAsync        | x  | x  |    x   |
-| HV    | Hardware Version       | HardwareVersion (property)       | --                               | x  | x  |    x   |
-| IC    | Input Change           | GetChangeDetectionChannelsAsync  | SetChangeDetectionChannelsAsync  | x  | x  |    x   |
-| IR    | Sample Rate            | GetSampleRateAsync               | SetSampleRateAsync               | x  | x  |    x   |
-| IS    | Force Sample           | --                               | ForceSampleAsync                 | x  | x  |    x   |
-| KY    | Encryption Key         | --                               | SetEncryptionKeyAsync            | x  | x  |    x   |
-| MY    | Source Address         | GetAddressAsync                  | SetSourceAddressAsync            | x  | x  |    x   |
-| ND    | Node Discovery         | --                               | DiscoverNetworkAsync             | x  | x  |    x   |
-| NI    | Node Identifier        | GetNodeIdentifierAsync           | SetNodeIdentifierAsync           | x  | x  |    x   |
-| SH/SL | Serial Number          | GetSerialNumberAsync             | --                               | x  | x  |    x   |
-| SM    | Sleep Mode             | GetSleepModeAsync                | SetSleepModeAsync                | x  | x  |    x   |
-| SO    | Sleep Mode Options     | GetSleepOptionsAsync             | SetSleepOptionsAsync             | x  |    |    x   |
-| WR    | Write Command          | --                               | WriteChangesAsync                | x  | x  |    x   |
+|       | Description            | Query                            | Command                          | S1 | S2 | Pro900 | Cellular |
+|:-----:|:-----------------------|:---------------------------------|:---------------------------------|:--:|:--:|:------:|:--------:|
+| HV    | Hardware Version       | HardwareVersion (property)       | --                               | x  | x  |    x   |    x     |
+| AP    | API Mode               | GetApiModeAsync                  | SetApiModeAsync                  | x  | x  |    x   |    x     |
+| BD    | Interface Data Rate    | GetBaudRateAsync                 | SetBaudRateAsync                 | x  | x  |    x   |    x     |
+| NB    | Parity                 | GetParityAsync                   | SetParityAsync                   | x  | x  |    x   |    x     |
+| SB    | Stop Bits              | GetStopBitsAsync                 | SetStopBitsAsync                 | x  | x  |    x   |    x     |
+| RO    | Packetization Timeout  | GetPacketizationTimeoutAsync     | SetPacketizationTimeoutAsync     | x  | x  |    x   |    x     |
+| FT    | Flow Control Threshold | GetFlowControlThresholdAsync     | SetFlowControlThresholdAsync     | x  | x  |    x   |    x     |
+| NI    | Node Identifier        | GetNodeIdentifierAsync           | SetNodeIdentifierAsync           | x  | x  |    x   |    x     |
+| CN    | Exit Command Mode      | --                               | ExitCommandModeAsync             | x  | x  |    x   |    x     |
+| WR    | Write Command          | --                               | WriteChangesAsync                | x  | x  |    x   |    x     |
+| SH/SL | Serial Number          | GetSerialNumberAsync             | --                               | x  | x  |    x   |          |
+| DH/DL | Destination Address    | GetAddressAsync                  | SetDestinationAddressAsync       | x  | x  |    x   |          |
+| MY    | Source Address         | GetAddressAsync                  | SetSourceAddressAsync            | x  | x  |    x   |          |
+| ND    | Node Discovery         | --                               | DiscoverNetworkAsync             | x  | x  |    x   |          |
+| D(N)  | DIO Configuration      | GetInputOutputConfigurationAsync | SetInputOutputConfigurationAsync | x  | x  |    x   |          |
+| IC    | Input Change           | GetChangeDetectionChannelsAsync  | SetChangeDetectionChannelsAsync  | x  | x  |    x   |          |
+| IR    | Sample Rate            | GetSampleRateAsync               | SetSampleRateAsync               | x  | x  |    x   |          |
+| IS    | Force Sample           | --                               | ForceSampleAsync                 | x  | x  |    x   |          |
+| SM    | Sleep Mode             | GetSleepModeAsync                | SetSleepModeAsync                | x  | x  |    x   |          |
+| EE    | Encryption Enable      | IsEncryptionEnabledAsync         | SetEncryptionEnabledAsync        | x  | x  |    x   |          |
+| KY    | Encryption Key         | --                               | SetEncryptionKeyAsync            | x  | x  |    x   |          |
+| SO    | Sleep Mode Options     | GetSleepOptionsAsync             | SetSleepOptionsAsync             | x  |    |    x   |          |
+| CE    | Coordinator Enable     | IsCoordinatorAsync               | SetCoordinatorAsync              | x  |    |        |          |
+| CH    | Channel                | GetChannelAsync                  | SetChannelAsync                  | x  |    |        |          |
+| AI    | Association Indicator  | GetAssociationAsync              | SetAssociationAsync              |    | x  |        |    x     |
 
 All other commands are currently unsupported but feel free to file an issue if you'd like to see something that isn't here.
 

@@ -10,11 +10,6 @@ using XBee.Frames;
 using XBee.Frames.AtCommands;
 using XBee.Observable;
 
-#if WINDOWS_UWP
-using Windows.Devices.Enumeration;
-using Windows.Devices.SerialCommunication;
-#endif
-
 namespace XBee
 {
     public class XBeeController : IDisposable
@@ -25,16 +20,10 @@ namespace XBee
 
         private static readonly ConcurrentDictionary<byte, Action<CommandResponseFrameContent>> ExecuteCallbacks =
             new ConcurrentDictionary<byte, Action<CommandResponseFrameContent>>();
-
-#if !DEBUG
-        private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(5);
-        private static readonly TimeSpan DefaultRemoteQueryTimeout = TimeSpan.FromSeconds(5);
-        private static readonly TimeSpan DefaultLocalQueryTimeout = TimeSpan.FromSeconds(1);
-#else
+        
         private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(300);
         private static readonly TimeSpan DefaultRemoteQueryTimeout = TimeSpan.FromSeconds(300);
         private static readonly TimeSpan DefaultLocalQueryTimeout = TimeSpan.FromSeconds(300);
-#endif
 
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(30);
         private readonly object _frameIdLock = new object();
@@ -189,14 +178,11 @@ namespace XBee
         /// </summary>
         public event EventHandler<SourcedSensorSampleReceivedEventArgs> SensorSampleReceived;
 
-#if WINDOWS_UWP
-    /// <summary>
-    /// Open a local node.
-    /// </summary>
-    /// <param name="device">The serial device used to talk to the controller node</param>
-    /// <returns></returns>
-        public async Task OpenAsync(SerialDevice device)
-#else
+        /// <summary>
+        ///     Occurs when an SMS message is received.
+        /// </summary>
+        public event EventHandler<SmsReceivedEventArgs> SmsReceived; 
+
         /// <summary>
         ///     Open a local node.
         /// </summary>
@@ -205,7 +191,6 @@ namespace XBee
         /// <returns></returns>
         [Obsolete("Use OpenAsync()")]
         public async Task OpenAsync(string port, int baudRate)
-#endif
         {
             if (IsOpen)
                 throw new InvalidOperationException(
@@ -218,12 +203,8 @@ namespace XBee
                 _connection.Open();
                 return;
             }
-
-#if WINDOWS_UWP
-            _connection = new SerialConnection(device);
-#else
+            
             _connection = new SerialConnection(port, baudRate);
-#endif
 
             try
             {
@@ -408,6 +389,7 @@ namespace XBee
         /// </summary>
         /// <param name="command"></param>
         /// <param name="address"></param>
+        /// <param name="queueLocal"></param>
         /// <returns></returns>
         internal async Task ExecuteAtCommand(AtCommand command, NodeAddress address = null, bool queueLocal = false)
         {
@@ -656,50 +638,7 @@ namespace XBee
                     }
                 }), timeout);
         }
-
-#if WINDOWS_UWP
-    /// <summary>
-    /// Try to find and open a local node.
-    /// </summary>
-    /// <returns>The controller or null if no controller was found</returns>
-        public static async Task<XBeeController> FindAndOpen()
-        {
-            var controller = new XBeeController();
-
-            string aqs = SerialDevice.GetDeviceSelector();
-            var devices = await DeviceInformation.FindAllAsync(aqs);
-
-            foreach (var device in devices)
-            {
-                try
-                {
-                    var serialDevice = await SerialDevice.FromIdAsync(device.Id);
-                    await controller.OpenAsync(serialDevice);
-                    return controller;
-                }
-                catch (InvalidOperationException)
-                {
-                }
-                catch (UnauthorizedAccessException)
-                {
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                }
-                catch (ArgumentException)
-                {
-                }
-                catch (TimeoutException)
-                {
-                }
-                catch (IOException)
-                {
-                }
-            }
-
-            return null;
-        }
-#else
+        
         /// <summary>
         ///     Try to find and open a local node.
         /// </summary>
@@ -738,8 +677,6 @@ namespace XBee
 
             return null;
         }
-
-#endif
 
         /// <summary>
         ///     Try to find and open a local node.
@@ -864,6 +801,11 @@ namespace XBee
                         sensorSample.SensorValueA, sensorSample.SensorValueB, sensorSample.SensorValueC,
                         sensorSample.SensorValueD, sensorSample.TemperatureCelsius));
             }
+            else if (content is RxSmsFrame)
+            {
+                var smsFrame = content as RxSmsFrame;
+                SmsReceived?.Invoke(this, new SmsReceivedEventArgs(smsFrame.PhoneNumber, smsFrame.Message));
+            }
         }
 
         private byte GetNextFrameId()
@@ -887,33 +829,5 @@ namespace XBee
             if (IsOpen)
                 _connection.Close();
         }
-
-        #region Deprecated
-
-        [Obsolete("Use DiscoverNetworkAsync")]
-        public async Task DiscoverNetwork()
-        {
-            await DiscoverNetworkAsync();
-        }
-
-        [Obsolete("Use DiscoverNetworkAsync")]
-        public async Task DiscoverNetwork(TimeSpan timeout)
-        {
-            await DiscoverNetworkAsync(timeout);
-        }
-
-        [Obsolete("Use FindAsync")]
-        public static async Task<XBeeController> Find(IEnumerable<string> ports, int baudRate)
-        {
-            return await FindAsync(ports, baudRate);
-        }
-
-        [Obsolete("Use FindAndOpenAsync")]
-        public static async Task<XBeeController> FindAndOpen(IEnumerable<string> ports, int baudRate)
-        {
-            return await FindAndOpenAsync(ports, baudRate);
-        }
-
-        #endregion
     }
 }

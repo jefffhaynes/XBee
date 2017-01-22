@@ -40,7 +40,7 @@ namespace XBee.Util.ViewModels
 
         private async void Discover()
         {
-            await Controller.DiscoverNetwork();
+            await Controller.DiscoverNetworkAsync();
         }
     }
 }

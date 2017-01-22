@@ -1,14 +1,26 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
-    public class XBeeCellular : XBeeNode
+    public class XBeeCellular : XBeeNode, IAssociationIndicator
     {
+        private const string NotSupportedMessage = "This feature is not supported on the XBee Cellular device.";
+
         public XBeeCellular(XBeeController controller, HardwareVersion hardwareVersion, NodeAddress address = null) : base(controller, hardwareVersion, address)
         {
+        }
+
+        /// <summary>
+        ///     Occurs when an SMS message is received.
+        /// </summary>
+        public event EventHandler<SmsReceivedEventArgs> SmsReceived
+        {
+            add {  Controller.SmsReceived += value; }
+            remove { Controller.SmsReceived -= value; }
         }
 
         public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
@@ -72,7 +84,7 @@ namespace XBee.Devices
         }
 
         /// <summary>
-        /// Gets the celluar signal strength for the modem.
+        /// Gets the cellular signal strength for the modem.
         /// </summary>
         /// <returns>0x71 - 0x33 (-113 dBm to -51 dBm)</returns>
         public async Task<byte> GetCellularSignalStrengthAsync()
@@ -82,7 +94,7 @@ namespace XBee.Devices
         }
 
         /// <summary>
-        /// Gets the configured internet protocol for the device.
+        /// Gets the configured Internet protocol for the device.
         /// </summary>
         /// <returns></returns>
         public async Task<InternetProtocol> GetInternetProtocolAsync()
@@ -92,7 +104,7 @@ namespace XBee.Devices
         }
 
         /// <summary>
-        /// Sets the internet protocol for the device.
+        /// Sets the Internet protocol for the device.
         /// </summary>
         /// <param name="protocol"></param>
         /// <returns></returns>
@@ -160,5 +172,221 @@ namespace XBee.Devices
         {
             await ExecuteAtCommandAsync(new CellularDeviceOptionCommand(option));
         }
+
+        /// <summary>
+        /// Gets the Access Point Name (APN) the device uses to connect.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetAccessPointNameAsync()
+        {
+            var response = await ExecuteAtQueryAsync<StringResponseData>(new AccessPointNameCommand());
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Sets the Access Point Name (APN) the device uses to connect. The APN must match a valid value for the carrier.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public async Task SetAccessPointNameAsync(string name)
+        {
+            await ExecuteAtCommandAsync(new AccessPointNameCommand(name));
+        }
+        
+        /// <summary>
+        /// Gets the network association state for this node.
+        /// </summary>
+        public async Task<AssociationIndicator> GetAssociationAsync()
+        {
+            PrimitiveResponseData<AssociationIndicator> response = await
+                    Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
+                        new AssociationIndicationCommand());
+
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Send an SMS.
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task SendSms(string phoneNumber, string message)
+        {
+            var cleanNumber = phoneNumber.Replace("-", string.Empty).Replace("(", string.Empty).Replace(")", string.Empty);
+            var txSms = new TxSmsFrame(cleanNumber, message);
+            await Controller.ExecuteAsync(txSms);
+        }
+
+        protected override NodeAddress GetAddressInternal()
+        {
+            return null;
+        }
+
+        #region Not Supported
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override NodeAddress Address
+        {
+            get
+            {
+                throw new NotSupportedException(NotSupportedMessage);
+            }
+        }
+
+        public override Task<NodeAddress> GetAddressAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        public override Task SetDestinationAddressAsync(LongAddress address)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        public override Task SetSourceAddressAsync(ShortAddress address)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task ForceSampleAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task<byte> GetChannelAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task SetChannelAsync(byte channel)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task<LongAddress> GetSerialNumberAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task<DigitalSampleChannels> GetChangeDetectionChannelsAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task<SleepMode> GetSleepModeAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task SetSleepModeAsync(SleepMode mode)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+        
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task<TimeSpan> GetSampleRateAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task SetSampleRateAsync(TimeSpan interval)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task<bool> IsEncryptionEnabledAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task SetEncryptionKeyAsync(byte[] key)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task<InputOutputConfiguration> GetInputOutputConfigurationAsync(InputOutputChannel channel)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+        
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override Task SetInputOutputConfigurationAsync(InputOutputChannel channel, InputOutputConfiguration configuration)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override XBeeStream GetSerialStream()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override IObservable<byte[]> GetReceivedData()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        /// Not supported on XBee Cellular.
+        /// </summary>
+        public override IObservable<Sample> GetSamples()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+        
+        #endregion
     }
 }

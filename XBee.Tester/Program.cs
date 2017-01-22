@@ -86,21 +86,27 @@ namespace XBee.Tester
 
             var cellularNode = _xbee.Local as XBeeCellular;
 
-            var phoneNumber = await cellularNode.GetPhoneNumberAsync();
-            Console.WriteLine(phoneNumber);
+            //var phoneNumber = await cellularNode.GetPhoneNumberAsync();
+            //Console.WriteLine(phoneNumber);
 
-            var iccid = await cellularNode.GetIccidAsync();
-            Console.WriteLine(iccid);
+            //var iccid = await cellularNode.GetIccidAsync();
+            //Console.WriteLine(iccid);
 
-            var imei = await cellularNode.GetImeiAsync();
-            Console.WriteLine(imei);
+            //var imei = await cellularNode.GetImeiAsync();
+            //Console.WriteLine(imei);
 
-            var networkOperator = await cellularNode.GetNetworkOperatorAsync();
-            Console.WriteLine(networkOperator);
+            //var networkOperator = await cellularNode.GetNetworkOperatorAsync();
+            //Console.WriteLine(networkOperator);
 
-            var tcpClientTimeout = await cellularNode.GetTcpClientConnectionTimeoutAsync();
-            Console.WriteLine(tcpClientTimeout);
+            //var tcpClientTimeout = await cellularNode.GetTcpClientConnectionTimeoutAsync();
+            //Console.WriteLine(tcpClientTimeout);
 
+            var accessPointName = await cellularNode.GetAccessPointNameAsync();
+            Console.WriteLine(accessPointName);
+
+            //await cellularNode.SendSms("7032179771", "hello world");
+
+            cellularNode.SmsReceived += (sender, args) => Console.WriteLine($"{args.PhoneNumber}: {args.Message}");
         }
 
 

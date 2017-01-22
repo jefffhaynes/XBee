@@ -6,7 +6,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
-    public class XBeeSeries2 : XBeeNode
+    public class XBeeSeries2 : XBeeNode, IAssociationIndicator
     {
         internal XBeeSeries2(XBeeController controller,
             HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2,
@@ -56,17 +56,5 @@ namespace XBee.Devices
         {
             await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
         }
-
-        #region Deprecated
-        
-        [Obsolete("Use GetAssociationAsync")]
-        public async Task<AssociationIndicator> GetAssociation()
-        {
-            return await GetAssociationAsync();
-        }
-
-        #endregion
-
-
     }
 }

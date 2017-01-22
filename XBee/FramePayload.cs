@@ -30,6 +30,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.TxRequestExt, typeof(TxRequestExtFrame))]
         [Subtype("FrameType", FrameType.TxStatus, typeof(TxStatusFrame))]
         [Subtype("FrameType", FrameType.TxStatusExt, typeof(TxStatusExtFrame))]
+        [Subtype("FrameType", FrameType.TxSms, typeof(TxSmsFrame))]
         [Subtype("FrameType", FrameType.RxIndicator, typeof(RxIndicatorFrame))]
         [Subtype("FrameType", FrameType.RxIndicator16, typeof(RxIndicator16Frame))]
         [Subtype("FrameType", FrameType.RxIndicatorExt, typeof(RxIndicatorExtFrame))]
@@ -37,6 +38,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.RxIndicatorSample, typeof(RxIndicatorSampleFrame))]
         [Subtype("FrameType", FrameType.RxIndicator16Sample, typeof(RxIndicator16SampleFrame))]
         [Subtype("FrameType", FrameType.RxIndicatorSampleExt, typeof(RxIndicatorSampleExtFrame))]
+        [Subtype("FrameType", FrameType.RxSms, typeof(RxSmsFrame))]
         [Subtype("FrameType", FrameType.SensorReadIndicator, typeof(SensorReadIndicatorFrame))]
         [Subtype("FrameType", FrameType.FirmwareUpdateStatus, typeof(FirmwareUpdateStatusFrame))]
         public FrameContent Content { get; set; }

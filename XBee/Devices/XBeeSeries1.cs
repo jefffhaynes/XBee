@@ -86,33 +86,5 @@ namespace XBee.Devices
         {
             await TransmitDataAsync(data, CancellationToken.None, enableAck);
         }
-
-        #region Deprecated
-        
-        [Obsolete("Use IsCoordinatorAsync")]
-        public virtual async Task<bool> IsCoordinator()
-        {
-            return await IsCoordinatorAsync();
-        }
-        
-        [Obsolete("Use SetCoordinatorAsync")]
-        public virtual async Task SetCoordinator(bool enable)
-        {
-            await SetCoordinatorAsync(enable);
-        }
-
-        [Obsolete("Use GetSleepOptionsAsync")]
-        public async Task<SleepOptions> GetSleepOptions()
-        {
-            return await GetSleepOptionsAsync();
-        }
-
-        [Obsolete("Use SetSleepOptionsAsync")]
-        public async Task SetSleepOptions(SleepOptions options)
-        {
-            await SetSleepOptionsAsync(options);
-        }
-
-        #endregion
     }
 }

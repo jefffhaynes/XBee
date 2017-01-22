@@ -13,7 +13,7 @@ namespace XBee.Devices
         {
         }
 
-        public override async Task<NodeAddress> GetDestinationAddressAsync()
+        public override async Task<NodeAddress> GetAddressAsync()
         {
             var high = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
             var low = await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand());

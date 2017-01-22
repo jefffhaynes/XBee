@@ -1,9 +1,10 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public enum ApiMode
+    public enum ApiMode : byte
     {
-        Disabled,
-        Enabled,
-        EnabledEscaped
+        Disabled = 0x0,
+        Enabled = 0x1,
+        EnabledEscaped = 0x2,
+        Bypass = 0x5
     }
 }

@@ -9,6 +9,8 @@
         TxRequestExt = 0x10,
         TxRequestExplicit = 0x11,
         RemoteAtCommand = 0x17,
+        TxSms = 0x1f,
+        TxIPv4 = 0x20,
         CreateSourceRoute = 0x21,
         RxIndicator = 0x80,
         RxIndicator16 = 0x81,
@@ -27,9 +29,11 @@
         NodeIdentificationIndicator = 0x95,
         RemoteAtCommandResponse = 0x97,
         ModemStatusExt = 0x98,
+        RxSms = 0x9f,
         FirmwareUpdateStatus = 0xa0,
         RouteRecordIndicator = 0xa1,
         ManytooneRouteRequestIndicator = 0xa3,
+        RxIPv4 = 0xb0,
         Unknown = 0xff,
     }
 }
