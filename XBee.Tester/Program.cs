@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
+using System.Net;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,6 +105,13 @@ namespace XBee.Tester
             var accessPointName = await cellularNode.GetAccessPointNameAsync();
             Console.WriteLine(accessPointName);
 
+            var address = await cellularNode.GetIPAddressAsync();
+            Console.WriteLine(address);
+
+            cellularNode.InternetDataReceived +=
+                (sender, args) => Console.WriteLine($"{args.SourceAddress}: {BitConverter.ToString(args.Data)}");
+
+            await cellularNode.TransmitDataAsync(IPAddress.Parse("127.0.0.1"), 80, Encoding.UTF8.GetBytes("hello world"));
             //await cellularNode.SendSms("7032179771", "hello world");
 
             cellularNode.SmsReceived += (sender, args) => Console.WriteLine($"{args.PhoneNumber}: {args.Message}");

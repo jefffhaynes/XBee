@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using BinarySerialization;
@@ -181,7 +182,12 @@ namespace XBee
         /// <summary>
         ///     Occurs when an SMS message is received.
         /// </summary>
-        public event EventHandler<SmsReceivedEventArgs> SmsReceived; 
+        public event EventHandler<SmsReceivedEventArgs> SmsReceived;
+
+        /// <summary>
+        ///     Occurs when IP data is received.
+        /// </summary>
+        public event EventHandler<InternetDataReceivedEventArgs> InternetDataReceived; 
 
         /// <summary>
         ///     Open a local node.
@@ -804,7 +810,17 @@ namespace XBee
             else if (content is RxSmsFrame)
             {
                 var smsFrame = content as RxSmsFrame;
+
                 SmsReceived?.Invoke(this, new SmsReceivedEventArgs(smsFrame.PhoneNumber, smsFrame.Message));
+            }
+            else if (content is RxIPv4Frame)
+            {
+                var ipv4Frame = content as RxIPv4Frame;
+                var address = new IPAddress(ipv4Frame.SourceAddress);
+
+                InternetDataReceived?.Invoke(this,
+                    new InternetDataReceivedEventArgs(address, ipv4Frame.DestinationPort, ipv4Frame.SourcePort,
+                        ipv4Frame.Protocol, ipv4Frame.Data));
             }
         }
 

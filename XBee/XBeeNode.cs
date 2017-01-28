@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using XBee.Frames;
@@ -254,10 +255,15 @@ namespace XBee
 
             var address = new LongAddress(high.Value, low.Value);
 
-            PrimitiveResponseData<ShortAddress> source =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<ShortAddress>>(new SourceAddressCommand());
+            // we have to do this nonsense because they decided to reuse "MY" for the cellular IP source address
+            PrimitiveResponseData<byte[]> source =
+                await ExecuteAtQueryAsync<PrimitiveResponseData<byte[]>>(new SourceAddressCommand());
 
-            return new NodeAddress(address, source.Value);
+            var leValue = source.Value.Reverse().ToArray();
+            var sourceAddressValue = BitConverter.ToUInt16(leValue, 0);
+            var sourceAddress = new ShortAddress(sourceAddressValue);
+
+            return new NodeAddress(address, sourceAddress);
         }
 
         /// <summary>

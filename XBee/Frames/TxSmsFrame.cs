@@ -17,7 +17,7 @@ namespace XBee.Frames
 
             var data = System.Text.Encoding.UTF8.GetBytes(message);
             if (data.Length > MaxPayloadLength)
-                throw new ArgumentException("Message too long", nameof(message));
+                throw new ArgumentException($"Message must be less than {MaxPayloadLength} bytes when encoded.", nameof(message));
 
             Data = data;
         }
