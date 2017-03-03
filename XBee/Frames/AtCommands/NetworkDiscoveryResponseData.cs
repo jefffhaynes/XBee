@@ -25,6 +25,7 @@ namespace XBee.Frames.AtCommands
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBee24S2C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900HP, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProSX, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         public NetworkDiscoveryResponseDataExtendedInfo ExtendedInfo { get; set; }
 
         [Ignore]
