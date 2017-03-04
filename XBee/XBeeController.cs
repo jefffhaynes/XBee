@@ -632,7 +632,7 @@ namespace XBee
 
                             var signalStrength = discoveryData.ReceivedSignalStrengthIndicator?.SignalStrength;
 
-                            NodeDiscovered(this,
+                            NodeDiscovered?.Invoke(this,
                                 new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
                                     node));
                         }
@@ -732,10 +732,10 @@ namespace XBee
                     return new XBeePro900HP(this, Frames.AtCommands.HardwareVersion.XBeePro900, address);
                 case Frames.AtCommands.HardwareVersion.XBeePro900HP:
                     return new XBeePro900HP(this, Frames.AtCommands.HardwareVersion.XBeePro900HP, address);
-                case Frames.AtCommands.HardwareVersion.XBeeCellular:
-                    return new XBeeCellular(this, Frames.AtCommands.HardwareVersion.XBeeCellular, address);
                 case Frames.AtCommands.HardwareVersion.XBeeProSX:
                     return new XBeePro900HP(this, Frames.AtCommands.HardwareVersion.XBeeProSX, address);
+                case Frames.AtCommands.HardwareVersion.XBeeCellular:
+                    return new XBeeCellular(this, Frames.AtCommands.HardwareVersion.XBeeCellular, address);
                 default:
                     throw new NotSupportedException($"{hardwareVersion} not supported.");
             }
