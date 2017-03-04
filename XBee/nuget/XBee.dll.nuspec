@@ -8,11 +8,11 @@
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for controlling XBee wireless modules.</description>
-    <releaseNotes>XBee Cellular support.  More AT command support.  Deprecated interfaces removed.</releaseNotes>
+    <releaseNotes>Adds XBeePro SX Module Support</releaseNotes>
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
-      <dependency id="BinarySerializer" version="6.0.2" />
+      <dependency id="BinarySerializer" version="6.0.3" />
     </dependencies>
   </metadata>
 </package>
