@@ -14,15 +14,30 @@ namespace XBee.Devices
         {
         }
 
+        /// <summary>
+        ///     Gets the network association state for this node.
+        /// </summary>
+        public async Task<AssociationIndicator> GetAssociationAsync()
+        {
+            var response = await
+                Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
+                    new AssociationIndicationCommand());
+
+            return response.Value;
+        }
+
         public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
             await TransmitDataAsync(data, CancellationToken.None, enableAck);
         }
 
-        public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true)
+        public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken,
+            bool enableAck = true)
         {
             if (Address == null)
+            {
                 throw new InvalidOperationException("Can't send data to local device.");
+            }
 
             var transmitRequest = new TxRequestExtFrame(Address.LongAddress, data);
 
@@ -33,23 +48,38 @@ namespace XBee.Devices
             }
             else
             {
-                TxStatusExtFrame response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest, cancellationToken);
+                var response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest, cancellationToken);
 
                 if (response.DeliveryStatus != DeliveryStatusExt.Success)
+                {
                     throw new XBeeException($"Delivery failed with status code '{response.DeliveryStatus}'.");
+                }
             }
         }
 
-        /// <summary>
-        /// Gets the network association state for this node.
-        /// </summary>
-        public async Task<AssociationIndicator> GetAssociationAsync()
+        public async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, byte sourceEndpoint,
+            byte destinationEndpoint, ushort clusterId, ushort profileId)
         {
-            PrimitiveResponseData<AssociationIndicator> response = await
-                    Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
-                        new AssociationIndicationCommand());
+            if (Address == null)
+            {
+                throw new InvalidOperationException("Can't send data to local device.");
+            }
 
-            return response.Value;
+            var transmitRequest = new TxRequestExplicitFrame(Address.LongAddress, data)
+            {
+                SourceEndpoint = sourceEndpoint,
+                DestinationEndpoint = destinationEndpoint,
+                ClusterId = clusterId,
+                ProfileId = profileId
+            };
+
+            var response =
+                await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest, cancellationToken);
+
+            if (response.DeliveryStatus != DeliveryStatusExt.Success)
+            {
+                throw new XBeeException($"Delivery failed with status code '{response.DeliveryStatus}'.");
+            }
         }
 
         public override async Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)

@@ -21,7 +21,7 @@ namespace XBee
 
         private static readonly ConcurrentDictionary<byte, Action<CommandResponseFrameContent>> ExecuteCallbacks =
             new ConcurrentDictionary<byte, Action<CommandResponseFrameContent>>();
-        
+
         private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(300);
         private static readonly TimeSpan DefaultRemoteQueryTimeout = TimeSpan.FromSeconds(300);
         private static readonly TimeSpan DefaultLocalQueryTimeout = TimeSpan.FromSeconds(300);
@@ -29,118 +29,20 @@ namespace XBee
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(30);
         private readonly object _frameIdLock = new object();
 
+        private readonly SemaphoreSlim _initializeSemaphoreSlim = new SemaphoreSlim(1);
+
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
         private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
 
         private SerialConnection _connection;
         private byte _frameId = byte.MinValue;
-        private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
-
-        private EventHandler<MemberSerializedEventArgs> _frameMemberSerialized;
         private EventHandler<MemberSerializedEventArgs> _frameMemberDeserialized;
-        private EventHandler<MemberSerializingEventArgs> _frameMemberSerializing;
         private EventHandler<MemberSerializingEventArgs> _frameMemberDeserializing;
 
-        // ReSharper disable DelegateSubtraction
-
-        /// <summary>
-        ///     Occurs after a member has been serialized.
-        /// </summary>
-        public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized
-        {
-            add
-            {
-                _frameMemberSerialized += value;
-                var connection = _connection;
-                if (connection != null)
-                    connection.MemberSerialized += _frameMemberSerialized;
-            }
-
-            remove
-            {
-                _frameMemberSerialized -= value;
-                var connection = _connection;
-                if (connection != null)
-                    connection.MemberSerialized -= _frameMemberSerialized;
-            }
-        }
-
-        /// <summary>
-        ///     Occurs after a member has been deserialized.
-        /// </summary>
-        public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized
-        {
-            add
-            {
-                _frameMemberDeserialized += value;
-                var connection = _connection;
-                if (connection != null)
-                    connection.MemberDeserialized += _frameMemberDeserialized;
-            }
-
-            remove
-            {
-                _frameMemberDeserialized -= value;
-                var connection = _connection;
-                if (connection != null)
-                    connection.MemberDeserialized -= _frameMemberDeserialized;
-            }
-        }
-
-        /// <summary>
-        ///     Occurs before a member has been serialized.
-        /// </summary>
-        public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing
-        {
-            add
-            {
-                _frameMemberSerializing += value;
-                var connection = _connection;
-                if (connection != null)
-                    connection.MemberSerializing += _frameMemberSerializing;
-            }
-
-            remove
-            {
-                _frameMemberSerializing -= value;
-                var connection = _connection;
-                if (connection != null)
-                    connection.MemberSerializing -= _frameMemberSerializing;
-            }
-        }
-
-        /// <summary>
-        ///     Occurs before a member has been deserialized.
-        /// </summary>
-        public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing
-        {
-            add
-            {
-                _frameMemberDeserializing += value;
-                var connection = _connection;
-                if (connection != null)
-                    connection.MemberDeserializing += _frameMemberDeserializing;
-            }
-
-            remove
-            {
-                _frameMemberDeserializing -= value;
-                var connection = _connection;
-                if (connection != null)
-                    connection.MemberDeserializing -= _frameMemberDeserializing;
-            }
-        }
-
-        // ReSharper restore DelegateSubtraction
-
-        public HardwareVersion? HardwareVersion { get; private set; }
-
-        /// <summary>
-        ///     Get the local node.
-        /// </summary>
-        public XBeeNode Local { get; private set; }
-
-        public bool IsOpen => _connection?.IsOpen ?? false;
+        private EventHandler<MemberSerializedEventArgs> _frameMemberSerialized;
+        private EventHandler<MemberSerializingEventArgs> _frameMemberSerializing;
+        private bool _isInitialized;
+        private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
         [Obsolete("Use XBeeController(port, baudRate)")]
         public XBeeController()
@@ -151,6 +53,15 @@ namespace XBee
         {
             Connect(port, baudRate);
         }
+
+        public HardwareVersion? HardwareVersion { get; private set; }
+
+        /// <summary>
+        ///     Get the local node.
+        /// </summary>
+        public XBeeNode Local { get; private set; }
+
+        public bool IsOpen => _connection?.IsOpen ?? false;
 
         public void Dispose()
         {
@@ -187,7 +98,7 @@ namespace XBee
         /// <summary>
         ///     Occurs when IP data is received.
         /// </summary>
-        public event EventHandler<InternetDataReceivedEventArgs> InternetDataReceived; 
+        public event EventHandler<InternetDataReceivedEventArgs> InternetDataReceived;
 
         /// <summary>
         ///     Open a local node.
@@ -199,8 +110,10 @@ namespace XBee
         public async Task OpenAsync(string port, int baudRate)
         {
             if (IsOpen)
+            {
                 throw new InvalidOperationException(
                     "The controller is already connected, please close the existing connection.");
+            }
 
             _connection?.Dispose();
 
@@ -209,7 +122,7 @@ namespace XBee
                 _connection.Open();
                 return;
             }
-            
+
             _connection = new SerialConnection(port, baudRate);
 
             try
@@ -232,63 +145,6 @@ namespace XBee
             _connection.Open();
             await Initialize();
             await Task.FromResult(0);
-        }
-
-        private void Connect(string port, int baudRate)
-        {
-            _connection = new SerialConnection(port, baudRate);
-
-            if (_frameMemberDeserialized != null)
-                _connection.MemberDeserialized += _frameMemberDeserialized;
-
-            if (_frameMemberDeserializing != null)
-                _connection.MemberDeserializing += _frameMemberDeserializing;
-
-            if (_frameMemberSerialized != null)
-                _connection.MemberSerialized += _frameMemberSerialized;
-
-            if (_frameMemberDeserialized != null)
-                _connection.MemberDeserialized += _frameMemberDeserialized;
-
-            _connection.FrameReceived += OnFrameReceived;
-        }
-
-        private readonly SemaphoreSlim _initializeSemaphoreSlim = new SemaphoreSlim(1);
-        private bool _isInitialized;
-
-        private async Task Initialize()
-        {
-            if (_isInitialized)
-                return;
-
-            await _initializeSemaphoreSlim.WaitAsync();
-
-            if (_isInitialized)
-                return;
-
-            try
-            {
-                /* Unfortunately the protocol changes based on what type of hardware we're using... */
-                HardwareVersion = await GetHardwareVersion();
-                _connection.CoordinatorHardwareVersion = HardwareVersion;
-
-                /* We want the receiver to have the hardware version in context so cycle the connection */
-                _connection.Close();
-
-                // This is to address a .net (windows?) serial port management issue
-                await TaskExtensions.Retry(() => _connection.Open(),
-                    TimeSpan.FromSeconds(3), typeof (UnauthorizedAccessException));
-
-                // ReSharper disable PossibleInvalidOperationException
-                Local = CreateNode(HardwareVersion.Value);
-                // ReSharper restore PossibleInvalidOperationException
-
-                _isInitialized = true;
-            }
-            finally
-            {
-                _initializeSemaphoreSlim.Release();
-            }
         }
 
         /// <summary>
@@ -314,7 +170,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Create a node.
+        ///     Create a node.
         /// </summary>
         /// <param name="address">The address of the node or null for the controller node.</param>
         /// <param name="autodetectHardwareVersion">If true query node for hardware version.  Otherwise assume controller version.</param>
@@ -324,14 +180,18 @@ namespace XBee
             await Initialize();
 
             if (address == null)
+            {
                 return Local;
+            }
 
             HardwareVersion version;
 
             if (autodetectHardwareVersion)
             {
                 if (!IsOpen)
+                {
                     throw new InvalidOperationException("Connection closed.");
+                }
 
                 version = await
                     TaskExtensions.Retry(async () => await GetHardwareVersion(address), TimeSpan.FromSeconds(5),
@@ -346,7 +206,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Create a node.
+        ///     Create a node.
         /// </summary>
         /// <param name="address">The address of the node or null for the controller node.</param>
         /// <param name="version">The hardware version to use for the specified node.</param>
@@ -356,14 +216,128 @@ namespace XBee
             return await Task.FromResult(CreateNode(version, address));
         }
 
-        private async Task<HardwareVersion> GetHardwareVersion(NodeAddress address = null)
+        /// <summary>
+        ///     Get the controller sample source.
+        /// </summary>
+        public IObservable<SourcedSample> GetSampleSource()
         {
-            var version =
-                await
-                    ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
-                        TimeSpan.FromSeconds(1));
+            return _sampleSource;
+        }
 
-            return version.HardwareVersion;
+        /// <summary>
+        ///     Get the controller received data source.
+        /// </summary>
+        public IObservable<SourcedData> GetReceivedDataSource()
+        {
+            return _receivedDataSource;
+        }
+
+        /// <summary>
+        ///     Start network discovery.  The discovery of a node will result in a <see cref="NodeDiscovered" /> event.
+        /// </summary>
+        public async Task DiscoverNetworkAsync()
+        {
+            await DiscoverNetworkAsync(NetworkDiscoveryTimeout);
+        }
+
+        /// <summary>
+        ///     Start network discovery.  The discovery of a node will result in a <see cref="NodeDiscovered" /> event.
+        /// </summary>
+        /// <param name="timeout">The amount of time to wait until discovery responses are ignored</param>
+        /// <remarks>During network discovery nodes may be unresponsive</remarks>
+        public async Task DiscoverNetworkAsync(TimeSpan timeout)
+        {
+            var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
+
+            await ExecuteMultiQueryAsync(atCommandFrame, new Action<AtCommandResponseFrame>(
+                async frame =>
+                {
+                    var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
+
+                    if (NodeDiscovered != null && discoveryData?.LongAddress != null && !discoveryData.IsCoordinator)
+                    {
+                        var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
+
+                        // XBees have trouble recovering from discovery
+                        await Task.Delay(500);
+
+                        try
+                        {
+                            var node = await GetNodeAsync(address);
+
+                            var signalStrength = discoveryData.ReceivedSignalStrengthIndicator?.SignalStrength;
+
+                            NodeDiscovered?.Invoke(this,
+                                new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
+                                    node));
+                        }
+                        catch (TimeoutException)
+                        {
+                            /* if we timeout getting the remote node info, no need to bubble up.  
+                             * We just won't include the node in discovery */
+                        }
+                    }
+                }), timeout);
+        }
+
+        /// <summary>
+        ///     Try to find and open a local node.
+        /// </summary>
+        /// <param name="ports">Ports to scan</param>
+        /// <param name="baudRate">Baud rate, typically 9600 or 115200</param>
+        /// <returns>The controller or null if no controller was found</returns>
+        public static async Task<XBeeController> FindAndOpenAsync(IEnumerable<string> ports, int baudRate)
+        {
+            foreach (var port in ports)
+            {
+                try
+                {
+                    var controller = new XBeeController(port, baudRate);
+                    await controller.OpenAsync();
+                    return controller;
+                }
+                catch (InvalidOperationException)
+                {
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                }
+                catch (ArgumentException)
+                {
+                }
+                catch (TimeoutException)
+                {
+                }
+                catch (IOException)
+                {
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        ///     Try to find and open a local node.
+        /// </summary>
+        /// <param name="ports">Ports to scan</param>
+        /// <param name="baudRate">Baud rate, typically 9600 or 115200</param>
+        /// <returns>The controller or null if no controller was found</returns>
+        public static async Task<XBeeController> FindAsync(IEnumerable<string> ports, int baudRate)
+        {
+            var controller = await FindAndOpenAsync(ports, baudRate);
+            controller.Close();
+            return controller;
+        }
+
+        public void Close()
+        {
+            if (IsOpen)
+            {
+                _connection.Close();
+            }
         }
 
         /// <summary>
@@ -385,7 +359,9 @@ namespace XBee
         internal async Task ExecuteAsync(FrameContent frame, CancellationToken cancellationToken)
         {
             if (!IsOpen)
+            {
                 throw new InvalidOperationException("Controller must be open to execute commands.");
+            }
 
             await _connection.Send(frame, cancellationToken);
         }
@@ -421,7 +397,8 @@ namespace XBee
         /// <param name="frame">The frame to send</param>
         /// <param name="timeout">Timeout</param>
         /// <returns>The response frame</returns>
-        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout)
+        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame,
+            TimeSpan timeout)
             where TResponseFrame : CommandResponseFrameContent
         {
             return await ExecuteQueryAsync<TResponseFrame>(frame, timeout, CancellationToken.None);
@@ -435,7 +412,8 @@ namespace XBee
         /// <param name="timeout">Timeout</param>
         /// <param name="cancellationToken">A cancellation token used to cancel the query.</param>
         /// <returns>The response frame</returns>
-        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame, TimeSpan timeout,
+        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame,
+            TimeSpan timeout,
             CancellationToken cancellationToken)
             where TResponseFrame : CommandResponseFrameContent
         {
@@ -519,7 +497,9 @@ namespace XBee
 
             if (address == null)
             {
-                var atCommandFrame = queueLocal ? new AtQueuedCommandFrameContent(command) : new AtCommandFrameContent(command);
+                var atCommandFrame = queueLocal
+                    ? new AtQueuedCommandFrameContent(command)
+                    : new AtCommandFrameContent(command);
                 var response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame, timeout);
                 responseContent = response.Content;
             }
@@ -533,7 +513,9 @@ namespace XBee
             }
 
             if (responseContent.Status != AtCommandStatus.Success)
+            {
                 throw new AtCommandException(responseContent.Status);
+            }
 
             return responseContent.Data as TResponseData;
         }
@@ -545,9 +527,103 @@ namespace XBee
         /// <param name="address">The address of the node.  If this is null the command will be execute on the local node.</param>
         /// <param name="queueLocal">Queue this command for deferred execution if issued to a local controller.</param>
         /// <returns></returns>
-        internal async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null, bool queueLocal = false)
+        internal async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null,
+            bool queueLocal = false)
         {
             await ExecuteAtQueryAsync<AtCommandResponseFrameData>(command, address, queueLocal);
+        }
+
+        internal async Task Reset()
+        {
+            _modemResetTaskCompletionSource = new TaskCompletionSource<ModemStatus>();
+            await ExecuteAtCommandAsync(new ResetCommand());
+
+            var delayCancellationTokenSource = new CancellationTokenSource();
+            var delayTask = Task.Delay(ModemResetTimeout, delayCancellationTokenSource.Token);
+
+            if (await Task.WhenAny(_modemResetTaskCompletionSource.Task, delayTask) == delayTask)
+            {
+                throw new TimeoutException("No modem status received after reset.");
+            }
+
+            delayCancellationTokenSource.Cancel();
+            _modemResetTaskCompletionSource = null;
+        }
+
+        private void Connect(string port, int baudRate)
+        {
+            _connection = new SerialConnection(port, baudRate);
+
+            if (_frameMemberDeserialized != null)
+            {
+                _connection.MemberDeserialized += _frameMemberDeserialized;
+            }
+
+            if (_frameMemberDeserializing != null)
+            {
+                _connection.MemberDeserializing += _frameMemberDeserializing;
+            }
+
+            if (_frameMemberSerialized != null)
+            {
+                _connection.MemberSerialized += _frameMemberSerialized;
+            }
+
+            if (_frameMemberDeserialized != null)
+            {
+                _connection.MemberDeserialized += _frameMemberDeserialized;
+            }
+
+            _connection.FrameReceived += OnFrameReceived;
+        }
+
+        private async Task Initialize()
+        {
+            if (_isInitialized)
+            {
+                return;
+            }
+
+            await _initializeSemaphoreSlim.WaitAsync();
+
+            if (_isInitialized)
+            {
+                return;
+            }
+
+            try
+            {
+                /* Unfortunately the protocol changes based on what type of hardware we're using... */
+                HardwareVersion = await GetHardwareVersion();
+                _connection.CoordinatorHardwareVersion = HardwareVersion;
+
+                /* We want the receiver to have the hardware version in context so cycle the connection */
+                _connection.Close();
+
+                // This is to address a .net (windows?) serial port management issue
+                await TaskExtensions.Retry(() => _connection.Open(),
+                    TimeSpan.FromSeconds(3), typeof(UnauthorizedAccessException));
+
+                // ReSharper disable PossibleInvalidOperationException
+                Local = CreateNode(HardwareVersion.Value);
+                // ReSharper restore PossibleInvalidOperationException
+
+                _isInitialized = true;
+            }
+            finally
+            {
+                _initializeSemaphoreSlim.Release();
+            }
+        }
+
+        private async Task<HardwareVersion> GetHardwareVersion(NodeAddress address = null)
+        {
+            var version =
+                await
+                    ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
+                        TimeSpan.FromSeconds(1));
+
+            return version.HardwareVersion;
         }
 
         /// <summary>
@@ -567,8 +643,13 @@ namespace XBee
             var callbackProxy = new Action<CommandResponseFrameContent>(callbackFrame =>
             {
                 if (context == null)
+                {
                     callback((TResponseFrame) callbackFrame);
-                else context.Post(state => callback((TResponseFrame) callbackFrame), null);
+                }
+                else
+                {
+                    context.Post(state => callback((TResponseFrame) callbackFrame), null);
+                }
             });
 
             ExecuteCallbacks.AddOrUpdate(frame.FrameId, b => callbackProxy, (b, source) => callbackProxy);
@@ -579,137 +660,6 @@ namespace XBee
 
             Action<CommandResponseFrameContent> action;
             ExecuteCallbacks.TryRemove(frame.FrameId, out action);
-        }
-
-        /// <summary>
-        ///     Get the controller sample source.
-        /// </summary>
-        public IObservable<SourcedSample> GetSampleSource()
-        {
-            return _sampleSource;
-        }
-
-        /// <summary>
-        ///     Get the controller received data source.
-        /// </summary>
-        public IObservable<SourcedData> GetReceivedDataSource()
-        {
-            return _receivedDataSource;
-        }
-
-        /// <summary>
-        ///     Start network discovery.  The discovery of a node will result in a <see cref="NodeDiscovered" /> event.
-        /// </summary>
-        public async Task DiscoverNetworkAsync()
-        {
-            await DiscoverNetworkAsync(NetworkDiscoveryTimeout);
-        }
-
-        /// <summary>
-        ///     Start network discovery.  The discovery of a node will result in a <see cref="NodeDiscovered" /> event.
-        /// </summary>
-        /// <param name="timeout">The amount of time to wait until discovery responses are ignored</param>
-        /// <remarks>During network discovery nodes may be unresponsive</remarks>
-        public async Task DiscoverNetworkAsync(TimeSpan timeout)
-        {
-            var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
-
-            await ExecuteMultiQueryAsync(atCommandFrame, new Action<AtCommandResponseFrame>(
-                async frame =>
-                {
-                    var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
-
-                    if (NodeDiscovered != null && discoveryData?.LongAddress != null && !discoveryData.IsCoordinator)
-                    {
-                        var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
-
-                        // XBees have trouble recovering from discovery
-                        await Task.Delay(500);
-
-                        try
-                        {
-                            var node = await GetNodeAsync(address);
-
-                            var signalStrength = discoveryData.ReceivedSignalStrengthIndicator?.SignalStrength;
-
-                            NodeDiscovered?.Invoke(this,
-                                new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
-                                    node));
-                        }
-                        catch (TimeoutException)
-                        {
-                            /* if we timeout getting the remote node info, no need to bubble up.  
-                             * We just won't include the node in discovery */
-                        }
-                    }
-                }), timeout);
-        }
-        
-        /// <summary>
-        ///     Try to find and open a local node.
-        /// </summary>
-        /// <param name="ports">Ports to scan</param>
-        /// <param name="baudRate">Baud rate, typically 9600 or 115200</param>
-        /// <returns>The controller or null if no controller was found</returns>
-        public static async Task<XBeeController> FindAndOpenAsync(IEnumerable<string> ports, int baudRate)
-        {
-            foreach (var port in ports)
-            {
-                try
-                {
-                    var controller = new XBeeController(port, baudRate);
-                    await controller.OpenAsync();
-                    return controller;
-                }
-                catch (InvalidOperationException)
-                {
-                }
-                catch (UnauthorizedAccessException)
-                {
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                }
-                catch (ArgumentException)
-                {
-                }
-                catch (TimeoutException)
-                {
-                }
-                catch (IOException)
-                {
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        ///     Try to find and open a local node.
-        /// </summary>
-        /// <param name="ports">Ports to scan</param>
-        /// <param name="baudRate">Baud rate, typically 9600 or 115200</param>
-        /// <returns>The controller or null if no controller was found</returns>
-        public static async Task<XBeeController> FindAsync(IEnumerable<string> ports, int baudRate)
-        {
-            var controller = await FindAndOpenAsync(ports, baudRate);
-            controller.Close();
-            return controller;
-        }
-
-        internal async Task Reset()
-        {
-            _modemResetTaskCompletionSource = new TaskCompletionSource<ModemStatus>();
-            await ExecuteAtCommandAsync(new ResetCommand());
-
-            var delayCancellationTokenSource = new CancellationTokenSource();
-            var delayTask = Task.Delay(ModemResetTimeout, delayCancellationTokenSource.Token);
-
-            if (await Task.WhenAny(_modemResetTaskCompletionSource.Task, delayTask) == delayTask)
-                throw new TimeoutException("No modem status received after reset.");
-
-            delayCancellationTokenSource.Cancel();
-            _modemResetTaskCompletionSource = null;
         }
 
         private XBeeNode CreateNode(HardwareVersion hardwareVersion, NodeAddress address = null)
@@ -795,11 +745,11 @@ namespace XBee
             else if (content is SensorReadIndicatorFrame)
             {
                 var sensorFrame = content as SensorReadIndicatorFrame;
-                var sensorSample = new SensorSample(sensorFrame.OneWireSensor, 
-                    sensorFrame.SensorValueA, 
-                    sensorFrame.SensorValueB, 
-                    sensorFrame.SensorValueC, 
-                    sensorFrame.SensorValueD, 
+                var sensorSample = new SensorSample(sensorFrame.OneWireSensor,
+                    sensorFrame.SensorValueA,
+                    sensorFrame.SensorValueB,
+                    sensorFrame.SensorValueC,
+                    sensorFrame.SensorValueD,
                     sensorFrame.TemperatureCelsius);
 
                 var address = sensorFrame.GetAddress();
@@ -836,16 +786,120 @@ namespace XBee
                 }
 
                 if (_frameId == 0)
+                {
                     _frameId = 1;
+                }
 
                 return _frameId;
             }
         }
 
-        public void Close()
+        // ReSharper disable DelegateSubtraction
+
+        /// <summary>
+        ///     Occurs after a member has been serialized.
+        /// </summary>
+        public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized
         {
-            if (IsOpen)
-                _connection.Close();
+            add
+            {
+                _frameMemberSerialized += value;
+                var connection = _connection;
+                if (connection != null)
+                {
+                    connection.MemberSerialized += _frameMemberSerialized;
+                }
+            }
+
+            remove
+            {
+                _frameMemberSerialized -= value;
+                var connection = _connection;
+                if (connection != null)
+                {
+                    connection.MemberSerialized -= _frameMemberSerialized;
+                }
+            }
         }
+
+        /// <summary>
+        ///     Occurs after a member has been deserialized.
+        /// </summary>
+        public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized
+        {
+            add
+            {
+                _frameMemberDeserialized += value;
+                var connection = _connection;
+                if (connection != null)
+                {
+                    connection.MemberDeserialized += _frameMemberDeserialized;
+                }
+            }
+
+            remove
+            {
+                _frameMemberDeserialized -= value;
+                var connection = _connection;
+                if (connection != null)
+                {
+                    connection.MemberDeserialized -= _frameMemberDeserialized;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Occurs before a member has been serialized.
+        /// </summary>
+        public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing
+        {
+            add
+            {
+                _frameMemberSerializing += value;
+                var connection = _connection;
+                if (connection != null)
+                {
+                    connection.MemberSerializing += _frameMemberSerializing;
+                }
+            }
+
+            remove
+            {
+                _frameMemberSerializing -= value;
+                var connection = _connection;
+                if (connection != null)
+                {
+                    connection.MemberSerializing -= _frameMemberSerializing;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Occurs before a member has been deserialized.
+        /// </summary>
+        public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing
+        {
+            add
+            {
+                _frameMemberDeserializing += value;
+                var connection = _connection;
+                if (connection != null)
+                {
+                    connection.MemberDeserializing += _frameMemberDeserializing;
+                }
+            }
+
+            remove
+            {
+                _frameMemberDeserializing -= value;
+                var connection = _connection;
+                if (connection != null)
+                {
+                    connection.MemberDeserializing -= _frameMemberDeserializing;
+                }
+            }
+        }
+
+        // ReSharper restore DelegateSubtraction
     }
 }

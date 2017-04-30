@@ -28,7 +28,7 @@ namespace XBee
         /// <summary>
         /// The hardware version for this node.
         /// </summary>
-        public HardwareVersion HardwareVersion { get; private set; }
+        public HardwareVersion HardwareVersion { get; }
 
         /// <summary>
         /// The address of this node.
@@ -508,22 +508,31 @@ namespace XBee
 
         private void ControllerOnDataReceived(object sender, SourcedDataReceivedEventArgs e)
         {
-            if (DataReceived != null && e.Address.Equals(GetAddressInternal()))
-                DataReceived(this, new DataReceivedEventArgs(e.Data));
+            if (e.Address.Equals(GetAddressInternal()))
+            {
+                DataReceived?.Invoke(this, new DataReceivedEventArgs(e.Data));
+            }
         }
         
         private void ControllerOnSampleReceived(object sender, SourcedSampleReceivedEventArgs e)
         {
-            if (SampleReceived != null && e.Address.Equals(GetAddressInternal()))
-                SampleReceived(this, new SampleReceivedEventArgs(e.DigitalChannels, e.DigitalSampleState, e.AnalogChannels, e.AnalogSamples));
+            if (e.Address.Equals(GetAddressInternal()))
+            {
+                SampleReceived?.Invoke(this,
+                    new SampleReceivedEventArgs(e.DigitalChannels, e.DigitalSampleState, e.AnalogChannels,
+                        e.AnalogSamples));
+            }
         }
 
         private void ControllerOnSensorSampleReceived(object sender, SourcedSensorSampleReceivedEventArgs e)
         {
-            if (SensorSampleReceived != null && e.Address.Equals(GetAddressInternal()))
-                SensorSampleReceived(this,
-                    new SensorSampleReceivedEventArgs(e.OneWireSensor, e.SensorValueA, e.SensorValueB, e.SensorValueC,
+            if (e.Address.Equals(GetAddressInternal()))
+            {
+                SensorSampleReceived?.Invoke(this,
+                    new SensorSampleReceivedEventArgs(e.OneWireSensor, e.SensorValueA, e.SensorValueB,
+                        e.SensorValueC,
                         e.SensorValueD, e.TemperatureCelsius));
+            }
         }
     }
 }
