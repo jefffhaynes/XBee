@@ -1,16 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using BinarySerialization;
 using XBee.Frames.AtCommands;
 
-#if NETCORE
-using Windows.Devices.SerialCommunication;
-#else
 using System.IO.Ports;
-#endif
 
 namespace XBee
 {
@@ -18,33 +12,23 @@ namespace XBee
     {
         private readonly FrameSerializer _frameSerializer = new FrameSerializer();
 
-#if NETCORE
-        private readonly SerialDevice _serialPort;
-#else
         private readonly SerialPort _serialPort;
-#endif
 
         private CancellationTokenSource _readCancellationTokenSource;
 
         private readonly object _openCloseLock = new object();
         private readonly SemaphoreSlim _writeSemaphoreSlim = new SemaphoreSlim(1);
 
-#if NETCORE
-        public SerialConnection(SerialDevice device)
-        {
-            _serialPort = device;
-#else
+
         public SerialConnection(string port, int baudRate)
         {
-            
             _serialPort = new SerialPort(port, baudRate);
-#endif
         }
 
         public HardwareVersion? CoordinatorHardwareVersion
         {
-            get { return _frameSerializer.ControllerHardwareVersion; }
-            set { _frameSerializer.ControllerHardwareVersion = value; }
+            get => _frameSerializer.ControllerHardwareVersion;
+            set => _frameSerializer.ControllerHardwareVersion = value;
         }
 
         public void Dispose()
@@ -57,8 +41,8 @@ namespace XBee
         /// </summary>
         public event EventHandler<MemberSerializedEventArgs> MemberSerialized
         {
-            add { _frameSerializer.MemberSerialized += value; }
-            remove { _frameSerializer.MemberSerialized -= value; }
+            add => _frameSerializer.MemberSerialized += value;
+            remove => _frameSerializer.MemberSerialized -= value;
         }
 
         /// <summary>
@@ -66,8 +50,8 @@ namespace XBee
         /// </summary>
         public event EventHandler<MemberSerializedEventArgs> MemberDeserialized
         {
-            add { _frameSerializer.MemberDeserialized += value; }
-            remove { _frameSerializer.MemberDeserialized -= value; }
+            add => _frameSerializer.MemberDeserialized += value;
+            remove => _frameSerializer.MemberDeserialized -= value;
         }
 
         /// <summary>
@@ -75,8 +59,8 @@ namespace XBee
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> MemberSerializing
         {
-            add { _frameSerializer.MemberSerializing += value; }
-            remove { _frameSerializer.MemberSerializing -= value; }
+            add => _frameSerializer.MemberSerializing += value;
+            remove => _frameSerializer.MemberSerializing -= value;
         }
 
         /// <summary>
@@ -84,8 +68,8 @@ namespace XBee
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> MemberDeserializing
         {
-            add { _frameSerializer.MemberDeserializing += value; }
-            remove { _frameSerializer.MemberDeserializing -= value; }
+            add => _frameSerializer.MemberDeserializing += value;
+            remove => _frameSerializer.MemberDeserializing -= value;
         }
 
         public bool IsOpen => _serialPort.IsOpen;
@@ -104,11 +88,7 @@ namespace XBee
 
             try
             {
-#if NETCORE
-                await _serialPort.OutputStream.WriteAsync(data.AsBuffer());
-#else
                 await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken);
-#endif
             }
             finally
             {
@@ -124,9 +104,8 @@ namespace XBee
         {
             lock (_openCloseLock)
             {
-#if !NETCORE
                 _serialPort.Open();
-#endif
+
                 _readCancellationTokenSource = new CancellationTokenSource();
                 CancellationToken cancellationToken = _readCancellationTokenSource.Token;
 
@@ -136,11 +115,8 @@ namespace XBee
                     {
                         try
                         {
-#if NETCORE
-                            Frame frame = _frameSerializer.Deserialize(_serialPort.InputStream.AsStreamForRead());
-#else
                             Frame frame = _frameSerializer.Deserialize(_serialPort.BaseStream);
-#endif
+
                             var handler = FrameReceived;
                             if (handler != null)
                                 Task.Run(() =>
@@ -174,10 +150,7 @@ namespace XBee
                     return;
 
                 _readCancellationTokenSource.Cancel();
-
-#if !NETCORE
                 _serialPort.Close();
-#endif
 
                 try
                 {

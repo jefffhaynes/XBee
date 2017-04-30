@@ -26,32 +26,32 @@ namespace XBee
         }
 
         /// <summary>
-        /// The hardware version for this node.
+        ///     The hardware version for this node.
         /// </summary>
         public HardwareVersion HardwareVersion { get; }
 
         /// <summary>
-        /// The address of this node.
+        ///     The address of this node.
         /// </summary>
         public virtual NodeAddress Address { get; }
 
         /// <summary>
-        /// Occurs when data is received from this node.
+        ///     Occurs when data is received from this node.
         /// </summary>
         public event EventHandler<DataReceivedEventArgs> DataReceived;
 
         /// <summary>
-        /// Occurs when a sample is received from this node.
+        ///     Occurs when a sample is received from this node.
         /// </summary>
         public event EventHandler<SampleReceivedEventArgs> SampleReceived;
-        
+
         /// <summary>
-        /// Occurs when a sample is received from this node.
+        ///     Occurs when a sample is received from this node.
         /// </summary>
         public event EventHandler<SensorSampleReceivedEventArgs> SensorSampleReceived;
 
         /// <summary>
-        /// Force a hardware reset of this node.
+        ///     Force a hardware reset of this node.
         /// </summary>
         /// <returns></returns>
         public async Task ResetAsync()
@@ -64,18 +64,18 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the configured name of this node.
+        ///     Gets the configured name of this node.
         /// </summary>
         /// <returns>The name of this node</returns>
         public async Task<string> GetNodeIdentifierAsync()
         {
-            NodeIdentifierResponseData response =
+            var response =
                 await ExecuteAtQueryAsync<NodeIdentifierResponseData>(new NodeIdentifierCommand());
             return response.Id;
         }
 
         /// <summary>
-        /// Sets the configured name of this node.
+        ///     Sets the configured name of this node.
         /// </summary>
         /// <param name="id">The new name for this node</param>
         public async Task SetNodeIdentifierAsync(string id)
@@ -84,18 +84,18 @@ namespace XBee
         }
 
         /// <summary>
-        /// Get the operating channel used between nodes.
+        ///     Get the operating channel used between nodes.
         /// </summary>
         /// <returns></returns>
         public virtual async Task<byte> GetChannelAsync()
         {
-            PrimitiveResponseData<byte> response =
+            var response =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new OperatingChannelCommand());
             return response.Value;
         }
 
         /// <summary>
-        /// Sets the operating channel used between nodes.
+        ///     Sets the operating channel used between nodes.
         /// </summary>
         /// <returns></returns>
         public virtual async Task SetChannelAsync(byte channel)
@@ -104,7 +104,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the baud rate configured for the serial interface on this node.
+        ///     Gets the baud rate configured for the serial interface on this node.
         /// </summary>
         /// <returns></returns>
         public async Task<uint> GetBaudRateAsync()
@@ -114,7 +114,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the baud rate for the serial interface on this node.
+        ///     Sets the baud rate for the serial interface on this node.
         /// </summary>
         /// <param name="baudRate"></param>
         /// <returns></returns>
@@ -124,7 +124,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets a non-standard baud rate for the serial interface on this node.
+        ///     Sets a non-standard baud rate for the serial interface on this node.
         /// </summary>
         /// <param name="baudRate"></param>
         /// <returns></returns>
@@ -134,7 +134,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the configured parity for the serial interface on this node.
+        ///     Gets the configured parity for the serial interface on this node.
         /// </summary>
         /// <returns></returns>
         public async Task<Parity> GetParityAsync()
@@ -144,7 +144,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the parity for the serial interface on this node.
+        ///     Sets the parity for the serial interface on this node.
         /// </summary>
         /// <param name="parity"></param>
         /// <returns></returns>
@@ -154,7 +154,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the configured number of stop bits for the serial interface on this node.
+        ///     Gets the configured number of stop bits for the serial interface on this node.
         /// </summary>
         /// <returns></returns>
         public async Task<StopBits> GetStopBitsAsync()
@@ -164,7 +164,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the number of stop bits for the serial interface on this node.
+        ///     Sets the number of stop bits for the serial interface on this node.
         /// </summary>
         /// <param name="stopBits"></param>
         /// <returns></returns>
@@ -174,7 +174,8 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the number of character times of inter-character silence required before transmission begins when operating in Transparent mode.
+        ///     Gets the number of character times of inter-character silence required before transmission begins when operating in
+        ///     Transparent mode.
         /// </summary>
         /// <returns></returns>
         public async Task<byte> GetPacketizationTimeoutAsync()
@@ -184,7 +185,8 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the number of character times of inter-character silence required before transmission begins when operating in Transparent mode.
+        ///     Sets the number of character times of inter-character silence required before transmission begins when operating in
+        ///     Transparent mode.
         /// </summary>
         /// <param name="characterTimes"></param>
         /// <returns></returns>
@@ -194,7 +196,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the flow control threshold.
+        ///     Gets the flow control threshold.
         /// </summary>
         /// <returns></returns>
         public async Task<byte> GetFlowControlThresholdAsync()
@@ -204,7 +206,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the flow control threshold.
+        ///     Sets the flow control threshold.
         /// </summary>
         /// <param name="byteCount"></param>
         /// <returns></returns>
@@ -214,7 +216,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Get the configured API mode for this node.
+        ///     Get the configured API mode for this node.
         /// </summary>
         /// <returns></returns>
         public async Task<ApiMode> GetApiModeAsync()
@@ -224,7 +226,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Set the configured API mode for this node.
+        ///     Set the configured API mode for this node.
         /// </summary>
         /// <param name="mode"></param>
         /// <returns></returns>
@@ -234,7 +236,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Used to explicitly exit command mode.
+        ///     Used to explicitly exit command mode.
         /// </summary>
         /// <returns></returns>
         public async Task ExitCommandModeAsync()
@@ -243,20 +245,20 @@ namespace XBee
         }
 
         /// <summary>
-        /// Queries the long network address for this node.
+        ///     Queries the long network address for this node.
         /// </summary>
         /// <returns>The long network address</returns>
         public virtual async Task<NodeAddress> GetAddressAsync()
         {
-            PrimitiveResponseData<uint> high =
+            var high =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
-            PrimitiveResponseData<uint> low =
+            var low =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand());
 
             var address = new LongAddress(high.Value, low.Value);
 
             // we have to do this nonsense because they decided to reuse "MY" for the cellular IP source address
-            PrimitiveResponseData<byte[]> source =
+            var source =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<byte[]>>(new SourceAddressCommand());
 
             var leValue = source.Value.Reverse().ToArray();
@@ -267,7 +269,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the long network address of this node.
+        ///     Sets the long network address of this node.
         /// </summary>
         /// <param name="address">The long network address</param>
         public virtual async Task SetDestinationAddressAsync(LongAddress address)
@@ -277,9 +279,9 @@ namespace XBee
             await ExecuteAtCommandAsync(new DestinationAddressLowCommand(address.Low));
             Address.LongAddress.Low = address.Low;
         }
-        
+
         /// <summary>
-        /// Queries the short network address of this node.
+        ///     Queries the short network address of this node.
         /// </summary>
         /// <param name="address">The short network address</param>
         /// <returns></returns>
@@ -289,32 +291,32 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the static serial number of this node.
+        ///     Gets the static serial number of this node.
         /// </summary>
         /// <returns>The serial number</returns>
         public virtual async Task<LongAddress> GetSerialNumberAsync()
         {
-            PrimitiveResponseData<uint> highAddress =
+            var highAddress =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberHighCommand());
-            PrimitiveResponseData<uint> lowAddress =
+            var lowAddress =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberLowCommand());
 
             return new LongAddress(highAddress.Value, lowAddress.Value);
         }
 
         /// <summary>
-        /// Gets the configured sleep mode for this node.
+        ///     Gets the configured sleep mode for this node.
         /// </summary>
         /// <returns>The sleep mode</returns>
         public virtual async Task<SleepMode> GetSleepModeAsync()
         {
-            PrimitiveResponseData<SleepMode> response =
+            var response =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<SleepMode>>(new SleepModeCommand());
             return response.Value;
         }
 
         /// <summary>
-        /// Sets the configured sleep mode for this node.
+        ///     Sets the configured sleep mode for this node.
         /// </summary>
         /// <param name="mode">The sleep mode</param>
         public virtual async Task SetSleepModeAsync(SleepMode mode)
@@ -323,48 +325,53 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets configuration for a channel on this node.
+        ///     Gets configuration for a channel on this node.
         /// </summary>
         /// <param name="channel">The channel</param>
         /// <returns>The channel configuration</returns>
         public virtual async Task<InputOutputConfiguration> GetInputOutputConfigurationAsync(InputOutputChannel channel)
         {
-            InputOutputResponseData response =
+            var response =
                 await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputConfigurationCommand(channel));
             return response.Value;
         }
 
         /// <summary>
-        /// Sets configuration for a channel on this node.
+        ///     Sets configuration for a channel on this node.
         /// </summary>
         /// <param name="channel">The channel</param>
         /// <param name="configuration">The channel configuration</param>
-        public virtual async Task SetInputOutputConfigurationAsync(InputOutputChannel channel, InputOutputConfiguration configuration)
+        public virtual async Task SetInputOutputConfigurationAsync(InputOutputChannel channel,
+            InputOutputConfiguration configuration)
         {
             await ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
         }
 
         /// <summary>
-        /// Gets channels configured for change detection.
+        ///     Gets channels configured for change detection.
         /// </summary>
         /// <returns>Flags indicating which channels are configured for change detection</returns>
         public virtual async Task<DigitalSampleChannels> GetChangeDetectionChannelsAsync()
         {
-            InputOutputChangeDetectionResponseData response =
+            var response =
                 await ExecuteAtQueryAsync<InputOutputChangeDetectionResponseData>(
                     new InputOutputChangeDetectionCommand());
 
             if (response.Channels != null)
+            {
                 return response.Channels.Value;
+            }
 
             if (response.ChannelsExt != null)
+            {
                 return response.ChannelsExt.Value;
+            }
 
             throw new InvalidOperationException("No channels returned.");
         }
 
         /// <summary>
-        /// Sets channels configured for change detection.
+        ///     Sets channels configured for change detection.
         /// </summary>
         /// <param name="channels">Flags indicating which channels to configure for change detection</param>
         /// <returns></returns>
@@ -374,7 +381,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Force this node to take and report a sample on configured channels.
+        ///     Force this node to take and report a sample on configured channels.
         /// </summary>
         public virtual async Task ForceSampleAsync()
         {
@@ -382,17 +389,17 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the configured sample rate.
+        ///     Gets the configured sample rate.
         /// </summary>
         /// <returns>The period between samples</returns>
         public virtual async Task<TimeSpan> GetSampleRateAsync()
         {
-            SampleRateResponseData response = await ExecuteAtQueryAsync<SampleRateResponseData>(new SampleRateCommand());
+            var response = await ExecuteAtQueryAsync<SampleRateResponseData>(new SampleRateCommand());
             return response.Interval;
         }
 
         /// <summary>
-        /// Sets the configured sample rate.
+        ///     Sets the configured sample rate.
         /// </summary>
         /// <param name="interval">The period between samples</param>
         public virtual async Task SetSampleRateAsync(TimeSpan interval)
@@ -401,18 +408,18 @@ namespace XBee
         }
 
         /// <summary>
-        /// Used to determine if encryption is enabled on this node.
+        ///     Used to determine if encryption is enabled on this node.
         /// </summary>
         /// <returns>True if encryption is enabled</returns>
         public virtual async Task<bool> IsEncryptionEnabledAsync()
         {
-            PrimitiveResponseData<bool> response =
+            var response =
                 await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new EncryptionEnableCommand());
             return response.Value;
         }
 
         /// <summary>
-        /// Used to enable encryption on this node.
+        ///     Used to enable encryption on this node.
         /// </summary>
         /// <param name="enabled">True to enable encryption</param>
         public async Task SetEncryptionEnabledAsync(bool enabled)
@@ -421,7 +428,8 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the configured symmetric encryption key for this node.  Only used if encryption is enabled.  There is no way to query the configured encryption key.
+        ///     Sets the configured symmetric encryption key for this node.  Only used if encryption is enabled.  There is no way
+        ///     to query the configured encryption key.
         /// </summary>
         /// <param name="key">A 16 byte symmetric encryption key</param>
         /// <returns></returns>
@@ -431,7 +439,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Commit configuration changes to this node.
+        ///     Commit configuration changes to this node.
         /// </summary>
         /// <returns></returns>
         public async Task WriteChangesAsync()
@@ -440,7 +448,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Subscribe to this node as a sample (not data) source.
+        ///     Subscribe to this node as a sample (not data) source.
         /// </summary>
         /// <returns></returns>
         public virtual IObservable<Sample> GetSamples()
@@ -451,7 +459,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Subscribe to this node as a data (not sample) source.
+        ///     Subscribe to this node as a data (not sample) source.
         /// </summary>
         /// <returns></returns>
         public virtual IObservable<byte[]> GetReceivedData()
@@ -462,22 +470,30 @@ namespace XBee
         }
 
         /// <summary>
-        /// Send data to this node.  This can either be used in transparent serial mode or to communicate with programmable nodes.
+        ///     Send data to this node.  This can either be used in transparent serial mode or to communicate with programmable
+        ///     nodes.
         /// </summary>
         /// <param name="data">The data to send</param>
-        /// <param name="enableAck">True to request an acknowledgment.  If an acknowledgment is requested and no acknowledgment is received a TimeoutException will be thrown.</param>
+        /// <param name="enableAck">
+        ///     True to request an acknowledgment.  If an acknowledgment is requested and no acknowledgment is
+        ///     received a TimeoutException will be thrown.
+        /// </param>
         public abstract Task TransmitDataAsync(byte[] data, bool enableAck = true);
 
         /// <summary>
-        /// Send data to this node.  This can either be used in transparent serial mode or to communicate with programmable nodes.
+        ///     Send data to this node.  This can either be used in transparent serial mode or to communicate with programmable
+        ///     nodes.
         /// </summary>
         /// <param name="data">The data to send</param>
         /// <param name="cancellationToken">Used to cancel the operation</param>
-        /// <param name="enableAck">True to request an acknowledgment.  If an acknowledgment is requested and no acknowledgment is received a TimeoutException will be thrown.</param>
+        /// <param name="enableAck">
+        ///     True to request an acknowledgment.  If an acknowledgment is requested and no acknowledgment is
+        ///     received a TimeoutException will be thrown.
+        /// </param>
         public abstract Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true);
 
         /// <summary>
-        /// Returns a stream that represents serial pass-though on the node.
+        ///     Returns a stream that represents serial pass-though on the node.
         /// </summary>
         /// <returns></returns>
         public virtual XBeeStream GetSerialStream()
@@ -513,7 +529,7 @@ namespace XBee
                 DataReceived?.Invoke(this, new DataReceivedEventArgs(e.Data));
             }
         }
-        
+
         private void ControllerOnSampleReceived(object sender, SourcedSampleReceivedEventArgs e)
         {
             if (e.Address.Equals(GetAddressInternal()))

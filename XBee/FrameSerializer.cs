@@ -20,8 +20,8 @@ namespace XBee
 
         public HardwareVersion? ControllerHardwareVersion
         {
-            get { return _serializationContext.ControllerHardwareVersion; }
-            set { _serializationContext.ControllerHardwareVersion = value; }
+            get => _serializationContext.ControllerHardwareVersion;
+            set => _serializationContext.ControllerHardwareVersion = value;
         }
 
         /// <summary>

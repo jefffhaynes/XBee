@@ -4,7 +4,7 @@ namespace XBee.Frames
 {
     public class AtCommandException : Exception
     {
-        public AtCommandStatus CommandStatus { get; private set; }
+        public AtCommandStatus CommandStatus { get; }
 
         public AtCommandException(AtCommandStatus commandStatus) : 
             base($"AT command failed with status '{commandStatus}'")

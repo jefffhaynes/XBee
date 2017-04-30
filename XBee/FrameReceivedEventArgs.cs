@@ -9,6 +9,6 @@ namespace XBee
             FrameContent = frameContent;
         }
 
-        public FrameContent FrameContent { get; private set; }
+        public FrameContent FrameContent { get; }
     }
 }

@@ -26,7 +26,7 @@ namespace XBee
 
         public ulong Value
         {
-            get { return ((ulong)High << 32) + Low; }
+            get => ((ulong)High << 32) + Low;
 
             set
             {
@@ -43,7 +43,7 @@ namespace XBee
 
         public bool Equals(LongAddress other)
         {
-            return Value.Equals(other.Value);
+            return other != null && Value.Equals(other.Value);
         }
 
         public override string ToString()

@@ -22,7 +22,7 @@ namespace XBee
 
         public bool Equals(ShortAddress other)
         {
-            return Value.Equals(other.Value);
+            return other != null && Value.Equals(other.Value);
         }
 
         public override string ToString()
