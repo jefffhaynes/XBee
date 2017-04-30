@@ -19,7 +19,7 @@ XBee
  * Data transmit
  * Data receive via events or [.NET Rx](https://rx.codeplex.com/)
 
-###Quick Start###
+### Quick Start ###
 
 Here is a simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
 
@@ -66,7 +66,7 @@ if(controller != null)
    // ...
 ```
 
-###Nodes###
+### Nodes ###
 
 The XBeeController class represents the local serial attached XBee API.  This would typically be a coordinator but could be any device to be controlled via a serial port.
 
@@ -91,11 +91,11 @@ The address for the remote node can be determined in a number of ways.  Either c
 
 Now that we have some nodes, let's do something with them...
 
-###Command and Events###
+### Command and Events ###
 
 XBees are based on a sort of command-event model where the coordinator is either telling the XBee to do something or the XBee is telling the coordinator that something happened.
 
-####Commands####
+#### Commands ####
 
 The first type of command is what XBee calls AT commands.  An example is a command that can be used to configure pins on the XBee, setting pins high or low or reserving them for input.
 
@@ -107,7 +107,7 @@ This will force pin DIO4 high.  Note that which physical pin this translates to 
 
 Below is a table summarizing the commands supported by this library.
 
-####AT Commands####
+#### AT Commands ####
 
 |       | Description            | Query                              | Command                            | S1 | S2 | Pro900 | Cellular |
 |:-----:|:-----------------------|:-----------------------------------|:-----------------------------------|:--:|:--:|:------:|:--------:|
@@ -152,7 +152,7 @@ All other commands are currently unsupported but feel free to file an issue if y
 
 Note 1: Use GetIPAddressAsync.
 
-####Serial Data####
+#### Serial Data ####
 
 The second type of command involves sending arbitrary serial data to a node.  In the simplest case this can act as a transparent passthrough as most XBees will pass the serial data to their local UART.  However, in the case of programmable XBees it is possible to intercept the serial data and store it, interpret it, etc.
 
@@ -160,7 +160,7 @@ The second type of command involves sending arbitrary serial data to a node.  In
 await node.TransmitDataAsync(Encoding.UTF8.GetBytes("Hello!"));
 ```
 
-###Events###
+### Events ###
 
 Somewhat confusingly, XBees have two different mechanisms for asychronously sending data to the coordinator.  The first is sampling and the second is serial data.  Samples coorespond to our pin example from above and represent the "input" part of GPIO.
 
