@@ -19,8 +19,10 @@ namespace XBee
                 }
                 catch (Exception e)
                 {
-                    if(e.GetType() != allowedExceptionType)
+                    if (e.GetType() != allowedExceptionType)
+                    {
                         throw;
+                    }
                 }
                 await Task.Delay(100);
             }
@@ -40,8 +42,10 @@ namespace XBee
                 }
                 catch (Exception e)
                 {
-                    if(allowedExceptionTypes.All(exception => e.GetType() != exception))
+                    if (allowedExceptionTypes.All(exception => e.GetType() != exception))
+                    {
                         throw;
+                    }
                 }
                 await Task.Delay(100);
             }

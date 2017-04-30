@@ -16,8 +16,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public SleepOptions? Options
         {
-            get { return Parameter as SleepOptions?; }
-            set { Parameter = value; }
+            get => Parameter as SleepOptions?;
+            set => Parameter = value;
         }
     }
 }

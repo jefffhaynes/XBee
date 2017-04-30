@@ -23,8 +23,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public InputOutputConfiguration? Configuration
         {
-            get { return Parameter as InputOutputConfiguration?; }
-            set { Parameter = Convert.ToByte(value); }
+            get => Parameter as InputOutputConfiguration?;
+            set => Parameter = Convert.ToByte(value);
         }
     }
 }

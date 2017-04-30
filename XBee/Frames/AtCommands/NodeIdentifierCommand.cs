@@ -18,8 +18,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public string Id
         {
-            get { return Parameter as string; }
-            set { Parameter = value; }
+            get => Parameter as string;
+            set => Parameter = value;
         }
     }
 }

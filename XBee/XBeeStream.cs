@@ -18,6 +18,22 @@ namespace XBee
             node.DataReceived += NodeOnDataReceived;
         }
 
+        public bool DisableAck { get; set; }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => true;
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override int ReadTimeout { get; set; }
+        public override int WriteTimeout { get; set; }
+
         public override void Flush()
         {
         }
@@ -54,6 +70,26 @@ namespace XBee
             return Task.FromResult(ReadImpl(buffer, offset, count, cancellationToken));
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (!disposing)
+                {
+                    return;
+                }
+
+                if (_node != null)
+                {
+                    _node.DataReceived -= NodeOnDataReceived;
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
         private int ReadImpl(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             var stream = new MemoryStream();
@@ -78,7 +114,7 @@ namespace XBee
 
             while (stream.Length < count)
             {
-                var remaining = count - (int)stream.Length;
+                var remaining = count - (int) stream.Length;
 
                 var block = _receivedDataQueue.Take(linkedTokenSource.Token);
 
@@ -96,40 +132,6 @@ namespace XBee
             stream.Write(buffer, 0, count);
             return count;
         }
-
-        public bool DisableAck { get; set; }
-
-        public override bool CanRead => true;
-        public override bool CanSeek => false;
-        public override bool CanWrite => true;
-        public override long Length => throw new NotSupportedException();
-
-        public override long Position
-        {
-            get => throw new NotSupportedException();
-            set => throw new NotSupportedException();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (!disposing)
-                {
-                    return;
-                }
-
-                if (_node != null)
-                    _node.DataReceived -= NodeOnDataReceived;
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
-
-        public override int ReadTimeout { get; set; }
-        public override int WriteTimeout { get; set; }
 
         private void NodeOnDataReceived(object sender, DataReceivedEventArgs dataReceivedEventArgs)
         {

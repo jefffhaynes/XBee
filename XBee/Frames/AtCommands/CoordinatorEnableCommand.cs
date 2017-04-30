@@ -16,8 +16,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public CoordinatorEnableState? EnableState
         {
-            get { return Parameter as CoordinatorEnableState?; }
-            set { Parameter = value; }
+            get => Parameter as CoordinatorEnableState?;
+            set => Parameter = value;
         }
     }
 }

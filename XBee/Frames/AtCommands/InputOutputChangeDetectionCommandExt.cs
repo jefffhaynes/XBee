@@ -17,8 +17,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public DigitalSampleChannels? Channels
         {
-            get { return Parameter as DigitalSampleChannels?; }
-            set { Parameter = value; }
+            get => Parameter as DigitalSampleChannels?;
+            set => Parameter = value;
         }
     }
 }

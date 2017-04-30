@@ -16,8 +16,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public ShortAddress Address
         {
-            get { return Parameter as ShortAddress; }
-            set { Parameter = value; }
+            get => Parameter as ShortAddress;
+            set => Parameter = value;
         }
     }
 }

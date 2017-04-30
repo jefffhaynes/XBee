@@ -17,8 +17,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public NodeMessagingOptions? Options
         {
-            get { return Parameter as NodeMessagingOptions?; }
-            set { Parameter = value; }
+            get => Parameter as NodeMessagingOptions?;
+            set => Parameter = value;
         }
     }
 }

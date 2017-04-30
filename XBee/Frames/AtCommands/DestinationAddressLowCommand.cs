@@ -16,8 +16,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public uint? Low
         {
-            get { return Parameter as uint?; }
-            set { Parameter = value; }
+            get => Parameter as uint?;
+            set => Parameter = value;
         }
     }
 }

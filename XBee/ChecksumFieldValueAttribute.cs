@@ -17,8 +17,10 @@ namespace XBee
 
         protected override void Compute(byte[] buffer, int offset, int count)
         {
-            for (int i = offset; i < count; i++)
+            for (var i = offset; i < count; i++)
+            {
                 _checksum = _checksum + buffer[i];
+            }
         }
 
         protected override object ComputeFinal()

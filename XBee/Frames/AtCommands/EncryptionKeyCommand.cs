@@ -25,8 +25,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public byte[] Key
         {
-            get { return Parameter as byte[]; }
-            set { Parameter = value; }
+            get => Parameter as byte[];
+            set => Parameter = value;
         }
     }
 }

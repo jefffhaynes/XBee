@@ -16,8 +16,8 @@ namespace XBee.Frames.AtCommands
         [Ignore]
         public bool? Enabled
         {
-            get { return Parameter as bool?; }
-            set { Parameter = value; }
+            get => Parameter as bool?;
+            set => Parameter = value;
         }
     }
 }
