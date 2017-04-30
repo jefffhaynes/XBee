@@ -114,11 +114,13 @@ namespace XBee
         {
             try
             {
-                if (disposing)
+                if (!disposing)
                 {
-                    if (_node != null)
-                        _node.DataReceived -= NodeOnDataReceived;
+                    return;
                 }
+
+                if (_node != null)
+                    _node.DataReceived -= NodeOnDataReceived;
             }
             finally
             {
