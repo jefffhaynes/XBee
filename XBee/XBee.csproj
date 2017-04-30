@@ -101,8 +101,10 @@
     <Compile Include="Frames\ModemStatusExtFrame.cs" />
     <Compile Include="Frames\RxSmsFrame.cs" />
     <Compile Include="Frames\RxIPv4Frame.cs" />
+    <Compile Include="Frames\TransmitOptionExplicit.cs" />
     <Compile Include="Frames\TxIPv4Frame.cs" />
     <Compile Include="Frames\TxIPv4Options.cs" />
+    <Compile Include="Frames\TxRequestExplicitFrame.cs" />
     <Compile Include="Frames\TxSmsFrame.cs" />
     <Compile Include="IAssociationIndicator.cs" />
     <Compile Include="InternetDataReceivedEventArgs.cs" />

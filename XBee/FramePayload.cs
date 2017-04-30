@@ -28,6 +28,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.TxRequest, typeof(TxRequestFrame))]
         [Subtype("FrameType", FrameType.TxRequest16, typeof(TxRequest16Frame))]
         [Subtype("FrameType", FrameType.TxRequestExt, typeof(TxRequestExtFrame))]
+        [Subtype("FrameType", FrameType.TxRequestExplicit, typeof(TxRequestExplicitFrame))]
         [Subtype("FrameType", FrameType.TxStatus, typeof(TxStatusFrame))]
         [Subtype("FrameType", FrameType.TxStatusExt, typeof(TxStatusExtFrame))]
         [Subtype("FrameType", FrameType.TxSms, typeof(TxSmsFrame))]
