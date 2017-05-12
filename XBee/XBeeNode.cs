@@ -57,10 +57,10 @@ namespace XBee
         public async Task ResetAsync()
         {
             /* We get no response from remote reset commands */
-            await ExecuteAtCommand(new ResetCommand());
+            await ExecuteAtCommand(new ResetCommand()).ConfigureAwait(false);
 
             /* Wait approximate reset time per documentation */
-            await Task.Delay(HardwareResetTime);
+            await Task.Delay(HardwareResetTime).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -70,7 +70,8 @@ namespace XBee
         public async Task<string> GetNodeIdentifierAsync()
         {
             var response =
-                await ExecuteAtQueryAsync<NodeIdentifierResponseData>(new NodeIdentifierCommand());
+                await ExecuteAtQueryAsync<NodeIdentifierResponseData>(new NodeIdentifierCommand())
+                    .ConfigureAwait(false);
             return response.Id;
         }
 
@@ -78,9 +79,9 @@ namespace XBee
         ///     Sets the configured name of this node.
         /// </summary>
         /// <param name="id">The new name for this node</param>
-        public async Task SetNodeIdentifierAsync(string id)
+        public Task SetNodeIdentifierAsync(string id)
         {
-            await ExecuteAtCommandAsync(new NodeIdentifierCommand(id));
+            return ExecuteAtCommandAsync(new NodeIdentifierCommand(id));
         }
 
         /// <summary>
@@ -90,7 +91,8 @@ namespace XBee
         public virtual async Task<byte> GetChannelAsync()
         {
             var response =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new OperatingChannelCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new OperatingChannelCommand())
+                    .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -98,9 +100,9 @@ namespace XBee
         ///     Sets the operating channel used between nodes.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task SetChannelAsync(byte channel)
+        public virtual Task SetChannelAsync(byte channel)
         {
-            await ExecuteAtCommandAsync(new OperatingChannelCommand(channel));
+            return ExecuteAtCommandAsync(new OperatingChannelCommand(channel));
         }
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace XBee
         /// <returns></returns>
         public async Task<uint> GetBaudRateAsync()
         {
-            var response = await ExecuteAtQueryAsync<BaudRateResponseData>(new BaudRateCommand());
+            var response = await ExecuteAtQueryAsync<BaudRateResponseData>(new BaudRateCommand()).ConfigureAwait(false);
             return response.BaudRate;
         }
 
@@ -118,9 +120,9 @@ namespace XBee
         /// </summary>
         /// <param name="baudRate"></param>
         /// <returns></returns>
-        public async Task SetBaudRateAsync(BaudRate baudRate)
+        public Task SetBaudRateAsync(BaudRate baudRate)
         {
-            await ExecuteAtCommandAsync(new BaudRateCommand(baudRate), true);
+            return ExecuteAtCommandAsync(new BaudRateCommand(baudRate), true);
         }
 
         /// <summary>
@@ -128,9 +130,9 @@ namespace XBee
         /// </summary>
         /// <param name="baudRate"></param>
         /// <returns></returns>
-        public async Task SetBaudRateAsync(int baudRate)
+        public Task SetBaudRateAsync(int baudRate)
         {
-            await ExecuteAtCommandAsync(new BaudRateCommand(baudRate), true);
+            return ExecuteAtCommandAsync(new BaudRateCommand(baudRate), true);
         }
 
         /// <summary>
@@ -139,7 +141,8 @@ namespace XBee
         /// <returns></returns>
         public async Task<Parity> GetParityAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<Parity>>(new ParityCommand());
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<Parity>>(new ParityCommand())
+                .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -148,9 +151,9 @@ namespace XBee
         /// </summary>
         /// <param name="parity"></param>
         /// <returns></returns>
-        public async Task SetParityAsync(Parity parity)
+        public Task SetParityAsync(Parity parity)
         {
-            await ExecuteAtCommandAsync(new ParityCommand(parity));
+            return ExecuteAtCommandAsync(new ParityCommand(parity));
         }
 
         /// <summary>
@@ -159,7 +162,8 @@ namespace XBee
         /// <returns></returns>
         public async Task<StopBits> GetStopBitsAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<StopBits>>(new StopBitsCommand());
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<StopBits>>(new StopBitsCommand())
+                .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -168,9 +172,9 @@ namespace XBee
         /// </summary>
         /// <param name="stopBits"></param>
         /// <returns></returns>
-        public async Task SetStopBitsAsync(StopBits stopBits)
+        public Task SetStopBitsAsync(StopBits stopBits)
         {
-            await ExecuteAtCommandAsync(new StopBitsCommand(stopBits));
+            return ExecuteAtCommandAsync(new StopBitsCommand(stopBits));
         }
 
         /// <summary>
@@ -180,7 +184,8 @@ namespace XBee
         /// <returns></returns>
         public async Task<byte> GetPacketizationTimeoutAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new PacketizationTimeoutCommand());
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new PacketizationTimeoutCommand())
+                .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -190,9 +195,9 @@ namespace XBee
         /// </summary>
         /// <param name="characterTimes"></param>
         /// <returns></returns>
-        public async Task SetPacketizationTimeoutAsync(byte characterTimes)
+        public Task SetPacketizationTimeoutAsync(byte characterTimes)
         {
-            await ExecuteAtCommandAsync(new PacketizationTimeoutCommand(characterTimes));
+            return ExecuteAtCommandAsync(new PacketizationTimeoutCommand(characterTimes));
         }
 
         /// <summary>
@@ -201,7 +206,8 @@ namespace XBee
         /// <returns></returns>
         public async Task<byte> GetFlowControlThresholdAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new FlowControlThresholdCommand());
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new FlowControlThresholdCommand())
+                .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -210,9 +216,9 @@ namespace XBee
         /// </summary>
         /// <param name="byteCount"></param>
         /// <returns></returns>
-        public async Task SetFlowControlThresholdAsync(byte byteCount)
+        public Task SetFlowControlThresholdAsync(byte byteCount)
         {
-            await ExecuteAtCommandAsync(new FlowControlThresholdCommand(byteCount));
+            return ExecuteAtCommandAsync(new FlowControlThresholdCommand(byteCount));
         }
 
         /// <summary>
@@ -221,7 +227,8 @@ namespace XBee
         /// <returns></returns>
         public async Task<ApiMode> GetApiModeAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ApiMode>>(new ApiEnableCommand());
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ApiMode>>(new ApiEnableCommand())
+                .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -230,9 +237,9 @@ namespace XBee
         /// </summary>
         /// <param name="mode"></param>
         /// <returns></returns>
-        public async Task SetApiModeAsync(ApiMode mode)
+        public Task SetApiModeAsync(ApiMode mode)
         {
-            await ExecuteAtCommandAsync(new ApiEnableCommand(mode));
+            return ExecuteAtCommandAsync(new ApiEnableCommand(mode));
         }
 
         /// <summary>
@@ -251,15 +258,18 @@ namespace XBee
         public virtual async Task<NodeAddress> GetAddressAsync()
         {
             var high =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressHighCommand())
+                    .ConfigureAwait(false);
             var low =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DestinationAddressLowCommand())
+                    .ConfigureAwait(false);
 
             var address = new LongAddress(high.Value, low.Value);
 
             // we have to do this nonsense because they decided to reuse "MY" for the cellular IP source address
             var source =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<byte[]>>(new SourceAddressCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<byte[]>>(new SourceAddressCommand())
+                    .ConfigureAwait(false);
 
             var leValue = source.Value.Reverse().ToArray();
             var sourceAddressValue = BitConverter.ToUInt16(leValue, 0);
@@ -274,9 +284,9 @@ namespace XBee
         /// <param name="address">The long network address</param>
         public virtual async Task SetDestinationAddressAsync(LongAddress address)
         {
-            await ExecuteAtCommandAsync(new DestinationAddressHighCommand(address.High));
+            await ExecuteAtCommandAsync(new DestinationAddressHighCommand(address.High)).ConfigureAwait(false);
             Address.LongAddress.High = address.High;
-            await ExecuteAtCommandAsync(new DestinationAddressLowCommand(address.Low));
+            await ExecuteAtCommandAsync(new DestinationAddressLowCommand(address.Low)).ConfigureAwait(false);
             Address.LongAddress.Low = address.Low;
         }
 
@@ -285,9 +295,9 @@ namespace XBee
         /// </summary>
         /// <param name="address">The short network address</param>
         /// <returns></returns>
-        public virtual async Task SetSourceAddressAsync(ShortAddress address)
+        public virtual Task SetSourceAddressAsync(ShortAddress address)
         {
-            await ExecuteAtCommandAsync(new SourceAddressCommand(address));
+            return ExecuteAtCommandAsync(new SourceAddressCommand(address));
         }
 
         /// <summary>
@@ -297,9 +307,11 @@ namespace XBee
         public virtual async Task<LongAddress> GetSerialNumberAsync()
         {
             var highAddress =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberHighCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberHighCommand())
+                    .ConfigureAwait(false);
             var lowAddress =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberLowCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new SerialNumberLowCommand())
+                    .ConfigureAwait(false);
 
             return new LongAddress(highAddress.Value, lowAddress.Value);
         }
@@ -311,7 +323,8 @@ namespace XBee
         public virtual async Task<SleepMode> GetSleepModeAsync()
         {
             var response =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<SleepMode>>(new SleepModeCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<SleepMode>>(new SleepModeCommand())
+                    .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -319,9 +332,9 @@ namespace XBee
         ///     Sets the configured sleep mode for this node.
         /// </summary>
         /// <param name="mode">The sleep mode</param>
-        public virtual async Task SetSleepModeAsync(SleepMode mode)
+        public virtual Task SetSleepModeAsync(SleepMode mode)
         {
-            await ExecuteAtCommandAsync(new SleepModeCommand(mode));
+            return ExecuteAtCommandAsync(new SleepModeCommand(mode));
         }
 
         /// <summary>
@@ -332,7 +345,8 @@ namespace XBee
         public virtual async Task<InputOutputConfiguration> GetInputOutputConfigurationAsync(InputOutputChannel channel)
         {
             var response =
-                await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputConfigurationCommand(channel));
+                await ExecuteAtQueryAsync<InputOutputResponseData>(new InputOutputConfigurationCommand(channel))
+                    .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -341,10 +355,10 @@ namespace XBee
         /// </summary>
         /// <param name="channel">The channel</param>
         /// <param name="configuration">The channel configuration</param>
-        public virtual async Task SetInputOutputConfigurationAsync(InputOutputChannel channel,
+        public virtual Task SetInputOutputConfigurationAsync(InputOutputChannel channel,
             InputOutputConfiguration configuration)
         {
-            await ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
+            return ExecuteAtCommandAsync(new InputOutputConfigurationCommand(channel, configuration));
         }
 
         /// <summary>
@@ -355,7 +369,7 @@ namespace XBee
         {
             var response =
                 await ExecuteAtQueryAsync<InputOutputChangeDetectionResponseData>(
-                    new InputOutputChangeDetectionCommand());
+                    new InputOutputChangeDetectionCommand()).ConfigureAwait(false);
 
             if (response.Channels != null)
             {
@@ -375,17 +389,17 @@ namespace XBee
         /// </summary>
         /// <param name="channels">Flags indicating which channels to configure for change detection</param>
         /// <returns></returns>
-        public virtual async Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)
+        public virtual Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)
         {
-            await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
+            return ExecuteAtCommandAsync(new InputOutputChangeDetectionCommand(channels));
         }
 
         /// <summary>
         ///     Force this node to take and report a sample on configured channels.
         /// </summary>
-        public virtual async Task ForceSampleAsync()
+        public virtual Task ForceSampleAsync()
         {
-            await ExecuteAtCommandAsync(new ForceSampleCommand());
+            return ExecuteAtCommandAsync(new ForceSampleCommand());
         }
 
         /// <summary>
@@ -394,7 +408,8 @@ namespace XBee
         /// <returns>The period between samples</returns>
         public virtual async Task<TimeSpan> GetSampleRateAsync()
         {
-            var response = await ExecuteAtQueryAsync<SampleRateResponseData>(new SampleRateCommand());
+            var response = await ExecuteAtQueryAsync<SampleRateResponseData>(new SampleRateCommand())
+                .ConfigureAwait(false);
             return response.Interval;
         }
 
@@ -402,9 +417,9 @@ namespace XBee
         ///     Sets the configured sample rate.
         /// </summary>
         /// <param name="interval">The period between samples</param>
-        public virtual async Task SetSampleRateAsync(TimeSpan interval)
+        public virtual Task SetSampleRateAsync(TimeSpan interval)
         {
-            await ExecuteAtCommandAsync(new SampleRateCommand(interval));
+            return ExecuteAtCommandAsync(new SampleRateCommand(interval));
         }
 
         /// <summary>
@@ -414,7 +429,8 @@ namespace XBee
         public virtual async Task<bool> IsEncryptionEnabledAsync()
         {
             var response =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new EncryptionEnableCommand());
+                await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new EncryptionEnableCommand())
+                    .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -422,9 +438,9 @@ namespace XBee
         ///     Used to enable encryption on this node.
         /// </summary>
         /// <param name="enabled">True to enable encryption</param>
-        public async Task SetEncryptionEnabledAsync(bool enabled)
+        public Task SetEncryptionEnabledAsync(bool enabled)
         {
-            await ExecuteAtCommandAsync(new EncryptionEnableCommand(enabled));
+            return ExecuteAtCommandAsync(new EncryptionEnableCommand(enabled));
         }
 
         /// <summary>
@@ -433,18 +449,18 @@ namespace XBee
         /// </summary>
         /// <param name="key">A 16 byte symmetric encryption key</param>
         /// <returns></returns>
-        public virtual async Task SetEncryptionKeyAsync(byte[] key)
+        public virtual Task SetEncryptionKeyAsync(byte[] key)
         {
-            await ExecuteAtCommandAsync(new EncryptionKeyCommand(key));
+            return ExecuteAtCommandAsync(new EncryptionKeyCommand(key));
         }
 
         /// <summary>
         ///     Commit configuration changes to this node.
         /// </summary>
         /// <returns></returns>
-        public async Task WriteChangesAsync()
+        public Task WriteChangesAsync()
         {
-            await ExecuteAtCommandAsync(new WriteCommand());
+            return ExecuteAtCommandAsync(new WriteCommand());
         }
 
         /// <summary>
@@ -506,20 +522,20 @@ namespace XBee
             return Address;
         }
 
-        protected async Task ExecuteAtCommand(AtCommand command)
+        protected Task ExecuteAtCommand(AtCommand command)
         {
-            await Controller.ExecuteAtCommand(command);
+            return Controller.ExecuteAtCommand(command);
         }
 
-        protected async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
+        protected Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
             where TResponseData : AtCommandResponseFrameData
         {
-            return await Controller.ExecuteAtQueryAsync<TResponseData>(command, GetAddressInternal());
+            return Controller.ExecuteAtQueryAsync<TResponseData>(command, GetAddressInternal());
         }
 
-        protected virtual async Task ExecuteAtCommandAsync(AtCommand command, bool queueLocal = false)
+        protected virtual Task ExecuteAtCommandAsync(AtCommand command, bool queueLocal = false)
         {
-            await Controller.ExecuteAtCommandAsync(command, GetAddressInternal(), queueLocal);
+            return Controller.ExecuteAtCommandAsync(command, GetAddressInternal(), queueLocal);
         }
 
         private void ControllerOnDataReceived(object sender, SourcedDataReceivedEventArgs e)

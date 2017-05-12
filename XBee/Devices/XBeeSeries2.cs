@@ -21,9 +21,67 @@ namespace XBee.Devices
         {
             var response = await
                 Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
-                    new AssociationIndicationCommand());
+                    new AssociationIndicationCommand()).ConfigureAwait(false);
 
             return response.Value;
+        }
+
+        /// <summary>
+        ///     Gets flags indicating the configured sleep options for this node.
+        /// </summary>
+        public async Task<SleepOptionsExt> GetSleepOptionsAsync()
+        {
+            var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand())
+                .ConfigureAwait(false);
+
+            if (response.OptionsExt == null)
+            {
+                throw new InvalidOperationException("No valid sleep options returned.");
+            }
+
+            return response.OptionsExt.Value;
+        }
+
+        /// <summary>
+        ///     Sets flags indicating sleep options for this node.
+        /// </summary>
+        /// <param name="options">Sleep options</param>
+        public Task SetSleepOptionsAsync(SleepOptionsExt options)
+        {
+            return ExecuteAtCommandAsync(new SleepOptionsCommandExt(options));
+        }
+
+        /// <summary>
+        /// Gets the sleep period.
+        /// </summary>
+        /// <returns>The sleep period.</returns>
+        public async Task<TimeSpan> GetSleepPeriodAsync()
+        {
+            var response = await ExecuteAtQueryAsync<SleepPeriodResponseData>(new SleepPeriodCommand())
+                .ConfigureAwait(false);
+            return response.Period;
+        }
+
+        /// <summary>
+        /// Sets the value for a sleep period.
+        /// </summary>
+        /// <param name="period">The sleep period.</param>
+        /// <returns></returns>
+        public Task SetSleepPeriodAsync(TimeSpan period)
+        {
+            return ExecuteAtCommandAsync(new SleepPeriodCommand(period));
+        }
+
+        public async Task<ushort> GetSleepPeriodCount()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new SleepPeriodCountCommand())
+                .ConfigureAwait(false);
+            return response.Value;
+        }
+
+        public Task SetSleepPeriodCount(ushort periodCount)
+        {
+            return ExecuteAtCommandAsync(new SleepPeriodCountCommand(periodCount));
         }
 
         public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
@@ -44,11 +102,12 @@ namespace XBee.Devices
             if (!enableAck)
             {
                 transmitRequest.Options = TransmitOptionsExt.DisableAck;
-                await Controller.ExecuteAsync(transmitRequest, cancellationToken);
+                await Controller.ExecuteAsync(transmitRequest, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                var response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest, cancellationToken);
+                var response = await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest, cancellationToken)
+                    .ConfigureAwait(false);
 
                 if (response.DeliveryStatus != DeliveryStatusExt.Success)
                 {
@@ -74,7 +133,8 @@ namespace XBee.Devices
             };
 
             var response =
-                await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest, cancellationToken);
+                await Controller.ExecuteQueryAsync<TxStatusExtFrame>(transmitRequest, cancellationToken)
+                    .ConfigureAwait(false);
 
             if (response.DeliveryStatus != DeliveryStatusExt.Success)
             {
@@ -82,9 +142,9 @@ namespace XBee.Devices
             }
         }
 
-        public override async Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)
+        public override Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)
         {
-            await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
+            return ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
         }
     }
 }

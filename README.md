@@ -130,9 +130,9 @@ Below is a table summarizing the commands supported by this library.
 | IR    | Sample Rate            | GetSampleRateAsync                 | SetSampleRateAsync                 | x  | x  |    x   |          |
 | IS    | Force Sample           | --                                 | ForceSampleAsync                   | x  | x  |    x   |          |
 | SM    | Sleep Mode             | GetSleepModeAsync                  | SetSleepModeAsync                  | x  | x  |    x   |          |
+| SO    | Sleep Mode Options     | GetSleepOptionsAsync               | SetSleepOptionsAsync               | x  | x  |    x   |          |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync           | SetEncryptionEnabledAsync          | x  | x  |    x   |          |
 | KY    | Encryption Key         | --                                 | SetEncryptionKeyAsync              | x  | x  |    x   |          |
-| SO    | Sleep Mode Options     | GetSleepOptionsAsync               | SetSleepOptionsAsync               | x  |    |    x   |          |
 | CE    | Coordinator Enable     | IsCoordinatorAsync                 | SetCoordinatorAsync                | x  |    |        |          |
 | CH    | Channel                | GetChannelAsync                    | SetChannelAsync                    | x  |    |        |          |
 | AI    | Association Indicator  | GetAssociationAsync                | SetAssociationAsync                |    | x  |        |    x     |

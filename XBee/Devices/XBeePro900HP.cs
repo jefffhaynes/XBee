@@ -51,21 +51,6 @@ namespace XBee.Devices
             await ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
         }
 
-        public async Task<SleepOptionsExt> GetSleepOptionsAsync()
-        {
-            var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand());
-
-            if (response.OptionsExt == null)
-                throw new InvalidOperationException("No valid sleep options returned.");
-
-            return response.OptionsExt.Value;
-        }
-
-        public async Task SetSleepOptionsAsync(SleepOptionsExt options)
-        {
-            await ExecuteAtCommandAsync(new SleepOptionsCommandExt(options));
-        }
-
         #region Deprecated
         
         [Obsolete("Use GetNodeMessagingOptionsAsync")]

@@ -28,6 +28,8 @@ namespace XBee.Frames
         [Subtype("AtCommand", "DL", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "SM", typeof(PrimitiveResponseData<SleepMode>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "SO", typeof(SleepOptionsResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "SP", typeof(SleepPeriodResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "SN", typeof(PrimitiveResponseData<ushort>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "ND", typeof(NetworkDiscoveryResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "HV", typeof(HardwareVersionResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "CE", typeof(CoordinatorEnableResponseData), BindingMode = BindingMode.OneWay)]

@@ -21,7 +21,8 @@ namespace XBee.Devices
         public virtual async Task<bool> IsCoordinatorAsync()
         {
             var response =
-                await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand());
+                await ExecuteAtQueryAsync<CoordinatorEnableResponseData>(new CoordinatorEnableCommand())
+                    .ConfigureAwait(false);
 
             if (response.EnableState == null)
             {
@@ -35,9 +36,9 @@ namespace XBee.Devices
         ///     Sets a value indicating whether this node is a coordinator node.
         /// </summary>
         /// <param name="enable">True if this is a coordinator node</param>
-        public virtual async Task SetCoordinatorAsync(bool enable)
+        public virtual Task SetCoordinatorAsync(bool enable)
         {
-            await ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
+            return ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
         }
 
         /// <summary>
@@ -45,7 +46,8 @@ namespace XBee.Devices
         /// </summary>
         public async Task<SleepOptions> GetSleepOptionsAsync()
         {
-            var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand());
+            var response = await ExecuteAtQueryAsync<SleepOptionsResponseData>(new SleepOptionsCommand())
+                .ConfigureAwait(false);
 
             if (response.Options == null)
             {
@@ -59,9 +61,9 @@ namespace XBee.Devices
         ///     Sets flags indicating sleep options for this node.
         /// </summary>
         /// <param name="options">Sleep options</param>
-        public async Task SetSleepOptionsAsync(SleepOptions options)
+        public Task SetSleepOptionsAsync(SleepOptions options)
         {
-            await ExecuteAtCommandAsync(new SleepOptionsCommand(options));
+            return ExecuteAtCommandAsync(new SleepOptionsCommand(options));
         }
 
         public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken,
@@ -77,11 +79,12 @@ namespace XBee.Devices
             if (!enableAck)
             {
                 transmitRequest.Options = TransmitOptions.DisableAck;
-                await Controller.ExecuteAsync(transmitRequest, cancellationToken);
+                await Controller.ExecuteAsync(transmitRequest, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                var response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest, cancellationToken);
+                var response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest, cancellationToken)
+                    .ConfigureAwait(false);
 
                 if (response.Status != DeliveryStatus.Success)
                 {
@@ -90,9 +93,9 @@ namespace XBee.Devices
             }
         }
 
-        public override async Task TransmitDataAsync(byte[] data, bool enableAck = true)
+        public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
-            await TransmitDataAsync(data, CancellationToken.None, enableAck);
+            return TransmitDataAsync(data, CancellationToken.None, enableAck);
         }
     }
 }
