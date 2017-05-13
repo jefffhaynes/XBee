@@ -74,9 +74,9 @@ namespace XBee
 
         public bool IsOpen => _serialPort.IsOpen;
 
-        public async Task Send(FrameContent frameContent)
+        public Task Send(FrameContent frameContent)
         {
-            await Send(frameContent, CancellationToken.None);
+            return Send(frameContent, CancellationToken.None);
         }
 
         public async Task Send(FrameContent frameContent, CancellationToken cancellationToken)
@@ -84,11 +84,11 @@ namespace XBee
             byte[] data = _frameSerializer.Serialize(new Frame(frameContent));
 
 
-            await _writeSemaphoreSlim.WaitAsync(cancellationToken);
+            await _writeSemaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
 
             try
             {
-                await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken);
+                await _serialPort.BaseStream.WriteAsync(data, 0, data.Length, cancellationToken).ConfigureAwait(false);
             }
             finally
             {

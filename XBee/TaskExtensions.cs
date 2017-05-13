@@ -24,7 +24,7 @@ namespace XBee
                         throw;
                     }
                 }
-                await Task.Delay(100);
+                await Task.Delay(100).ConfigureAwait(false);
             }
 
             throw new TimeoutException();
@@ -38,7 +38,7 @@ namespace XBee
             {
                 try
                 {
-                    return await func();
+                    return await func().ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
@@ -47,7 +47,7 @@ namespace XBee
                         throw;
                     }
                 }
-                await Task.Delay(100);
+                await Task.Delay(100).ConfigureAwait(false);
             }
 
             throw new TimeoutException();
