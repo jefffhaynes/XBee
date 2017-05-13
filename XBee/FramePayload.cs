@@ -43,6 +43,7 @@ namespace XBee
         [Subtype("FrameType", FrameType.RxSms, typeof(RxSmsFrame))]
         [Subtype("FrameType", FrameType.RxIPv4, typeof(RxIPv4Frame))]
         [Subtype("FrameType", FrameType.SensorReadIndicator, typeof(SensorReadIndicatorFrame))]
+        [Subtype("FrameType", FrameType.NodeIdentificationIndicator, typeof(NodeIdentificationFrame))]
         [Subtype("FrameType", FrameType.FirmwareUpdateStatus, typeof(FirmwareUpdateStatusFrame))]
         public FrameContent Content { get; set; }
     }

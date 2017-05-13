@@ -32,7 +32,7 @@
         RxSms = 0x9f,
         FirmwareUpdateStatus = 0xa0,
         RouteRecordIndicator = 0xa1,
-        ManytooneRouteRequestIndicator = 0xa3,
+        ManyToOneRouteRequestIndicator = 0xa3,
         RxIPv4 = 0xb0,
         Unknown = 0xff,
     }

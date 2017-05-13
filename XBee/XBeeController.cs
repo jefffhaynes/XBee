@@ -101,6 +101,11 @@ namespace XBee
         public event EventHandler<InternetDataReceivedEventArgs> InternetDataReceived;
 
         /// <summary>
+        /// Occurs when a node identification is received.
+        /// </summary>
+        public event EventHandler<NodeIdentificationEventArgs> NodeIdentificationReceived;
+        
+        /// <summary>
         ///     Open a local node.
         /// </summary>
         /// <param name="port">The COM port of the node</param>
@@ -775,6 +780,17 @@ namespace XBee
                 InternetDataReceived?.Invoke(this,
                     new InternetDataReceivedEventArgs(address, ipv4Frame.DestinationPort, ipv4Frame.SourcePort,
                         ipv4Frame.Protocol, ipv4Frame.Data));
+            }
+            else if (content is NodeIdentificationFrame)
+            {
+                var idFrame = content as NodeIdentificationFrame;
+                var idEvent = new NodeIdentificationEventArgs(
+                    new NodeAddress(idFrame.SenderLongAddress, idFrame.SenderShortAddress), 
+                    new NodeAddress(idFrame.RemoteLongAddress, idFrame.RemoteShortAddress), 
+                    idFrame.ParentAddress, idFrame.Name, idFrame.DeviceType,
+                    idFrame.NodeIdentificationReason, idFrame.ReceiveOptions,
+                    idFrame.DigiProfileId, idFrame.ManufacturerId);
+                NodeIdentificationReceived?.Invoke(this, idEvent);
             }
         }
 
