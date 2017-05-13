@@ -131,6 +131,8 @@ Below is a table summarizing the commands supported by this library.
 | IS    | Force Sample           | --                                 | ForceSampleAsync                   | x  | x  |    x   |          |
 | SM    | Sleep Mode             | GetSleepModeAsync                  | SetSleepModeAsync                  | x  | x  |    x   |          |
 | SO    | Sleep Mode Options     | GetSleepOptionsAsync               | SetSleepOptionsAsync               | x  | x  |    x   |          |
+| SP    | Sleep Period           | GetSleepPeriodAsync                | SetSleepPeriodAsync                |    | x  |    x   |          |
+| SN    | Sleep Period Count     | GetSleepPeriodCountAsync           | SetSleepPeriodCountAsync           |    | x  |    x   |          |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync           | SetEncryptionEnabledAsync          | x  | x  |    x   |          |
 | KY    | Encryption Key         | --                                 | SetEncryptionKeyAsync              | x  | x  |    x   |          |
 | CE    | Coordinator Enable     | IsCoordinatorAsync                 | SetCoordinatorAsync                | x  |    |        |          |

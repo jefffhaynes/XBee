@@ -131,7 +131,7 @@ namespace XBee
 
                 _connection.Open();
 
-                await Initialize();
+                await Initialize().ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -140,11 +140,10 @@ namespace XBee
             }
         }
 
-        public async Task OpenAsync()
+        public Task OpenAsync()
         {
             _connection.Open();
-            await Initialize();
-            await Task.FromResult(0);
+            return Initialize();
         }
 
         /// <summary>
@@ -153,9 +152,9 @@ namespace XBee
         /// <param name="address">The address of the remote node</param>
         /// <returns>The remote node</returns>
         [Obsolete("Use GetNodeAsync")]
-        public async Task<XBeeNode> GetRemoteAsync(NodeAddress address)
+        public Task<XBeeNode> GetRemoteAsync(NodeAddress address)
         {
-            return await GetNodeAsync(address);
+            return GetNodeAsync(address);
         }
 
         /// <summary>
@@ -164,9 +163,9 @@ namespace XBee
         /// <param name="address">The address of the remote node</param>
         /// <returns>The remote node</returns>
         [Obsolete("Use GetNodeAsync")]
-        public async Task<XBeeNode> GetRemoteNodeAsync(NodeAddress address)
+        public Task<XBeeNode> GetRemoteNodeAsync(NodeAddress address)
         {
-            return await GetNodeAsync(address);
+            return GetNodeAsync(address);
         }
 
         /// <summary>
@@ -177,7 +176,7 @@ namespace XBee
         /// <returns>The specified node.</returns>
         public async Task<XBeeNode> GetNodeAsync(NodeAddress address = null, bool autodetectHardwareVersion = true)
         {
-            await Initialize();
+            await Initialize().ConfigureAwait(false);
 
             if (address == null)
             {
@@ -195,14 +194,14 @@ namespace XBee
 
                 version = await
                     TaskExtensions.Retry(async () => await GetHardwareVersion(address), TimeSpan.FromSeconds(5),
-                        typeof(TimeoutException), typeof(AtCommandException));
+                        typeof(TimeoutException), typeof(AtCommandException)).ConfigureAwait(false);
             }
             else
             {
                 version = Local.HardwareVersion;
             }
 
-            return await Task.FromResult(CreateNode(version, address));
+            return await Task.FromResult(CreateNode(version, address)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -211,9 +210,9 @@ namespace XBee
         /// <param name="address">The address of the node or null for the controller node.</param>
         /// <param name="version">The hardware version to use for the specified node.</param>
         /// <returns>The specified node.</returns>
-        public async Task<XBeeNode> GetNodeAsync(NodeAddress address, HardwareVersion version)
+        public Task<XBeeNode> GetNodeAsync(NodeAddress address, HardwareVersion version)
         {
-            return await Task.FromResult(CreateNode(version, address));
+            return Task.FromResult(CreateNode(version, address));
         }
 
         /// <summary>
@@ -235,9 +234,9 @@ namespace XBee
         /// <summary>
         ///     Start network discovery.  The discovery of a node will result in a <see cref="NodeDiscovered" /> event.
         /// </summary>
-        public async Task DiscoverNetworkAsync()
+        public Task DiscoverNetworkAsync()
         {
-            await DiscoverNetworkAsync(NetworkDiscoveryTimeout);
+            return DiscoverNetworkAsync(NetworkDiscoveryTimeout);
         }
 
         /// <summary>
@@ -245,37 +244,39 @@ namespace XBee
         /// </summary>
         /// <param name="timeout">The amount of time to wait until discovery responses are ignored</param>
         /// <remarks>During network discovery nodes may be unresponsive</remarks>
-        public async Task DiscoverNetworkAsync(TimeSpan timeout)
+        public Task DiscoverNetworkAsync(TimeSpan timeout)
         {
             var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
 
-            await ExecuteMultiQueryAsync(atCommandFrame, new Action<AtCommandResponseFrame>(
+            return ExecuteMultiQueryAsync(atCommandFrame, new Action<AtCommandResponseFrame>(
                 async frame =>
                 {
                     var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
 
-                    if (NodeDiscovered != null && discoveryData?.LongAddress != null && !discoveryData.IsCoordinator)
+                    if (NodeDiscovered == null || discoveryData?.LongAddress == null || discoveryData.IsCoordinator)
                     {
-                        var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
+                        return;
+                    }
 
-                        // XBees have trouble recovering from discovery
-                        await Task.Delay(500);
+                    var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
 
-                        try
-                        {
-                            var node = await GetNodeAsync(address);
+                    // XBees have trouble recovering from discovery
+                    await Task.Delay(500);
 
-                            var signalStrength = discoveryData.ReceivedSignalStrengthIndicator?.SignalStrength;
+                    try
+                    {
+                        var node = await GetNodeAsync(address);
 
-                            NodeDiscovered?.Invoke(this,
-                                new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
-                                    node));
-                        }
-                        catch (TimeoutException)
-                        {
-                            /* if we timeout getting the remote node info, no need to bubble up.  
+                        var signalStrength = discoveryData.ReceivedSignalStrengthIndicator?.SignalStrength;
+
+                        NodeDiscovered?.Invoke(this,
+                            new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
+                                node));
+                    }
+                    catch (TimeoutException)
+                    {
+                        /* if we timeout getting the remote node info, no need to bubble up.  
                              * We just won't include the node in discovery */
-                        }
                     }
                 }), timeout);
         }
@@ -293,7 +294,7 @@ namespace XBee
                 try
                 {
                     var controller = new XBeeController(port, baudRate);
-                    await controller.OpenAsync();
+                    await controller.OpenAsync().ConfigureAwait(false);
                     return controller;
                 }
                 catch (InvalidOperationException)
@@ -327,7 +328,7 @@ namespace XBee
         /// <returns>The controller or null if no controller was found</returns>
         public static async Task<XBeeController> FindAsync(IEnumerable<string> ports, int baudRate)
         {
-            var controller = await FindAndOpenAsync(ports, baudRate);
+            var controller = await FindAndOpenAsync(ports, baudRate).ConfigureAwait(false);
             controller.Close();
             return controller;
         }
@@ -345,9 +346,9 @@ namespace XBee
         /// </summary>
         /// <param name="frame"></param>
         /// <returns></returns>
-        internal async Task ExecuteAsync(FrameContent frame)
+        internal Task ExecuteAsync(FrameContent frame)
         {
-            await ExecuteAsync(frame, CancellationToken.None);
+            return ExecuteAsync(frame, CancellationToken.None);
         }
 
         /// <summary>
@@ -356,14 +357,14 @@ namespace XBee
         /// <param name="frame"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        internal async Task ExecuteAsync(FrameContent frame, CancellationToken cancellationToken)
+        internal Task ExecuteAsync(FrameContent frame, CancellationToken cancellationToken)
         {
             if (!IsOpen)
             {
                 throw new InvalidOperationException("Controller must be open to execute commands.");
             }
 
-            await _connection.Send(frame, cancellationToken);
+            return _connection.Send(frame, cancellationToken);
         }
 
         /// <summary>
@@ -373,7 +374,7 @@ namespace XBee
         /// <param name="address"></param>
         /// <param name="queueLocal"></param>
         /// <returns></returns>
-        internal async Task ExecuteAtCommand(AtCommand command, NodeAddress address = null, bool queueLocal = false)
+        internal Task ExecuteAtCommand(AtCommand command, NodeAddress address = null, bool queueLocal = false)
         {
             if (address == null)
             {
@@ -381,13 +382,11 @@ namespace XBee
                     ? new AtQueuedCommandFrameContent(command)
                     : new AtCommandFrameContent(command);
 
-                await ExecuteAsync(atCommandFrame);
+                return ExecuteAsync(atCommandFrame);
             }
-            else
-            {
-                var remoteCommand = new RemoteAtCommandFrameContent(address, command);
-                await ExecuteAsync(remoteCommand);
-            }
+
+            var remoteCommand = new RemoteAtCommandFrameContent(address, command);
+            return ExecuteAsync(remoteCommand);
         }
 
         /// <summary>
@@ -397,11 +396,11 @@ namespace XBee
         /// <param name="frame">The frame to send</param>
         /// <param name="timeout">Timeout</param>
         /// <returns>The response frame</returns>
-        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame,
+        internal Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame,
             TimeSpan timeout)
             where TResponseFrame : CommandResponseFrameContent
         {
-            return await ExecuteQueryAsync<TResponseFrame>(frame, timeout, CancellationToken.None);
+            return ExecuteQueryAsync<TResponseFrame>(frame, timeout, CancellationToken.None);
         }
 
         /// <summary>
@@ -427,15 +426,16 @@ namespace XBee
                     b => new TaskCompletionSource<CommandResponseFrameContent>(),
                     (b, source) => new TaskCompletionSource<CommandResponseFrameContent>());
 
-            await ExecuteAsync(frame, cancellationToken);
+            await ExecuteAsync(frame, cancellationToken).ConfigureAwait(false);
 
-            if (await Task.WhenAny(taskCompletionSource.Task, delayTask) == taskCompletionSource.Task)
+            if (await Task.WhenAny(taskCompletionSource.Task, delayTask).ConfigureAwait(false) !=
+                taskCompletionSource.Task)
             {
-                delayCancellationTokenSource.Cancel();
-                return await taskCompletionSource.Task as TResponseFrame;
+                throw new TimeoutException();
             }
 
-            throw new TimeoutException();
+            delayCancellationTokenSource.Cancel();
+            return await taskCompletionSource.Task.ConfigureAwait(false) as TResponseFrame;
         }
 
         /// <summary>
@@ -472,12 +472,12 @@ namespace XBee
         /// <param name="address">The address of the node.  If this is null the command will be sent to the local node.</param>
         /// <param name="queueLocal">Queue this command for deferred execution if issued to a local controller.</param>
         /// <returns>The response data</returns>
-        internal async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
+        internal Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
             NodeAddress address = null, bool queueLocal = false)
             where TResponseData : AtCommandResponseFrameData
         {
             var timeout = address == null ? DefaultLocalQueryTimeout : DefaultRemoteQueryTimeout;
-            return await ExecuteAtQueryAsync<TResponseData>(command, address, timeout, queueLocal);
+            return ExecuteAtQueryAsync<TResponseData>(command, address, timeout, queueLocal);
         }
 
         /// <summary>
@@ -500,7 +500,8 @@ namespace XBee
                 var atCommandFrame = queueLocal
                     ? new AtQueuedCommandFrameContent(command)
                     : new AtCommandFrameContent(command);
-                var response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame, timeout);
+                var response = await ExecuteQueryAsync<AtCommandResponseFrame>(atCommandFrame, timeout)
+                    .ConfigureAwait(false);
                 responseContent = response.Content;
             }
             else
@@ -508,7 +509,8 @@ namespace XBee
                 address.ShortAddress = address.LongAddress.IsBroadcast ? ShortAddress.Broadcast : ShortAddress.Disabled;
 
                 var remoteCommand = new RemoteAtCommandFrameContent(address, command);
-                var response = await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand, timeout);
+                var response = await ExecuteQueryAsync<RemoteAtCommandResponseFrame>(remoteCommand, timeout)
+                    .ConfigureAwait(false);
                 responseContent = response.Content;
             }
 
@@ -527,21 +529,21 @@ namespace XBee
         /// <param name="address">The address of the node.  If this is null the command will be execute on the local node.</param>
         /// <param name="queueLocal">Queue this command for deferred execution if issued to a local controller.</param>
         /// <returns></returns>
-        internal async Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null,
+        internal Task ExecuteAtCommandAsync(AtCommand command, NodeAddress address = null,
             bool queueLocal = false)
         {
-            await ExecuteAtQueryAsync<AtCommandResponseFrameData>(command, address, queueLocal);
+            return ExecuteAtQueryAsync<AtCommandResponseFrameData>(command, address, queueLocal);
         }
 
         internal async Task Reset()
         {
             _modemResetTaskCompletionSource = new TaskCompletionSource<ModemStatus>();
-            await ExecuteAtCommandAsync(new ResetCommand());
+            await ExecuteAtCommandAsync(new ResetCommand()).ConfigureAwait(false);
 
             var delayCancellationTokenSource = new CancellationTokenSource();
             var delayTask = Task.Delay(ModemResetTimeout, delayCancellationTokenSource.Token);
 
-            if (await Task.WhenAny(_modemResetTaskCompletionSource.Task, delayTask) == delayTask)
+            if (await Task.WhenAny(_modemResetTaskCompletionSource.Task, delayTask).ConfigureAwait(false) == delayTask)
             {
                 throw new TimeoutException("No modem status received after reset.");
             }
@@ -584,7 +586,7 @@ namespace XBee
                 return;
             }
 
-            await _initializeSemaphoreSlim.WaitAsync();
+            await _initializeSemaphoreSlim.WaitAsync().ConfigureAwait(false);
 
             if (_isInitialized)
             {
@@ -594,7 +596,7 @@ namespace XBee
             try
             {
                 /* Unfortunately the protocol changes based on what type of hardware we're using... */
-                HardwareVersion = await GetHardwareVersion();
+                HardwareVersion = await GetHardwareVersion().ConfigureAwait(false);
                 _connection.CoordinatorHardwareVersion = HardwareVersion;
 
                 /* We want the receiver to have the hardware version in context so cycle the connection */
@@ -621,7 +623,7 @@ namespace XBee
             var version =
                 await
                     ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
-                        TimeSpan.FromSeconds(1));
+                        TimeSpan.FromSeconds(1)).ConfigureAwait(false);
 
             return version.HardwareVersion;
         }
