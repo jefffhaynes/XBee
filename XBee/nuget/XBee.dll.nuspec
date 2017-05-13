@@ -8,7 +8,7 @@
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for controlling XBee wireless modules.</description>
-    <releaseNotes>Fix for explicit rx frame</releaseNotes>
+    <releaseNotes>More support for sleeping, better async/await management, fix for explicit rx frame</releaseNotes>
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
