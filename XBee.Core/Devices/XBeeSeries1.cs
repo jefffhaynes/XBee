@@ -79,7 +79,7 @@ namespace XBee.Devices
             if (!enableAck)
             {
                 transmitRequest.Options = TransmitOptions.DisableAck;
-                await Controller.ExecuteAsync(transmitRequest, cancellationToken).ConfigureAwait(false);
+                Controller.ExecuteAsync(transmitRequest);
             }
             else
             {

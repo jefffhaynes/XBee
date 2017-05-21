@@ -1,0 +1,96 @@
+﻿<Page
+    x:Class="XBee.Utility.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:XBee.Utility.Converters"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
+    </Page.Resources>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Pivot Margin="6">
+            <PivotItem Header="Connection">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListView Margin="6" ItemsSource="{Binding SerialDevices}" SelectedItem="{Binding SelectedDevice, Mode=TwoWay}">
+                        <ListView.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="6" HorizontalAlignment="Center" Text="No serial devices found"
+                                           Visibility="{Binding SerialDevices.Count, Converter={StaticResource ZeroToVisibilityConverter}, Mode=OneWay}"/>
+                            </DataTemplate>
+                        </ListView.HeaderTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1,0,0,0">
+                        <Grid Margin="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Column="0" Grid.Row="0" Margin="6" Text="Baud Rate" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Grid.Row="0" Margin="6" 
+                                      SelectedItem="{Binding SelectedDevice.BaudRate, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedBaudRates, Mode=OneWay}" />
+
+                            <TextBlock Grid.Column="0" Grid.Row="1" Margin="6" Text="Data Bits" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Grid.Row="1" Margin="6" 
+                                      SelectedItem="{Binding SelectedDevice.DataBits, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedDataBits, Mode=OneWay}" />
+                            
+                            <TextBlock Grid.Column="0" Grid.Row="2" Margin="6" Text="Stop Bits" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Grid.Row="2" Margin="6" 
+                                      SelectedItem="{Binding SelectedDevice.StopBits, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedStopBits, Mode=OneWay}" />
+
+                            <TextBlock Grid.Column="0" Grid.Row="3" Margin="6" Text="Parity" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Grid.Row="3" Margin="6" 
+                                      SelectedItem="{Binding SelectedDevice.Parity, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedParity, Mode=OneWay}" />
+
+                            <TextBlock Grid.Column="0" Grid.Row="4" Margin="6" Text="Handshake" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" Grid.Row="4" Margin="6" 
+                                      SelectedItem="{Binding SelectedDevice.Handshake, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedHandshakes, Mode=OneWay}" />
+
+                            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Margin="6" Content="Connect"
+                                    HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.ConnectCommand}"/>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="1,0,0,0">
+                        <ListView ItemsSource="{Binding DiscoveredControllers}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding HardwareVersion}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Devices">
+
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>

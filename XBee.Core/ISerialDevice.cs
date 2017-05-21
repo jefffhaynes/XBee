@@ -6,6 +6,6 @@ namespace XBee
     public interface ISerialDevice
     {
         void Write(byte[] data);
-        Task<byte[]> Read(uint count, CancellationToken cancellationToken);
+        Task<byte[]> ReadAsync(uint count, CancellationToken cancellationToken);
     }
 }

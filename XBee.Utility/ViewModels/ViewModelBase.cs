@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using XBee.Util.Annotations;
+using XBee.Utility.Annotations;
 
-namespace XBee.Util
+namespace XBee.Utility.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
@@ -11,8 +11,7 @@ namespace XBee.Util
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

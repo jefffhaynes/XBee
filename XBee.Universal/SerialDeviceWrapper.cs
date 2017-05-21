@@ -8,27 +8,34 @@ namespace XBee.Universal
 {
     public class SerialDeviceWrapper : ISerialDevice
     {
-        private readonly DataWriter _writer;
-        private readonly DataReader _reader;
+        private readonly SerialDevice _serialDevice;
 
         public SerialDeviceWrapper(SerialDevice serialDevice)
         {
-            _writer = new DataWriter(serialDevice.OutputStream);
-            _reader = new DataReader(serialDevice.InputStream);
+            _serialDevice = serialDevice;
         }
 
         public void Write(byte[] data)
         {
-            _writer.WriteBytes(data);
-            _writer.FlushAsync().AsTask().Wait();
+            using (var writer = new DataWriter(_serialDevice.OutputStream))
+            {
+                writer.WriteBytes(data);
+                writer.StoreAsync().AsTask().Wait();
+                writer.DetachStream();
+            }
         }
 
-        public async Task<byte[]> Read(uint count, CancellationToken cancellationToken)
+        public async Task<byte[]> ReadAsync(uint count, CancellationToken cancellationToken)
         {
-            var data = new byte[count];
-            await _reader.LoadAsync(count).AsTask(cancellationToken).ConfigureAwait(false);
-            _reader.ReadBytes(data);
-            return data;
+            using (var reader = new DataReader(_serialDevice.InputStream))
+            {
+                await reader.LoadAsync(count).AsTask(cancellationToken).ConfigureAwait(false);
+
+                var data = new byte[count];
+                reader.ReadBytes(data);
+                reader.DetachStream();
+                return data;
+            }
         }
     }
 }

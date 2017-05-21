@@ -45,12 +45,7 @@ namespace XBee
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "Must be zero.");
             }
 
-            if (count != buffer.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(count), count, "Must be equal to buffer length.");
-            }
-
-            var data = await _serialDevice.Read((uint)count, cancellationToken).ConfigureAwait(false);
+            var data = await _serialDevice.ReadAsync((uint)count, cancellationToken).ConfigureAwait(false);
             Array.Copy(data, buffer, data.Length);
             return data.Length;
         }

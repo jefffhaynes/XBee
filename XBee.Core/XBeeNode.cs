@@ -57,7 +57,7 @@ namespace XBee
         public async Task ResetAsync()
         {
             /* We get no response from remote reset commands */
-            await ExecuteAtCommand(new ResetCommand()).ConfigureAwait(false);
+            await ExecuteAtCommandAsync(new ResetCommand()).ConfigureAwait(false);
 
             /* Wait approximate reset time per documentation */
             await Task.Delay(HardwareResetTime).ConfigureAwait(false);
@@ -522,10 +522,10 @@ namespace XBee
             return Address;
         }
 
-        protected Task ExecuteAtCommand(AtCommand command)
-        {
-            return Controller.ExecuteAtCommand(command);
-        }
+        //protected void ExecuteAtCommand(AtCommand command)
+        //{
+        //    Controller.ExecuteAtCommand(command);
+        //}
 
         protected Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
             where TResponseData : AtCommandResponseFrameData

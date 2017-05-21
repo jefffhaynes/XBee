@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace XBee.Util
+namespace XBee.Utility
 {
     public class RelayCommand : ICommand
     {
-        /// <summary>
-        ///     The action (or parameterized action) that will be called when the command is invoked.
-        /// </summary>
-        protected Action Action = null;
-
-        protected Action<object> ParameterizedAction = null;
-
         /// <summary>
         ///     Bool indicating whether the command can execute.
         /// </summary>
         private readonly Func<bool> _canExecute;
 
+        /// <summary>
+        ///     The action (or parameterized action) that will be called when the command is invoked.
+        /// </summary>
+        protected Action Action;
+
+        protected Action<object> ParameterizedAction;
 
 
         /// <summary>
@@ -49,15 +48,7 @@ namespace XBee.Util
         /// <value>
         ///     <c>true</c> if this instance can execute; otherwise, <c>false</c>.
         /// </value>
-        public bool CanExecute
-        {
-            get { return _canExecute(); }
-        }
-
-        public void UpdateCanExecute()
-        {
-            CanExecuteChanged(this, EventArgs.Empty);
-        }
+        public bool CanExecute => _canExecute();
 
         /// <summary>
         ///     Defines the method that determines whether the command can execute in its current state.
@@ -93,15 +84,24 @@ namespace XBee.Util
         /// </summary>
         public event EventHandler CanExecuteChanged;
 
+        public void UpdateCanExecute()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
+
 
         protected void InvokeAction(object param)
         {
-            Action theAction = Action;
-            Action<object> theParameterizedAction = ParameterizedAction;
+            var theAction = Action;
+            var theParameterizedAction = ParameterizedAction;
             if (theAction != null)
+            {
                 theAction();
-            else if (theParameterizedAction != null)
-                theParameterizedAction(param);
+            }
+            else
+            {
+                theParameterizedAction?.Invoke(param);
+            }
         }
     }
 }

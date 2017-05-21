@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace XBee
         private static readonly TimeSpan DefaultLocalQueryTimeout = TimeSpan.FromSeconds(300);
 
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(30);
+        private readonly FrameContext _frameContext = new FrameContext(null);
         private readonly object _frameIdLock = new object();
 
         private readonly SemaphoreSlim _initializeSemaphoreSlim = new SemaphoreSlim(1);
@@ -32,35 +34,30 @@ namespace XBee
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
         private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
 
+        private readonly ISerialDevice _serialDevice;
+
+        private readonly BinarySerializer _serializer = new BinarySerializer {Endianness = Endianness.Big};
+
         //private SerialConnection _connection;
         private byte _frameId = byte.MinValue;
+
+        private HardwareVersion? _hardwareVersion;
         private bool _isInitialized;
+        private CancellationTokenSource _listenerCancellationTokenSource;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
-
-        //public XBeeController(string port, int baudRate)
-        //{
-        //    Connect(port, baudRate);
-        //}
-
-        private readonly ISerialDevice _serialDevice;
 
         public XBeeController(ISerialDevice serialDevice)
         {
             _serialDevice = serialDevice;
         }
 
-        public HardwareVersion? HardwareVersion { get; private set; }
-
         /// <summary>
         ///     Get the local node.
         /// </summary>
         public XBeeNode Local { get; private set; }
 
-        //public bool IsOpen => _connection?.IsOpen ?? false;
-
         public void Dispose()
         {
-            //Close();
             _sampleSource.Dispose();
             _receivedDataSource.Dispose();
         }
@@ -96,7 +93,7 @@ namespace XBee
         public event EventHandler<InternetDataReceivedEventArgs> InternetDataReceived;
 
         /// <summary>
-        /// Occurs when a node identification is received.
+        ///     Occurs when a node identification is received.
         /// </summary>
         public event EventHandler<NodeIdentificationEventArgs> NodeIdentificationReceived;
 
@@ -108,7 +105,7 @@ namespace XBee
         /// <returns>The specified node.</returns>
         public async Task<XBeeNode> GetNodeAsync(NodeAddress address = null, bool autodetectHardwareVersion = true)
         {
-            await Initialize().ConfigureAwait(false);
+            await InitializeAsync().ConfigureAwait(false);
 
             if (address == null)
             {
@@ -172,7 +169,8 @@ namespace XBee
         /// <param name="timeout">The amount of time to wait until discovery responses are ignored</param>
         /// <param name="cancellationToken"></param>
         /// <remarks>During network discovery nodes may be unresponsive</remarks>
-        public Task DiscoverNetworkAsync(TimeSpan timeout, CancellationToken cancellationToken = default(CancellationToken))
+        public Task DiscoverNetworkAsync(TimeSpan timeout,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
 
@@ -210,66 +208,41 @@ namespace XBee
         }
 
         /// <summary>
-        ///     Try to find and open a local node.
+        ///     Occurs after a member has been serialized.
         /// </summary>
-        /// <param name="ports">Ports to scan</param>
-        /// <param name="baudRate">Baud rate, typically 9600 or 115200</param>
-        /// <returns>The controller or null if no controller was found</returns>
-        //public static async Task<XBeeController> FindAndOpenAsync(IEnumerable<string> ports, int baudRate)
-        //{
-        //    foreach (var port in ports)
-        //    {
-        //        try
-        //        {
-        //            var controller = new XBeeController(port, baudRate);
-        //            await controller.OpenAsync().ConfigureAwait(false);
-        //            return controller;
-        //        }
-        //        catch (InvalidOperationException)
-        //        {
-        //        }
-        //        catch (UnauthorizedAccessException)
-        //        {
-        //        }
-        //        catch (ArgumentOutOfRangeException)
-        //        {
-        //        }
-        //        catch (ArgumentException)
-        //        {
-        //        }
-        //        catch (TimeoutException)
-        //        {
-        //        }
-        //        catch (IOException)
-        //        {
-        //        }
-        //    }
-
-        //    return null;
-        //}
-        
+        public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized
+        {
+            add => _serializer.MemberSerialized += value;
+            remove => _serializer.MemberSerialized -= value;
+        }
 
         /// <summary>
-        ///     Send an AT command to this node.
+        ///     Occurs after a member has been deserialized.
         /// </summary>
-        /// <param name="command"></param>
-        /// <param name="address"></param>
-        /// <param name="queueLocal"></param>
-        /// <returns></returns>
-        internal void ExecuteAtCommand(AtCommand command, NodeAddress address = null, bool queueLocal = false)
+        public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized
         {
-            if (address == null)
-            {
-                var atCommandFrame = queueLocal
-                    ? new AtQueuedCommandFrameContent(command)
-                    : new AtCommandFrameContent(command);
-
-                Execute(atCommandFrame);
-            }
-
-            var remoteCommand = new RemoteAtCommandFrameContent(address, command);
-            Execute(remoteCommand);
+            add => _serializer.MemberDeserialized += value;
+            remove => _serializer.MemberDeserialized -= value;
         }
+
+        /// <summary>
+        ///     Occurs before a member has been serialized.
+        /// </summary>
+        public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing
+        {
+            add => _serializer.MemberSerializing += value;
+            remove => _serializer.MemberSerializing -= value;
+        }
+
+        /// <summary>
+        ///     Occurs before a member has been deserialized.
+        /// </summary>
+        public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing
+        {
+            add => _serializer.MemberDeserializing += value;
+            remove => _serializer.MemberDeserializing -= value;
+        }
+
 
         /// <summary>
         ///     Send a frame to this node and wait for a response.
@@ -299,22 +272,22 @@ namespace XBee
             where TResponseFrame : CommandResponseFrameContent
         {
             frame.FrameId = GetNextFrameId();
-            
+
             var delayTask = Task.Delay(timeout, cancellationToken);
-            
+
             var taskCompletionSource =
                 ExecuteTaskCompletionSources.AddOrUpdate(frame.FrameId,
                     b => new TaskCompletionSource<CommandResponseFrameContent>(),
                     (b, source) => new TaskCompletionSource<CommandResponseFrameContent>());
 
-            Execute(frame);
+            await ExecuteAsync(frame);
 
             if (await Task.WhenAny(taskCompletionSource.Task, delayTask).ConfigureAwait(false) !=
                 taskCompletionSource.Task)
             {
                 throw new TimeoutException();
             }
-            
+
             return await taskCompletionSource.Task.ConfigureAwait(false) as TResponseFrame;
         }
 
@@ -324,10 +297,11 @@ namespace XBee
         /// <typeparam name="TResponseFrame">The expected response type</typeparam>
         /// <param name="frame">The frame to send</param>
         /// <returns>The response frame</returns>
-        internal Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame)
+        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame)
             where TResponseFrame : CommandResponseFrameContent
         {
-            return ExecuteQueryAsync<TResponseFrame>(frame, CancellationToken.None);
+            await InitializeAsync().ConfigureAwait(false);
+            return await ExecuteQueryAsync<TResponseFrame>(frame, CancellationToken.None).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -337,11 +311,12 @@ namespace XBee
         /// <param name="frame">The frame to send</param>
         /// <param name="cancellationToken">Used to cancel the operation</param>
         /// <returns>The response frame</returns>
-        internal Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame,
+        internal async Task<TResponseFrame> ExecuteQueryAsync<TResponseFrame>(CommandFrameContent frame,
             CancellationToken cancellationToken)
             where TResponseFrame : CommandResponseFrameContent
         {
-            return ExecuteQueryAsync<TResponseFrame>(frame, DefaultRemoteQueryTimeout, cancellationToken);
+            await InitializeAsync().ConfigureAwait(false);
+            return await ExecuteQueryAsync<TResponseFrame>(frame, DefaultRemoteQueryTimeout, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -352,12 +327,12 @@ namespace XBee
         /// <param name="address">The address of the node.  If this is null the command will be sent to the local node.</param>
         /// <param name="queueLocal">Queue this command for deferred execution if issued to a local controller.</param>
         /// <returns>The response data</returns>
-        internal Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
+        internal async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command,
             NodeAddress address = null, bool queueLocal = false)
             where TResponseData : AtCommandResponseFrameData
         {
             var timeout = address == null ? DefaultLocalQueryTimeout : DefaultRemoteQueryTimeout;
-            return ExecuteAtQueryAsync<TResponseData>(command, address, timeout, queueLocal);
+            return await ExecuteAtQueryAsync<TResponseData>(command, address, timeout, queueLocal).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -415,7 +390,7 @@ namespace XBee
             return ExecuteAtQueryAsync<AtCommandResponseFrameData>(command, address, queueLocal);
         }
 
-        internal async Task Reset()
+        internal async Task ResetAsync()
         {
             _modemResetTaskCompletionSource = new TaskCompletionSource<ModemStatus>();
             await ExecuteAtCommandAsync(new ResetCommand()).ConfigureAwait(false);
@@ -432,34 +407,15 @@ namespace XBee
             _modemResetTaskCompletionSource = null;
         }
 
-        //private void Connect(string port, int baudRate)
-        //{
-        //    _connection = new SerialConnection(port, baudRate);
+        internal async Task ExecuteAsync(FrameContent frameContent)
+        {
+            await InitializeAsync().ConfigureAwait(false);
+            var stream = new SerialDeviceStream(_serialDevice);
+            var frame = new Frame(frameContent);
+            _serializer.Serialize(stream, frame);
+        }
 
-        //    if (_frameMemberDeserialized != null)
-        //    {
-        //        _connection.MemberDeserialized += _frameMemberDeserialized;
-        //    }
-
-        //    if (_frameMemberDeserializing != null)
-        //    {
-        //        _connection.MemberDeserializing += _frameMemberDeserializing;
-        //    }
-
-        //    if (_frameMemberSerialized != null)
-        //    {
-        //        _connection.MemberSerialized += _frameMemberSerialized;
-        //    }
-
-        //    if (_frameMemberDeserialized != null)
-        //    {
-        //        _connection.MemberDeserialized += _frameMemberDeserialized;
-        //    }
-
-        //    _connection.FrameReceived += OnFrameReceived;
-        //}
-
-        private async Task Initialize()
+        private async Task InitializeAsync()
         {
             if (_isInitialized)
             {
@@ -475,18 +431,32 @@ namespace XBee
 
             try
             {
-                /* Unfortunately the protocol changes based on what type of hardware we're using... */
-                HardwareVersion = await GetHardwareVersion().ConfigureAwait(false);
-                _frameContext.ControllerHardwareVersion = HardwareVersion;
+                _serializer.MemberSerialized += (sender, args) => Debug.WriteLine("S -> " + args.MemberName + ": " + args.Value);
+                _serializer.MemberDeserializing += (sender, args) => Debug.WriteLine("D -> " + args.MemberName);
+                _serializer.MemberDeserialized += (sender, args) => Debug.WriteLine("D <- " + args.MemberName + ": " + args.Value);
+
+                // start receiving frames
+                Listen(true);
+
+                // set initialized so GetHardwareVersion doesn't try to enter this
+                _isInitialized = true;
+
+                // Unfortunately the protocol changes based on what type of hardware we're using...
+                _hardwareVersion = await GetHardwareVersion().ConfigureAwait(false);
+                _frameContext.ControllerHardwareVersion = _hardwareVersion.Value;
+
+                // reset frame deserializer
+                //_listenerCancellationTokenSource.Cancel(false);
 
                 // start receiving frames
                 Listen();
 
-                // ReSharper disable PossibleInvalidOperationException
-                Local = CreateNode(HardwareVersion.Value);
-                // ReSharper restore PossibleInvalidOperationException
-
-                _isInitialized = true;
+                Local = CreateNode(_hardwareVersion.Value);
+            }
+            catch
+            {
+                _isInitialized = false;
+                throw;
             }
             finally
             {
@@ -494,12 +464,17 @@ namespace XBee
             }
         }
 
-        private async Task<HardwareVersion> GetHardwareVersion(NodeAddress address = null)
+        public async Task<HardwareVersion> GetHardwareVersion(NodeAddress address = null)
         {
+            if (_hardwareVersion != null)
+            {
+                return _hardwareVersion.Value;
+            }
+
             var version =
                 await
                     ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
-                        TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+                        TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
             return version.HardwareVersion;
         }
@@ -513,7 +488,8 @@ namespace XBee
         /// <param name="timeout">The amount of time to wait before responses will be ignored</param>
         /// <param name="cancellationToken"></param>
         private async Task ExecuteMultiQueryAsync<TResponseFrame>(CommandFrameContent frame,
-            Action<TResponseFrame> callback, TimeSpan timeout, CancellationToken cancellationToken) where TResponseFrame : CommandResponseFrameContent
+            Action<TResponseFrame> callback, TimeSpan timeout, CancellationToken cancellationToken)
+            where TResponseFrame : CommandResponseFrameContent
         {
             frame.FrameId = GetNextFrameId();
 
@@ -533,7 +509,7 @@ namespace XBee
 
             ExecuteCallbacks.AddOrUpdate(frame.FrameId, b => callbackProxy, (b, source) => callbackProxy);
 
-            Execute(frame);
+            await ExecuteAsync(frame).ConfigureAwait(false);
 
             await Task.Delay(timeout, cancellationToken);
 
@@ -545,59 +521,63 @@ namespace XBee
         {
             switch (hardwareVersion)
             {
-                case Frames.AtCommands.HardwareVersion.XBeeSeries1:
-                    return new XBeeSeries1(this, Frames.AtCommands.HardwareVersion.XBeeSeries1, address);
-                case Frames.AtCommands.HardwareVersion.XBeeProSeries1:
-                    return new XBeeSeries1(this, Frames.AtCommands.HardwareVersion.XBeeProSeries1, address);
-                case Frames.AtCommands.HardwareVersion.ZNetZigBeeS2:
-                    return new XBeeSeries2(this, Frames.AtCommands.HardwareVersion.ZNetZigBeeS2, address);
-                case Frames.AtCommands.HardwareVersion.XBeeProS2:
-                    return new XBeeSeries2(this, Frames.AtCommands.HardwareVersion.XBeeProS2, address);
-                case Frames.AtCommands.HardwareVersion.XBeeProS2B:
-                    return new XBeeSeries2(this, Frames.AtCommands.HardwareVersion.XBeeProS2B, address);
-                case Frames.AtCommands.HardwareVersion.XBee24C:
-                    return new XBeeSeries2(this, Frames.AtCommands.HardwareVersion.XBee24C, address);
-                case Frames.AtCommands.HardwareVersion.XBeePro900:
-                    return new XBeePro900HP(this, Frames.AtCommands.HardwareVersion.XBeePro900, address);
-                case Frames.AtCommands.HardwareVersion.XBeePro900HP:
-                    return new XBeePro900HP(this, Frames.AtCommands.HardwareVersion.XBeePro900HP, address);
-                case Frames.AtCommands.HardwareVersion.XBeeProSX:
-                    return new XBeePro900HP(this, Frames.AtCommands.HardwareVersion.XBeeProSX, address);
-                case Frames.AtCommands.HardwareVersion.XBeeCellular:
-                    return new XBeeCellular(this, Frames.AtCommands.HardwareVersion.XBeeCellular, address);
+                case HardwareVersion.XBeeSeries1:
+                    return new XBeeSeries1(this, HardwareVersion.XBeeSeries1, address);
+                case HardwareVersion.XBeeProSeries1:
+                    return new XBeeSeries1(this, HardwareVersion.XBeeProSeries1, address);
+                case HardwareVersion.ZNetZigBeeS2:
+                    return new XBeeSeries2(this, HardwareVersion.ZNetZigBeeS2, address);
+                case HardwareVersion.XBeeProS2:
+                    return new XBeeSeries2(this, HardwareVersion.XBeeProS2, address);
+                case HardwareVersion.XBeeProS2B:
+                    return new XBeeSeries2(this, HardwareVersion.XBeeProS2B, address);
+                case HardwareVersion.XBee24C:
+                    return new XBeeSeries2(this, HardwareVersion.XBee24C, address);
+                case HardwareVersion.XBeePro900:
+                    return new XBeePro900HP(this, HardwareVersion.XBeePro900, address);
+                case HardwareVersion.XBeePro900HP:
+                    return new XBeePro900HP(this, HardwareVersion.XBeePro900HP, address);
+                case HardwareVersion.XBeeProSX:
+                    return new XBeePro900HP(this, HardwareVersion.XBeeProSX, address);
+                case HardwareVersion.XBeeCellular:
+                    return new XBeeCellular(this, HardwareVersion.XBeeCellular, address);
                 default:
                     throw new NotSupportedException($"{hardwareVersion} not supported.");
             }
         }
 
-        private readonly BinarySerializer _serializer = new BinarySerializer {Endianness = Endianness.Big};
-        private CancellationTokenSource _listenerCancellationTokenSource;
-        private readonly FrameContext _frameContext = new FrameContext(null);
+        private readonly SemaphoreSlim _listenLock = new SemaphoreSlim(1);
 
-        private void Listen()
+        private void Listen(bool once = false)
         {
             _listenerCancellationTokenSource = new CancellationTokenSource();
 
             Task.Run(async () =>
             {
-                var cancellationToken = _listenerCancellationTokenSource.Token;
+                await _listenLock.WaitAsync();
 
-                while (!_listenerCancellationTokenSource.IsCancellationRequested)
+                try
                 {
-                    var stream = new SerialDeviceStream(_serialDevice);
-                    var frame = await _serializer.DeserializeAsync<Frame>(stream, _frameContext, cancellationToken)
-                        .ConfigureAwait(false);
+                    var cancellationToken = _listenerCancellationTokenSource.Token;
 
-                    ProcessFrame(frame.Payload.Content);
+                    do
+                    {
+                        var stream = new SerialDeviceStream(_serialDevice);
+                        var frame = await _serializer
+                            .DeserializeAsync<Frame>(stream, _frameContext, cancellationToken)
+                            .ConfigureAwait(false);
+
+                        ProcessFrame(frame.Payload.Content);
+                    } while (!once && !_listenerCancellationTokenSource.IsCancellationRequested);
+                }
+                catch (TaskCanceledException)
+                {
+                }
+                finally
+                {
+                    _listenLock.Release();
                 }
             });
-        }
-
-        private void Execute(FrameContent frameContent)
-        {
-            var stream = new SerialDeviceStream(_serialDevice);
-            var frame = new Frame(frameContent);
-            _serializer.Serialize(stream, frame);
         }
 
         private void ProcessFrame(FrameContent content)
@@ -674,8 +654,8 @@ namespace XBee
             else if (content is NodeIdentificationFrame idFrame)
             {
                 var idEvent = new NodeIdentificationEventArgs(
-                    new NodeAddress(idFrame.SenderLongAddress, idFrame.SenderShortAddress), 
-                    new NodeAddress(idFrame.RemoteLongAddress, idFrame.RemoteShortAddress), 
+                    new NodeAddress(idFrame.SenderLongAddress, idFrame.SenderShortAddress),
+                    new NodeAddress(idFrame.RemoteLongAddress, idFrame.RemoteShortAddress),
                     idFrame.ParentAddress, idFrame.Name, idFrame.DeviceType,
                     idFrame.NodeIdentificationReason, idFrame.ReceiveOptions,
                     idFrame.DigiProfileId, idFrame.ManufacturerId);
@@ -699,42 +679,6 @@ namespace XBee
 
                 return _frameId;
             }
-        }
-        
-        /// <summary>
-        ///     Occurs after a member has been serialized.
-        /// </summary>
-        public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized
-        {
-            add => _serializer.MemberSerialized += value;
-            remove => _serializer.MemberSerialized -= value;
-        }
-
-        /// <summary>
-        ///     Occurs after a member has been deserialized.
-        /// </summary>
-        public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized
-        {
-            add => _serializer.MemberDeserialized += value;
-            remove => _serializer.MemberDeserialized -= value;
-        }
-
-        /// <summary>
-        ///     Occurs before a member has been serialized.
-        /// </summary>
-        public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing
-        {
-            add => _serializer.MemberSerializing += value;
-            remove => _serializer.MemberSerializing -= value;
-        }
-
-        /// <summary>
-        ///     Occurs before a member has been deserialized.
-        /// </summary>
-        public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing
-        {
-            add => _serializer.MemberDeserializing += value;
-            remove => _serializer.MemberDeserializing -= value;
         }
     }
 }

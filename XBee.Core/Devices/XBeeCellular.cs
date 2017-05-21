@@ -33,14 +33,14 @@ namespace XBee.Devices
         /// </summary>
         public event EventHandler<SmsReceivedEventArgs> SmsReceived
         {
-            add { Controller.SmsReceived += value; }
-            remove { Controller.SmsReceived -= value; }
+            add => Controller.SmsReceived += value;
+            remove => Controller.SmsReceived -= value;
         }
 
         public event EventHandler<InternetDataReceivedEventArgs> InternetDataReceived
         {
-            add { Controller.InternetDataReceived += value; }
-            remove { Controller.InternetDataReceived -= value; }
+            add => Controller.InternetDataReceived += value;
+            remove => Controller.InternetDataReceived -= value;
         }
 
         /// <summary>
@@ -214,13 +214,13 @@ namespace XBee.Devices
         /// <param name="phoneNumber"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task SendSms(string phoneNumber, string message)
+        public void SendSms(string phoneNumber, string message)
         {
             var cleanNumber = phoneNumber.Replace("-", string.Empty)
                 .Replace("(", string.Empty)
                 .Replace(")", string.Empty);
             var txSms = new TxSmsFrame(cleanNumber, message);
-            await Controller.ExecuteAsync(txSms);
+            Controller.ExecuteAsync(txSms);
         }
 
 // ReSharper disable InconsistentNaming
@@ -242,13 +242,16 @@ namespace XBee.Devices
             await TransmitDataAsync(address, port, 0, protocol, TxIPv4Options.None, data);
         }
 
-        public async Task TransmitDataAsync(IPAddress address, ushort port, ushort sourcePort, InternetProtocol protocol,
+        public Task TransmitDataAsync(IPAddress address, ushort port, ushort sourcePort, InternetProtocol protocol,
             TxIPv4Options options, byte[] data)
         {
             var addressData = address.GetAddressBytes();
             var addressValue = BitConverter.ToUInt32(addressData, 0);
             var txIPv4Frame = new TxIPv4Frame(addressValue, port, sourcePort, protocol, options, data);
-            await Controller.ExecuteAsync(txIPv4Frame);
+
+            // this kind of sucks but I switched back to a more accurate non-async model but now we're stuck with
+            // the "async" interface.  At some point maybe I'll fix it so it's async all the way down...
+            return Task.Run(() => Controller.ExecuteAsync(txIPv4Frame));
         }
 
         protected override NodeAddress GetAddressInternal()
@@ -261,10 +264,7 @@ namespace XBee.Devices
         /// <summary>
         ///     Not supported on XBee Cellular.  See GetIPAddressAsync().
         /// </summary>
-        public override NodeAddress Address
-        {
-            get { throw new NotSupportedException(NotSupportedMessage); }
-        }
+        public override NodeAddress Address => throw new NotSupportedException(NotSupportedMessage);
 
         /// <summary>
         ///     Not supported on XBee Cellular.  See GetIPAddressAsync().
@@ -432,7 +432,7 @@ namespace XBee.Devices
         /// </summary>
         public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -440,7 +440,7 @@ namespace XBee.Devices
         /// </summary>
         public override Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         #endregion
