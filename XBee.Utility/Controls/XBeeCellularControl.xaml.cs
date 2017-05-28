@@ -17,9 +17,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace XBee.Utility.Controls
 {
-    public sealed partial class SerialDeviceControl : UserControl
+    public sealed partial class XBeeCellularControl : UserControl
     {
-        public SerialDeviceControl()
+        public XBeeCellularControl()
         {
             this.InitializeComponent();
         }

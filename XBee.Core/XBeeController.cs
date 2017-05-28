@@ -435,18 +435,15 @@ namespace XBee
                 _serializer.MemberDeserializing += (sender, args) => Debug.WriteLine("D -> " + args.MemberName);
                 _serializer.MemberDeserialized += (sender, args) => Debug.WriteLine("D <- " + args.MemberName + ": " + args.Value);
 
-                // start receiving frames
+                // receive one frame to get HW version
                 Listen(true);
 
-                // set initialized so GetHardwareVersion doesn't try to enter this
+                // set initialized so GetHardwareVersion doesn't try to enter this again
                 _isInitialized = true;
 
                 // Unfortunately the protocol changes based on what type of hardware we're using...
                 _hardwareVersion = await GetHardwareVersion().ConfigureAwait(false);
                 _frameContext.ControllerHardwareVersion = _hardwareVersion.Value;
-
-                // reset frame deserializer
-                //_listenerCancellationTokenSource.Cancel(false);
 
                 // start receiving frames
                 Listen();

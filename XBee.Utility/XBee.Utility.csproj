@@ -95,6 +95,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\XBeeCellularControl.xaml.cs">
+      <DependentUpon>XBeeCellularControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\XBeeControllerControl.xaml.cs">
+      <DependentUpon>XBeeControllerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\ZeroToFalseConverter.cs" />
     <Compile Include="Converters\ZeroToVisibilityConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -129,6 +135,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\XBeeCellularControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\XBeeControllerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -11,6 +11,7 @@ namespace XBee.Utility.ViewModels
     public class ViewModel : ViewModelBase
     {
         private SerialDeviceViewModel _selectedDevice;
+        private XBeeControllerViewModel _selectedController;
         public ObservableCollection<SerialDeviceViewModel> SerialDevices { get; } = new ObservableCollection<SerialDeviceViewModel>();
 
         public ViewModel()
@@ -32,6 +33,18 @@ namespace XBee.Utility.ViewModels
 
         public ObservableCollection<XBeeControllerViewModel> DiscoveredControllers { get; } = new ObservableCollection<XBeeControllerViewModel>();
 
+        public XBeeControllerViewModel SelectedController
+        {
+            get => _selectedController;
+
+            set
+            {
+                if (Equals(value, _selectedController)) return;
+                _selectedController = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand ConnectCommand { get; }
 
         public async Task RefreshDevicesAsync()
@@ -48,8 +61,8 @@ namespace XBee.Utility.ViewModels
             foreach (var serialDevice in newDevices)
             {
                 SerialDevices.Add(serialDevice);
-                serialDevice.SerialDevice.ReadTimeout = TimeSpan.MaxValue;
-                serialDevice.SerialDevice.WriteTimeout = TimeSpan.FromSeconds(1);
+                //serialDevice.SerialDevice.ReadTimeout = TimeSpan.MaxValue;
+                //serialDevice.SerialDevice.WriteTimeout = TimeSpan.FromSeconds(60);
             }
 
             foreach (var missingDevice in missingDevices)
