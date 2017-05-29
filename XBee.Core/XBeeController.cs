@@ -251,9 +251,8 @@ namespace XBee
             }
 
             var version =
-                await
-                    ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
-                        TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+                await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
+                    TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
             return version.HardwareVersion;
         }
