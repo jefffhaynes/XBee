@@ -2,7 +2,7 @@
 
 namespace XBee.Utility.ViewModels
 {
-    public class XBeeControllerViewModel : ViewModelBase
+    public class XBeeControllerViewModel : ViewModelBase, IHardware
     {
         public XBeeControllerViewModel(Universal.XBeeController controller, HardwareVersion hardwareVersion)
         {

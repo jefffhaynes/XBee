@@ -6,9 +6,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:XBee.Utility.Converters"
     xmlns:controls="using:XBee.Utility.Controls"
+    xmlns:utility="using:XBee.Utility"
     mc:Ignorable="d">
     <Page.Resources>
         <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
+        <utility:HardwareVersionTemplateSelector x:Key="HardwareVersionTemplateSelector">
+            <utility:HardwareVersionTemplateSelector.CellularDataTemplate>
+                <DataTemplate>
+                    <controls:XBeeCellularControl/>
+                </DataTemplate>
+            </utility:HardwareVersionTemplateSelector.CellularDataTemplate>
+        </utility:HardwareVersionTemplateSelector>
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Pivot Margin="6">
@@ -84,7 +92,7 @@
                         </Grid>
                     </Border>
                     <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="1,0,0,0">
-                        <ListView ItemsSource="{Binding DiscoveredControllers}" SelectedItem="{Binding SelectedController}" Margin="6">
+                        <ListView ItemsSource="{Binding DiscoveredControllers}" SelectedItem="{Binding SelectedHardware}" Margin="6">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <controls:XBeeControllerControl/>
@@ -93,7 +101,8 @@
                         </ListView>
                     </Border>
                     <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="1,0,0,0">
-                        
+                        <ContentPresenter ContentTemplateSelector="{StaticResource HardwareVersionTemplateSelector}"
+                                          Content="{Binding SelectedHardware}"/>
                     </Border>
                 </Grid>
             </PivotItem>

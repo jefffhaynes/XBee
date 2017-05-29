@@ -11,7 +11,7 @@ namespace XBee.Utility.ViewModels
     public class ViewModel : ViewModelBase
     {
         private SerialDeviceViewModel _selectedDevice;
-        private XBeeControllerViewModel _selectedController;
+        private IHardware _selectedHardware;
         public ObservableCollection<SerialDeviceViewModel> SerialDevices { get; } = new ObservableCollection<SerialDeviceViewModel>();
 
         public ViewModel()
@@ -33,14 +33,14 @@ namespace XBee.Utility.ViewModels
 
         public ObservableCollection<XBeeControllerViewModel> DiscoveredControllers { get; } = new ObservableCollection<XBeeControllerViewModel>();
 
-        public XBeeControllerViewModel SelectedController
+        public IHardware SelectedHardware
         {
-            get => _selectedController;
+            get => _selectedHardware;
 
             set
             {
-                if (Equals(value, _selectedController)) return;
-                _selectedController = value;
+                if (Equals(value, _selectedHardware)) return;
+                _selectedHardware = value;
                 OnPropertyChanged();
             }
         }

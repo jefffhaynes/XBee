@@ -17,7 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+        <TextBlock Text="Cellular"/>
         
     </Grid>
 </UserControl>
