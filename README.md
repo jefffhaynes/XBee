@@ -1,7 +1,11 @@
 XBee
 ====
 
-.NET library for [XBee wireless controllers](http://www.digi.com/xbee/) available as a [nuget package](https://www.nuget.org/packages/XBee/).
+A [UWP library](https://www.nuget.org/packages/XBee.Universal) for [XBee wireless controllers](http://www.digi.com/xbee/).
+
+This library is broken into two pieces: a core [.NET Standard library](https://www.nuget.org/packages/XBee.Core), and a [UWP wrapper library](https://www.nuget.org/packages/XBee.Universal) that contains the serial device implementation.
+
+The .NET classic PCL is available [here](https://www.nuget.org/packages/XBee/4.2.0).  At some point I will port the classic .NET library to use the new core Standard library or wait until SerialPort is stable in .NET Standard.
 
  * Support for Series1, Series 2, 900HP, and Cellular
  * Simple async/await command and query model
@@ -26,7 +30,16 @@ Here is a simple example with a coordinator on COM3 and an arbitrary number of e
 <strong>Ensure the coordinator is in API Mode 1</strong>
 
 ```C#
-var controller = new XBeeController();
+
+var devices = await DeviceInformation.FindAllAsync(SerialDevice.GetDeviceSelector());
+var device = devices.FirstOrDefault();
+if (device == null)
+{
+    return;
+}
+
+var serialDevice = await SerialDevice.FromIdAsync(d.Id);
+var controller = new XBee.Universal.XBeeController(sd);
 
 // setup a simple callback for each time we discover a node
 controller.NodeDiscovered += async (sender, args) => 
@@ -45,9 +58,6 @@ controller.NodeDiscovered += async (sender, args) =>
     args.Node.SampleReceived += (node, sample) => Console.WriteLine("Sample recieved: {0}", sample);
 }
 
-// open the connection to our coordinator
-await controller.OpenAsync("COM3", 9600);
-
 // now discover the network, which will trigger the NodeDiscovered callback for each node found
 await controller.DiscoverNetwork();
 
@@ -55,15 +65,6 @@ Console.ReadKey();
 
 // wait for the samples to flow in...
 
-```
-
-If you don't know a priori what port the XBee will be attached to you can also scan for it:
-
-```c#
-var controller = await XBeeController.FindAndOpen(SerialPort.GetPortNames(), 9600);
-
-if(controller != null)
-   // ...
 ```
 
 ### Nodes ###
@@ -74,7 +75,7 @@ While the controller represents the API, if we want to control the node itself w
 
 ```c#
 var localNode = controller.Local;
-// which is the same as calling await controller.GetNodeAsync(null);
+// which is the same as calling await controller.GetNodeAsync(); // (address = null)
 
 var serialNumber = await localNode.GetSerialNumber();
 // etc
@@ -111,7 +112,7 @@ Below is a table summarizing the commands supported by this library.
 
 |       | Description            | Query                              | Command                            | S1 | S2 | Pro900 | Cellular |
 |:-----:|:-----------------------|:-----------------------------------|:-----------------------------------|:--:|:--:|:------:|:--------:|
-| HV    | Hardware Version       | HardwareVersion (property)         | --                                 | x  | x  |    x   |    x     |
+| HV    | Hardware Version       | GetHardwareVersionAsync            | --                                 | x  | x  |    x   |    x     |
 | AP    | API Mode               | GetApiModeAsync                    | SetApiModeAsync                    | x  | x  |    x   |    x     |
 | BD    | Interface Data Rate    | GetBaudRateAsync                   | SetBaudRateAsync                   | x  | x  |    x   |    x     |
 | NB    | Parity                 | GetParityAsync                     | SetParityAsync                     | x  | x  |    x   |    x     |
