@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0"?>
 <package >
   <metadata minClientVersion="3.2">
-    <id>XBee</id>
-    <version>5.0-beta</version>
+    <id>XBee.Universal</id>
+    <version>1.0.0-beta</version>
     <authors>Jeff Haynes</authors>
     <owners></owners>
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
