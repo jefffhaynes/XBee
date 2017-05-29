@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <RootNamespace>XBee</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>Core functionality for the XBee library</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +30,8 @@ namespace XBee
 
         private readonly SemaphoreSlim _initializeSemaphoreSlim = new SemaphoreSlim(1);
 
+        private readonly SemaphoreSlim _listenLock = new SemaphoreSlim(1);
+
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
         private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
 
@@ -38,7 +39,6 @@ namespace XBee
 
         private readonly BinarySerializer _serializer = new BinarySerializer {Endianness = Endianness.Big};
 
-        //private SerialConnection _connection;
         private byte _frameId = byte.MinValue;
 
         private HardwareVersion? _hardwareVersion;
@@ -243,6 +243,21 @@ namespace XBee
             remove => _serializer.MemberDeserializing -= value;
         }
 
+        public async Task<HardwareVersion> GetHardwareVersion(NodeAddress address = null)
+        {
+            if (_hardwareVersion != null)
+            {
+                return _hardwareVersion.Value;
+            }
+
+            var version =
+                await
+                    ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
+                        TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+
+            return version.HardwareVersion;
+        }
+
 
         /// <summary>
         ///     Send a frame to this node and wait for a response.
@@ -316,7 +331,8 @@ namespace XBee
             where TResponseFrame : CommandResponseFrameContent
         {
             await InitializeAsync().ConfigureAwait(false);
-            return await ExecuteQueryAsync<TResponseFrame>(frame, DefaultRemoteQueryTimeout, cancellationToken).ConfigureAwait(false);
+            return await ExecuteQueryAsync<TResponseFrame>(frame, DefaultRemoteQueryTimeout, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -332,7 +348,8 @@ namespace XBee
             where TResponseData : AtCommandResponseFrameData
         {
             var timeout = address == null ? DefaultLocalQueryTimeout : DefaultRemoteQueryTimeout;
-            return await ExecuteAtQueryAsync<TResponseData>(command, address, timeout, queueLocal).ConfigureAwait(false);
+            return await ExecuteAtQueryAsync<TResponseData>(command, address, timeout, queueLocal)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -431,10 +448,6 @@ namespace XBee
 
             try
             {
-                _serializer.MemberSerialized += (sender, args) => Debug.WriteLine("S -> " + args.MemberName + ": " + args.Value);
-                _serializer.MemberDeserializing += (sender, args) => Debug.WriteLine("D -> " + args.MemberName);
-                _serializer.MemberDeserialized += (sender, args) => Debug.WriteLine("D <- " + args.MemberName + ": " + args.Value);
-
                 // receive one frame to get HW version
                 Listen(true);
 
@@ -443,6 +456,7 @@ namespace XBee
 
                 // Unfortunately the protocol changes based on what type of hardware we're using...
                 _hardwareVersion = await GetHardwareVersion().ConfigureAwait(false);
+
                 _frameContext.ControllerHardwareVersion = _hardwareVersion.Value;
 
                 // start receiving frames
@@ -459,21 +473,6 @@ namespace XBee
             {
                 _initializeSemaphoreSlim.Release();
             }
-        }
-
-        public async Task<HardwareVersion> GetHardwareVersion(NodeAddress address = null)
-        {
-            if (_hardwareVersion != null)
-            {
-                return _hardwareVersion.Value;
-            }
-
-            var version =
-                await
-                    ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
-                        TimeSpan.FromSeconds(3)).ConfigureAwait(false);
-
-            return version.HardwareVersion;
         }
 
         /// <summary>
@@ -542,8 +541,6 @@ namespace XBee
                     throw new NotSupportedException($"{hardwareVersion} not supported.");
             }
         }
-
-        private readonly SemaphoreSlim _listenLock = new SemaphoreSlim(1);
 
         private void Listen(bool once = false)
         {
