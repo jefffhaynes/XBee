@@ -11,6 +11,10 @@
     <Page.Resources>
         <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
         <utility:HardwareVersionTemplateSelector x:Key="HardwareVersionTemplateSelector">
+            <utility:HardwareVersionTemplateSelector.DefaultDataTemplate>
+                <DataTemplate>
+                </DataTemplate>
+            </utility:HardwareVersionTemplateSelector.DefaultDataTemplate>
             <utility:HardwareVersionTemplateSelector.CellularDataTemplate>
                 <DataTemplate>
                     <controls:XBeeCellularControl/>
@@ -33,7 +37,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <ListView Margin="6" ItemsSource="{Binding SerialDevices}" SelectedItem="{Binding SelectedDevice, Mode=TwoWay}">
+                    <ListView Margin="6" ItemsSource="{Binding SerialDevices}" SelectedItem="{Binding SelectedSerialDevice, Mode=TwoWay}">
                         <ListView.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Margin="6" HorizontalAlignment="Center" Text="No serial devices found"
@@ -64,35 +68,35 @@
 
                             <TextBlock Grid.Column="0" Grid.Row="0" Margin="6" Text="Baud Rate" VerticalAlignment="Center"/>
                             <ComboBox Grid.Column="1" Grid.Row="0" Margin="6" 
-                                      SelectedItem="{Binding SelectedDevice.BaudRate, Mode=TwoWay}"
-                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedBaudRates, Mode=OneWay}" />
+                                      SelectedItem="{Binding SelectedSerialDevice.BaudRate, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedSerialDevice.SupportedBaudRates, Mode=OneWay}" />
 
                             <TextBlock Grid.Column="0" Grid.Row="1" Margin="6" Text="Data Bits" VerticalAlignment="Center"/>
                             <ComboBox Grid.Column="1" Grid.Row="1" Margin="6" 
-                                      SelectedItem="{Binding SelectedDevice.DataBits, Mode=TwoWay}"
-                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedDataBits, Mode=OneWay}" />
+                                      SelectedItem="{Binding SelectedSerialDevice.DataBits, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedSerialDevice.SupportedDataBits, Mode=OneWay}" />
                             
                             <TextBlock Grid.Column="0" Grid.Row="2" Margin="6" Text="Stop Bits" VerticalAlignment="Center"/>
                             <ComboBox Grid.Column="1" Grid.Row="2" Margin="6" 
-                                      SelectedItem="{Binding SelectedDevice.StopBits, Mode=TwoWay}"
-                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedStopBits, Mode=OneWay}" />
+                                      SelectedItem="{Binding SelectedSerialDevice.StopBits, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedSerialDevice.SupportedStopBits, Mode=OneWay}" />
 
                             <TextBlock Grid.Column="0" Grid.Row="3" Margin="6" Text="Parity" VerticalAlignment="Center"/>
                             <ComboBox Grid.Column="1" Grid.Row="3" Margin="6" 
-                                      SelectedItem="{Binding SelectedDevice.Parity, Mode=TwoWay}"
-                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedParity, Mode=OneWay}" />
+                                      SelectedItem="{Binding SelectedSerialDevice.Parity, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedSerialDevice.SupportedParity, Mode=OneWay}" />
 
                             <TextBlock Grid.Column="0" Grid.Row="4" Margin="6" Text="Handshake" VerticalAlignment="Center"/>
                             <ComboBox Grid.Column="1" Grid.Row="4" Margin="6" 
-                                      SelectedItem="{Binding SelectedDevice.Handshake, Mode=TwoWay}"
-                                      ItemsSource="{x:Bind ViewModel.SelectedDevice.SupportedHandshakes, Mode=OneWay}" />
+                                      SelectedItem="{Binding SelectedSerialDevice.Handshake, Mode=TwoWay}"
+                                      ItemsSource="{x:Bind ViewModel.SelectedSerialDevice.SupportedHandshakes, Mode=OneWay}" />
 
                             <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Margin="6" Content="Connect"
                                     HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.ConnectCommand}"/>
                         </Grid>
                     </Border>
                     <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="1,0,0,0">
-                        <ListView ItemsSource="{Binding DiscoveredControllers}" SelectedItem="{Binding SelectedHardware}" Margin="6">
+                        <ListView ItemsSource="{Binding DiscoveredControllers}" SelectedItem="{Binding SelectedHardware, Mode=TwoWay}" Margin="6">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <controls:XBeeControllerControl/>
@@ -101,8 +105,8 @@
                         </ListView>
                     </Border>
                     <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="1,0,0,0">
-                        <ContentPresenter ContentTemplateSelector="{StaticResource HardwareVersionTemplateSelector}"
-                                          Content="{Binding SelectedHardware}"/>
+                        <ContentControl ContentTemplateSelector="{StaticResource HardwareVersionTemplateSelector}"
+                                          Content="{Binding SelectedHardware}" />
                     </Border>
                 </Grid>
             </PivotItem>

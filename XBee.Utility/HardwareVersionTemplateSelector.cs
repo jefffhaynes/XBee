@@ -8,10 +8,16 @@ namespace XBee.Utility
 {
     public class HardwareVersionTemplateSelector : DataTemplateSelector
     {
+        public DataTemplate DefaultDataTemplate { get; set; }
         public DataTemplate CellularDataTemplate { get; set; }
 
-        protected override DataTemplate SelectTemplateCore(object item)
+        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
+            if (item == null)
+            {
+                return DefaultDataTemplate;
+            }
+
             var hardware = (IHardware) item;
 
             switch (hardware.HardwareVersion)
@@ -22,7 +28,7 @@ namespace XBee.Utility
                 }
                 default:
                 {
-                    throw new NotImplementedException();
+                    return base.SelectTemplateCore(item, container);
                 }
             }
         }

@@ -12,7 +12,7 @@
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
-      <dependency id="XBee.Core" version="1.0.0" />
+      <dependency id="XBee.Core" version="1.0.0-beta" />
     </dependencies>
   </metadata>
   <files>
@@ -24,7 +24,6 @@
 
     <!-- Resource files go together with the reference library. -->
     <file src="..\bin\x86\Release\XBee.Universal.pri" target="ref\uap10.0" />
-    <!--<file src="..\bin\x86\Release\XBee.Universal\*" target="ref\uap10.0\XBee.Universal" />-->
 
     <!-- The architecture-specific files go in architecture-specific directories. -->
     <file src="..\bin\x86\Release\XBee.Universal.dll" target="runtimes\win10-x86\lib\uap10.0" />

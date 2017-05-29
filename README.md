@@ -5,12 +5,11 @@ A [UWP library](https://www.nuget.org/packages/XBee.Universal) for [XBee wireles
 
 This library is broken into two pieces: a core [.NET Standard library](https://www.nuget.org/packages/XBee.Core), and a [UWP wrapper library](https://www.nuget.org/packages/XBee.Universal) that contains the serial device implementation.
 
-The .NET classic PCL is available [here](https://www.nuget.org/packages/XBee/4.2.0).  At some point I will port the classic .NET library to use the new core Standard library or wait until SerialPort is stable in .NET Standard.
-
  * Support for Series1, Series 2, 900HP, and Cellular
  * Simple async/await command and query model
  * [.NET Rx](https://rx.codeplex.com/)  support for async receive and sampling.
 
+The .NET classic PCL is available [here](https://www.nuget.org/packages/XBee/4.2.0).  At some point I will port the classic .NET library to use the new core Standard library or wait until SerialPort is stable in .NET Standard.
 
 ### Features ###
 

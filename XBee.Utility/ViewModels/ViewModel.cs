@@ -10,7 +10,7 @@ namespace XBee.Utility.ViewModels
 {
     public class ViewModel : ViewModelBase
     {
-        private SerialDeviceViewModel _selectedDevice;
+        private SerialDeviceViewModel _selectedSerialDevice;
         private IHardware _selectedHardware;
         public ObservableCollection<SerialDeviceViewModel> SerialDevices { get; } = new ObservableCollection<SerialDeviceViewModel>();
 
@@ -19,14 +19,14 @@ namespace XBee.Utility.ViewModels
             ConnectCommand = new RelayCommand(Connect);
         }
 
-        public SerialDeviceViewModel SelectedDevice
+        public SerialDeviceViewModel SelectedSerialDevice
         {
-            get => _selectedDevice;
+            get => _selectedSerialDevice;
 
             set
             {
-                if (Equals(value, _selectedDevice)) return;
-                _selectedDevice = value;
+                if (Equals(value, _selectedSerialDevice)) return;
+                _selectedSerialDevice = value;
                 OnPropertyChanged();
             }
         }
@@ -73,7 +73,7 @@ namespace XBee.Utility.ViewModels
 
         private async void Connect()
         {
-            var controller = new Universal.XBeeController(SelectedDevice.SerialDevice);
+            var controller = new Universal.XBeeController(SelectedSerialDevice.SerialDevice);
 
             try
             {

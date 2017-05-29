@@ -154,9 +154,16 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.2.3</Version>
     </PackageReference>
-    <PackageReference Include="XBee">
-      <Version>5.0.0</Version>
-    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XBee.Core\XBee.Core.csproj">
+      <Project>{780a3581-45f7-4ae6-9d43-6922b7e18d13}</Project>
+      <Name>XBee.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XBee.Universal\XBee.Universal.csproj">
+      <Project>{499b0db9-85c1-4dd3-9aa8-72f19932567e}</Project>
+      <Name>XBee.Universal</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -119,9 +119,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="protocol"></param>
         /// <returns></returns>
-        public async Task SetInternetProtocolAsync(InternetProtocol protocol)
+        public Task SetInternetProtocolAsync(InternetProtocol protocol)
         {
-            await ExecuteAtCommandAsync(new InternetProtocolCommand(protocol));
+            return ExecuteAtCommandAsync(new InternetProtocolCommand(protocol));
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="protocol"></param>
         /// <returns></returns>
-        public async Task SetSslProtocolAsync(SslProtocol protocol)
+        public Task SetSslProtocolAsync(SslProtocol protocol)
         {
-            await ExecuteAtCommandAsync(new SslProtocolCommand(protocol));
+            return ExecuteAtCommandAsync(new SslProtocolCommand(protocol));
         }
 
         /// <summary>
@@ -161,9 +161,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public async Task SetTcpClientConnectionTimeoutAsync(TimeSpan timeout)
+        public Task SetTcpClientConnectionTimeoutAsync(TimeSpan timeout)
         {
-            await ExecuteAtCommandAsync(new TcpClientConnectionTimeoutCommand(timeout));
+            return ExecuteAtCommandAsync(new TcpClientConnectionTimeoutCommand(timeout));
         }
 
         /// <summary>
@@ -183,9 +183,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="option"></param>
         /// <returns></returns>
-        public async Task SetDeviceOptionAsync(CellularDeviceOption option)
+        public Task SetDeviceOptionAsync(CellularDeviceOption option)
         {
-            await ExecuteAtCommandAsync(new CellularDeviceOptionCommand(option));
+            return ExecuteAtCommandAsync(new CellularDeviceOptionCommand(option));
         }
 
         /// <summary>
@@ -203,9 +203,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public async Task SetAccessPointNameAsync(string name)
+        public Task SetAccessPointNameAsync(string name)
         {
-            await ExecuteAtCommandAsync(new AccessPointNameCommand(name));
+            return ExecuteAtCommandAsync(new AccessPointNameCommand(name));
         }
 
         /// <summary>
@@ -214,13 +214,13 @@ namespace XBee.Devices
         /// <param name="phoneNumber"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public void SendSms(string phoneNumber, string message)
+        public Task SendSmsAsync(string phoneNumber, string message)
         {
             var cleanNumber = phoneNumber.Replace("-", string.Empty)
                 .Replace("(", string.Empty)
                 .Replace(")", string.Empty);
             var txSms = new TxSmsFrame(cleanNumber, message);
-            Controller.ExecuteAsync(txSms);
+            return Controller.ExecuteAsync(txSms);
         }
 
 // ReSharper disable InconsistentNaming

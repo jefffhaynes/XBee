@@ -2,7 +2,6 @@
     x:Class="XBee.Utility.Controls.XBeeCellularControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:XBee.Utility.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -17,7 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Cellular"/>
+        <TextBlock Text="{x:Bind }"/>
         
     </Grid>
 </UserControl>
