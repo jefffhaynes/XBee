@@ -16,7 +16,7 @@ namespace XBee.Utility.ViewModels
 
         public ViewModel()
         {
-            ConnectCommand = new RelayCommand(Connect);
+            ConnectCommand = new RelayCommand(ConnectAsync);
         }
 
         public SerialDeviceViewModel SelectedSerialDevice
@@ -71,13 +71,13 @@ namespace XBee.Utility.ViewModels
             }
         }
 
-        private async void Connect()
+        private async void ConnectAsync()
         {
             var controller = new Universal.XBeeController(SelectedSerialDevice.SerialDevice);
 
             try
             {
-                var hardwareVersion = await controller.GetHardwareVersion();
+                var hardwareVersion = await controller.GetHardwareVersionAsync();
                 DiscoveredControllers.Add(new XBeeControllerViewModel(controller, hardwareVersion));
             }
             catch (TimeoutException)

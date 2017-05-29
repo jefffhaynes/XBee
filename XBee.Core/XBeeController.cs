@@ -117,7 +117,7 @@ namespace XBee
             if (autodetectHardwareVersion)
             {
                 version = await
-                    TaskExtensions.Retry(async () => await GetHardwareVersion(address), TimeSpan.FromSeconds(5),
+                    TaskExtensions.Retry(async () => await GetHardwareVersionAsync(address), TimeSpan.FromSeconds(5),
                         typeof(TimeoutException), typeof(AtCommandException)).ConfigureAwait(false);
             }
             else
@@ -243,7 +243,7 @@ namespace XBee
             remove => _serializer.MemberDeserializing -= value;
         }
 
-        public async Task<HardwareVersion> GetHardwareVersion(NodeAddress address = null)
+        public async Task<HardwareVersion> GetHardwareVersionAsync(NodeAddress address = null)
         {
             if (_hardwareVersion != null)
             {
@@ -450,11 +450,11 @@ namespace XBee
                 // receive one frame to get HW version
                 Listen(true);
 
-                // set initialized so GetHardwareVersion doesn't try to enter this again
+                // set initialized so GetHardwareVersionAsync doesn't try to enter this again
                 _isInitialized = true;
 
                 // Unfortunately the protocol changes based on what type of hardware we're using...
-                var hardwareVersion = await GetHardwareVersion().ConfigureAwait(false);
+                var hardwareVersion = await GetHardwareVersionAsync().ConfigureAwait(false);
 
                 _frameContext.ControllerHardwareVersion = hardwareVersion;
 
