@@ -11,10 +11,6 @@
     <Page.Resources>
         <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
         <utility:HardwareVersionTemplateSelector x:Key="HardwareVersionTemplateSelector">
-            <utility:HardwareVersionTemplateSelector.DefaultDataTemplate>
-                <DataTemplate>
-                </DataTemplate>
-            </utility:HardwareVersionTemplateSelector.DefaultDataTemplate>
             <utility:HardwareVersionTemplateSelector.CellularDataTemplate>
                 <DataTemplate>
                     <controls:XBeeCellularControl/>
