@@ -16,7 +16,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="{x:Bind }"/>
-        
+
     </Grid>
 </UserControl>
