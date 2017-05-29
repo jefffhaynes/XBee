@@ -454,14 +454,16 @@ namespace XBee
                 _isInitialized = true;
 
                 // Unfortunately the protocol changes based on what type of hardware we're using...
-                _hardwareVersion = await GetHardwareVersion().ConfigureAwait(false);
+                var hardwareVersion = await GetHardwareVersion().ConfigureAwait(false);
 
-                _frameContext.ControllerHardwareVersion = _hardwareVersion.Value;
+                _frameContext.ControllerHardwareVersion = hardwareVersion;
 
                 // start receiving frames
                 Listen();
 
-                Local = CreateNode(_hardwareVersion.Value);
+                Local = CreateNode(hardwareVersion);
+
+                _hardwareVersion = hardwareVersion;
             }
             catch
             {
