@@ -541,7 +541,7 @@ namespace XBee
                 case HardwareVersion.XBeeCellular:
                     return new XBeeCellular(this, HardwareVersion.XBeeCellular, address);
                 default:
-                    throw new NotSupportedException($"{hardwareVersion} not supported.");
+                    throw new NotSupportedException($"Hardware version {hardwareVersion} not supported.");
             }
         }
 
