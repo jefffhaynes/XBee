@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
+using XBee.Devices;
 
 namespace XBee.Utility.ViewModels
 {
@@ -77,7 +78,15 @@ namespace XBee.Utility.ViewModels
             try
             {
                 var hardwareVersion = await controller.GetHardwareVersionAsync();
-                DiscoveredControllers.Add(new XBeeControllerViewModel(controller, hardwareVersion));
+                var node = controller.Local;
+
+                bool isCoord = false;
+                if (node is XBeeSeries1 series1)
+                {
+                    isCoord = await series1.IsCoordinatorAsync();
+                }
+
+                DiscoveredControllers.Add(new XBeeControllerViewModel(controller, hardwareVersion, isCoord));
             }
             catch (TimeoutException)
             {
