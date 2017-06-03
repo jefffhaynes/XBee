@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="XBee.Utility.Controls.XBeeControllerControl"
+    x:Class="XBee.Utility.Controls.XBeeCellularControllerControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:XBee.Utility.Controls"
@@ -12,10 +12,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Margin="6" Text="{Binding HardwareVersion}"/>
-        <Button Grid.Row="1" Margin="6" Content="Discover"/>
     </Grid>
 </UserControl>

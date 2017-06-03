@@ -61,8 +61,7 @@ namespace XBee.Utility.ViewModels
             foreach (var serialDevice in newDevices)
             {
                 SerialDevices.Add(serialDevice);
-                //serialDevice.SerialDevice.ReadTimeout = TimeSpan.MaxValue;
-                //serialDevice.SerialDevice.WriteTimeout = TimeSpan.FromSeconds(60);
+                serialDevice.SerialDevice.ReadTimeout = TimeSpan.MaxValue;
             }
 
             foreach (var missingDevice in missingDevices)

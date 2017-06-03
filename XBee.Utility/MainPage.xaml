@@ -10,10 +10,22 @@
     mc:Ignorable="d">
     <Page.Resources>
         <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
-        <utility:HardwareVersionTemplateSelector x:Key="HardwareVersionTemplateSelector">
+        <utility:HardwareVersionTemplateSelector x:Key="HardwareVersionControllerTemplateSelector">
+            <utility:HardwareVersionTemplateSelector.Series1DataTemplate>
+                <DataTemplate>
+                    <controls:XBeeControllerControl/>
+                </DataTemplate>
+            </utility:HardwareVersionTemplateSelector.Series1DataTemplate>
             <utility:HardwareVersionTemplateSelector.CellularDataTemplate>
                 <DataTemplate>
-                    <controls:XBeeCellularControl/>
+                    <controls:XBeeCellularControllerControl/>
+                </DataTemplate>
+            </utility:HardwareVersionTemplateSelector.CellularDataTemplate>
+        </utility:HardwareVersionTemplateSelector>
+        <utility:HardwareVersionTemplateSelector x:Key="HardwareVersionDetailTemplateSelector">
+            <utility:HardwareVersionTemplateSelector.CellularDataTemplate>
+                <DataTemplate>
+                    <controls:XBeeCellularDetailControl/>
                 </DataTemplate>
             </utility:HardwareVersionTemplateSelector.CellularDataTemplate>
         </utility:HardwareVersionTemplateSelector>
@@ -101,7 +113,7 @@
                         </ListView>
                     </Border>
                     <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="1,0,0,0">
-                        <ContentControl ContentTemplateSelector="{StaticResource HardwareVersionTemplateSelector}"
+                        <ContentControl ContentTemplateSelector="{StaticResource HardwareVersionDetailTemplateSelector}"
                                           Content="{Binding SelectedHardware}" />
                     </Border>
                 </Grid>

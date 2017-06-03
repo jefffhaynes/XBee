@@ -95,8 +95,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\XBeeCellularControl.xaml.cs">
-      <DependentUpon>XBeeCellularControl.xaml</DependentUpon>
+    <Compile Include="Controls\XBeeCellularDetailControl.xaml.cs">
+      <DependentUpon>XBeeCellularDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\XBeeCellularControllerControl.xaml.cs">
+      <DependentUpon>XBeeCellularControllerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\XBeeControllerControl.xaml.cs">
       <DependentUpon>XBeeControllerControl.xaml</DependentUpon>
@@ -137,9 +140,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\XBeeCellularControl.xaml">
+    <Page Include="Controls\XBeeCellularDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\XBeeCellularControllerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\XBeeControllerControl.xaml">
       <SubType>Designer</SubType>
@@ -152,7 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.2.3</Version>
+      <Version>5.3.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

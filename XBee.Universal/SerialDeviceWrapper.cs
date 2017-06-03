@@ -13,6 +13,14 @@ namespace XBee.Universal
         public SerialDeviceWrapper(SerialDevice serialDevice)
         {
             _serialDevice = serialDevice;
+            _serialDevice.ErrorReceived += (sender, args) =>
+            {
+
+            };
+            _serialDevice.PinChanged += (sender, args) =>
+            {
+
+            };
         }
 
         public void Write(byte[] data)
@@ -29,9 +37,9 @@ namespace XBee.Universal
         {
             using (var reader = new DataReader(_serialDevice.InputStream))
             {
-                await reader.LoadAsync(count).AsTask(cancellationToken).ConfigureAwait(false);
-
-                var data = new byte[count];
+                uint read = await reader.LoadAsync(count).AsTask(cancellationToken).ConfigureAwait(false);
+                
+                var data = new byte[read];
                 reader.ReadBytes(data);
                 reader.DetachStream();
                 return data;

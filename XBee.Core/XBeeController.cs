@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +32,7 @@ namespace XBee
         private readonly SemaphoreSlim _initializeSemaphoreSlim = new SemaphoreSlim(1);
 
         private readonly SemaphoreSlim _listenLock = new SemaphoreSlim(1);
+        private readonly object _executionLock = new object();
 
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
         private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
@@ -49,6 +51,13 @@ namespace XBee
         public XBeeController(ISerialDevice serialDevice)
         {
             _serialDevice = serialDevice;
+
+#if DEBUG
+            _serializer.MemberDeserialized += OnMemberDeserialized;
+            _serializer.MemberDeserializing += OnMemberDeserializing;
+            _serializer.MemberSerialized += OnMemberSerialized;
+            _serializer.MemberSerializing += OnMemberSerializing;
+#endif
         }
 
         /// <summary>
@@ -426,9 +435,13 @@ namespace XBee
         internal async Task ExecuteAsync(FrameContent frameContent)
         {
             await InitializeAsync().ConfigureAwait(false);
-            var stream = new SerialDeviceStream(_serialDevice);
-            var frame = new Frame(frameContent);
-            _serializer.Serialize(stream, frame);
+
+            lock (_executionLock)
+            {
+                var stream = new SerialDeviceStream(_serialDevice);
+                var frame = new Frame(frameContent);
+                _serializer.Serialize(stream, frame);
+            }
         }
 
         private async Task InitializeAsync()
@@ -560,12 +573,22 @@ namespace XBee
                     do
                     {
                         var stream = new SerialDeviceStream(_serialDevice);
+
+                        // ReSharper disable InconsistentlySynchronizedField
                         var frame = await _serializer
                             .DeserializeAsync<Frame>(stream, _frameContext, cancellationToken)
                             .ConfigureAwait(false);
+                        // ReSharper restore InconsistentlySynchronizedField
 
                         ProcessFrame(frame.Payload.Content);
-                    } while (!once && !_listenerCancellationTokenSource.IsCancellationRequested);
+
+                        // we want to ignore samples and the like...
+                        if (once && frame.Payload.Content is CommandResponseFrameContent)
+                        {
+                            break;
+                        }
+
+                    } while (!_listenerCancellationTokenSource.IsCancellationRequested);
                 }
                 catch (TaskCanceledException)
                 {
@@ -676,6 +699,28 @@ namespace XBee
 
                 return _frameId;
             }
+        }
+
+        private static void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
+        {
+            Debug.WriteLine("S-Start: {0} @ {1}", e.MemberName, e.Offset);
+        }
+
+        private static void OnMemberSerialized(object sender, MemberSerializedEventArgs e)
+        {
+            var value = e.Value ?? "null";
+            Debug.WriteLine("S-End: {0} ({1}) @ {2}", e.MemberName, value, e.Offset);
+        }
+
+        private static void OnMemberDeserializing(object sender, MemberSerializingEventArgs e)
+        {
+            Debug.WriteLine("D-Start: {0} @ {1}", e.MemberName, e.Offset);
+        }
+
+        private static void OnMemberDeserialized(object sender, MemberSerializedEventArgs e)
+        {
+            var value = e.Value ?? "null";
+            Debug.WriteLine("D-End: {0} ({1}) @ {2}", e.MemberName, value, e.Offset);
         }
     }
 }

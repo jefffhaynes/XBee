@@ -7,6 +7,8 @@ namespace XBee.Utility
 {
     public class HardwareVersionTemplateSelector : DataTemplateSelector
     {
+        public DataTemplate Series1DataTemplate { get; set; }
+        public DataTemplate Series2DataTemplate { get; set; }
         public DataTemplate CellularDataTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
@@ -20,6 +22,19 @@ namespace XBee.Utility
 
             switch (hardware.HardwareVersion)
             {
+                case HardwareVersion.XBeeSeries1:
+                case HardwareVersion.XBeeProSeries1:
+                {
+                    return Series1DataTemplate;
+                }
+                case HardwareVersion.XBeeProS2:
+                case HardwareVersion.XBeeProS2B:
+                case HardwareVersion.XBeeProS2C:
+                case HardwareVersion.XBee24C:
+                case HardwareVersion.XBeePro24C:
+                    {
+                    return Series2DataTemplate;
+                }
                 case HardwareVersion.XBeeCellular:
                 {
                     return CellularDataTemplate;

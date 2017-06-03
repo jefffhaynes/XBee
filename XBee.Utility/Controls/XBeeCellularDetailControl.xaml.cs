@@ -1,9 +1,9 @@
 ﻿
 namespace XBee.Utility.Controls
 {
-    public sealed partial class XBeeControllerControl
+    public sealed partial class XBeeCellularDetailControl
     {
-        public XBeeControllerControl()
+        public XBeeCellularDetailControl()
         {
             InitializeComponent();
         }
