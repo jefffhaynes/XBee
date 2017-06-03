@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="3.2">
     <id>XBee.Universal</id>
-    <version>1.0.0-beta2</version>
+    <version>1.0.0-beta3</version>
     <authors>Jeff Haynes</authors>
     <owners></owners>
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
