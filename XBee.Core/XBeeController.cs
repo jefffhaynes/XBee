@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +8,10 @@ using XBee.Devices;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 using XBee.Observable;
+
+#if DEBUG
+using System.Diagnostics;
+#endif
 
 namespace XBee
 {
@@ -703,6 +706,8 @@ namespace XBee
             }
         }
 
+#if DEBUG
+
         private static void OnMemberSerializing(object sender, MemberSerializingEventArgs e)
         {
             Debug.WriteLine("S-Start: {0} @ {1}", e.MemberName, e.Offset);
@@ -724,5 +729,6 @@ namespace XBee
             var value = e.Value ?? "null";
             Debug.WriteLine("D-End: {0} ({1}) @ {2}", e.MemberName, value, e.Offset);
         }
+#endif
     }
 }
