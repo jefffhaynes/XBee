@@ -541,6 +541,8 @@ namespace XBee
                     return new XBeeSeries2(this, HardwareVersion.XBeeProS2, address);
                 case HardwareVersion.XBeeProS2B:
                     return new XBeeSeries2(this, HardwareVersion.XBeeProS2B, address);
+                case HardwareVersion.XBee24S2C:
+                    return new XBeeSeries2(this, HardwareVersion.XBee24S2C, address);
                 case HardwareVersion.XBee24C:
                     return new XBeeSeries2(this, HardwareVersion.XBee24C, address);
                 case HardwareVersion.XBeePro24C:
