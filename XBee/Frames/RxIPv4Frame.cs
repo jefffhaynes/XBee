@@ -3,7 +3,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
 {
-    public class RxIPv4Frame : CommandFrameContent
+    internal class RxIPv4Frame : CommandFrameContent
     {
         [FieldOrder(0)]
         public uint SourceAddress { get; set; }

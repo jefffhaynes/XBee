@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class TcpClientConnectionTimeoutResponseData : AtCommandResponseFrameData
+    internal class TcpClientConnectionTimeoutResponseData : AtCommandResponseFrameData
     {
         public ushort Value { get; set; }
 

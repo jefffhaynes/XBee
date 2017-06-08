@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class RemoteAtCommandFrameContent : CommandFrameContent
+    internal class RemoteAtCommandFrameContent : CommandFrameContent
     {
         public RemoteAtCommandFrameContent()
         {

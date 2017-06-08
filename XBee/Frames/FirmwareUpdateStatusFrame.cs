@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class FirmwareUpdateStatusFrame : CommandResponseFrameContent
+    internal class FirmwareUpdateStatusFrame : CommandResponseFrameContent
     {
         [FieldOrder(0)]
         public LongAddress LongAddress { get; set; }

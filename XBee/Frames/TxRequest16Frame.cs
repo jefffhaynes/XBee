@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class TxRequest16Frame : CommandFrameContent
+    internal class TxRequest16Frame : CommandFrameContent
     {
         public TxRequest16Frame()
         {

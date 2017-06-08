@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public class AtCommandFrameContent : CommandFrameContent
+    internal class AtCommandFrameContent : CommandFrameContent
     {
         public AtCommandFrameContent()
         {

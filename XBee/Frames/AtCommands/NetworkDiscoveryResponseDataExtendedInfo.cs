@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class NetworkDiscoveryResponseDataExtendedInfo
+    internal class NetworkDiscoveryResponseDataExtendedInfo
     {
         [FieldOrder(0)]
         public ShortAddress ParentNetworkAddress { get; set; }

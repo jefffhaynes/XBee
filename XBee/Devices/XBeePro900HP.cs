@@ -5,7 +5,8 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
-    internal class XBeePro900HP : XBeeSeries2
+    // ReSharper disable once InconsistentNaming
+    public class XBeePro900HP : XBeeSeries2Base
     {
         internal XBeePro900HP(XBeeController controller, 
             HardwareVersion hardwareVersion = HardwareVersion.XBeePro900HP,
@@ -21,6 +22,28 @@ namespace XBee.Devices
             var address = new LongAddress(high.Value, low.Value);
 
             return new NodeAddress(address);
+        }
+
+        /// <summary>
+        ///     Gets the module Vendor Identification (VID).
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ushort> GetModuleVidAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new PanIdCommand())
+                .ConfigureAwait(false);
+
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Sets the module Vendor Identification (VID).  To commit changes to non-volatile memory, use <see cref="XBeeNode.WriteChangesAsync"/>.
+        /// </summary>
+        /// <param name="id">The VID to assign to this node.</param>
+        /// <returns></returns>
+        public Task SetModuleVidAsync(ushort id)
+        {
+            return ExecuteAtCommandAsync(new PanIdCommand(id));
         }
 
         /// <summary>

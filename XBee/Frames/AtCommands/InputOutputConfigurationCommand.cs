@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class InputOutputConfigurationCommand : AtCommand
+    internal class InputOutputConfigurationCommand : AtCommand
     {
         public InputOutputConfigurationCommand()
         {

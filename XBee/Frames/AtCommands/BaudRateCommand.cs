@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class BaudRateCommand : AtCommand
+    internal class BaudRateCommand : AtCommand
     {
         public BaudRateCommand() : base("BD")
         {

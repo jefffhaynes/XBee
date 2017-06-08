@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class StringResponseData : PrimitiveResponseData<string>
+    internal class StringResponseData : PrimitiveResponseData<string>
     {
         public override string ToString()
         {

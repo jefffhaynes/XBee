@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public class TxStatusFrame : CommandResponseFrameContent
+    internal class TxStatusFrame : CommandResponseFrameContent
     {
         public DeliveryStatus Status { get; set; }
     }

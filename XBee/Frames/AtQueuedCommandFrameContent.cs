@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public class AtQueuedCommandFrameContent : AtCommandFrameContent
+    internal class AtQueuedCommandFrameContent : AtCommandFrameContent
     {
         public AtQueuedCommandFrameContent()
         {

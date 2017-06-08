@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class TxRequestExtFrame : CommandFrameContent
+    internal class TxRequestExtFrame : CommandFrameContent
     {
         private static readonly byte[] ReservedData = {0xff, 0xfe};
 

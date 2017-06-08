@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class RxSmsFrame : FrameContent
+    internal class RxSmsFrame : FrameContent
     {
         [FieldOrder(0)]
         [FieldLength(20)]

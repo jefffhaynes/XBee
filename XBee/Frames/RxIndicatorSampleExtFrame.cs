@@ -5,7 +5,7 @@ using XBee.Converters;
 
 namespace XBee.Frames
 {
-    public class RxIndicatorSampleExtFrame : FrameContent, IRxIndicatorSampleFrame
+    internal class RxIndicatorSampleExtFrame : FrameContent, IRxIndicatorSampleFrame
     {
         private const AnalogSampleChannels AllAnalogSampleChannels =
             AnalogSampleChannels.Input0 |

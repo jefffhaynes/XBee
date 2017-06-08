@@ -5,7 +5,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee
 {
-    public class FrameSerializer
+    internal class FrameSerializer
     {
         private readonly FrameContext _serializationContext = new FrameContext(null);
         private readonly BinarySerializer _serializer = new BinarySerializer {Endianness = Endianness.Big};

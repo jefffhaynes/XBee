@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class NodeIdentifierCommand : AtCommand
+    internal class NodeIdentifierCommand : AtCommand
     {
         public NodeIdentifierCommand()
             : base("NI")

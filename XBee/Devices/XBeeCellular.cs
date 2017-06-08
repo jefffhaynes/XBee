@@ -33,14 +33,14 @@ namespace XBee.Devices
         /// </summary>
         public event EventHandler<SmsReceivedEventArgs> SmsReceived
         {
-            add { Controller.SmsReceived += value; }
-            remove { Controller.SmsReceived -= value; }
+            add => Controller.SmsReceived += value;
+            remove => Controller.SmsReceived -= value;
         }
 
         public event EventHandler<InternetDataReceivedEventArgs> InternetDataReceived
         {
-            add { Controller.InternetDataReceived += value; }
-            remove { Controller.InternetDataReceived -= value; }
+            add => Controller.InternetDataReceived += value;
+            remove => Controller.InternetDataReceived -= value;
         }
 
         /// <summary>
@@ -261,10 +261,7 @@ namespace XBee.Devices
         /// <summary>
         ///     Not supported on XBee Cellular.  See GetIPAddressAsync().
         /// </summary>
-        public override NodeAddress Address
-        {
-            get { throw new NotSupportedException(NotSupportedMessage); }
-        }
+        public override NodeAddress Address => throw new NotSupportedException(NotSupportedMessage);
 
         /// <summary>
         ///     Not supported on XBee Cellular.  See GetIPAddressAsync().
@@ -432,7 +429,7 @@ namespace XBee.Devices
         /// </summary>
         public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -440,7 +437,27 @@ namespace XBee.Devices
         /// </summary>
         public override Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
+        }
+
+        public override Task<TimeSpan> GetRssiPwmTimeAsync()
+        {
+            throw new NotSupportedException();
+        }
+
+        public override Task<byte> GetRssiPwmTimeValueAsync()
+        {
+            throw new NotSupportedException();
+        }
+
+        public override Task SetRssiPwmTimeAsync(TimeSpan timeout)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override Task SetRssiPwmTimeAsync(byte value)
+        {
+            throw new NotSupportedException();
         }
 
         #endregion

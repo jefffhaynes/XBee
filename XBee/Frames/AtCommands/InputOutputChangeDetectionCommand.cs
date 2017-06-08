@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class InputOutputChangeDetectionCommand : AtCommand
+    internal class InputOutputChangeDetectionCommand : AtCommand
     {
         public InputOutputChangeDetectionCommand() : base("IC")
         {

@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class SampleRateResponseData : AtCommandResponseFrameData
+    internal class SampleRateResponseData : AtCommandResponseFrameData
     {
         public ushort Value { get; set; }
 

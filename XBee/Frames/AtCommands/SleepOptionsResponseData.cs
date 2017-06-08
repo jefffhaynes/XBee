@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class SleepOptionsResponseData : AtCommandResponseFrameData
+    internal class SleepOptionsResponseData : AtCommandResponseFrameData
     {
         [FieldOrder(0)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]

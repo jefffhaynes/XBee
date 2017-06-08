@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class SleepPeriodCountCommand : AtCommand
+    internal class SleepPeriodCountCommand : AtCommand
     {
         public SleepPeriodCountCommand() : base("SN")
         {

@@ -56,6 +56,7 @@
     <Compile Include="AnonymousDisposable.cs" />
     <Compile Include="Devices\XBeeCellular.cs" />
     <Compile Include="Devices\XBeeSeries2.cs" />
+    <Compile Include="Devices\XBeeSeries2Base.cs" />
     <Compile Include="Frames\AtCommands\AccessPointNameCommand.cs" />
     <Compile Include="Frames\AtCommands\ApiMode.cs" />
     <Compile Include="Frames\AtCommands\ApiEnableCommand.cs" />
@@ -68,8 +69,15 @@
     <Compile Include="Frames\AtCommands\InternetProtocol.cs" />
     <Compile Include="Frames\AtCommands\CellularDeviceOptionCommand.cs" />
     <Compile Include="Frames\AtCommands\PacketizationTimeoutCommand.cs" />
+    <Compile Include="Frames\AtCommands\PanIdCommandExt.cs" />
+    <Compile Include="Frames\AtCommands\PanIdCommand.cs" />
     <Compile Include="Frames\AtCommands\Parity.cs" />
     <Compile Include="Frames\AtCommands\ParityCommand.cs" />
+    <Compile Include="Frames\AtCommands\PullUpResistorConfigurationExt.cs" />
+    <Compile Include="Frames\AtCommands\PullUpResistorConfiguration.cs" />
+    <Compile Include="Frames\AtCommands\RssiPwmTimeCommand.cs" />
+    <Compile Include="Frames\AtCommands\RssiPwmTimeResponseData.cs" />
+    <Compile Include="Frames\AtCommands\PullUpResistorConfigurationResponseData.cs" />
     <Compile Include="Frames\AtCommands\SleepPeriodResponseData.cs" />
     <Compile Include="Frames\AtCommands\SleepPeriodCommand.cs" />
     <Compile Include="Frames\AtCommands\SleepPeriodCountCommand.cs" />

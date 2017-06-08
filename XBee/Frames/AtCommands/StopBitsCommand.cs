@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class StopBitsCommand : AtCommand
+    internal class StopBitsCommand : AtCommand
     {
         public StopBitsCommand() : base("SB")
         {

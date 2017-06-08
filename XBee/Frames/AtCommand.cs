@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public abstract class AtCommand
+    internal abstract class AtCommand
     {
         private const int AtCommandFieldLength = 2;
 

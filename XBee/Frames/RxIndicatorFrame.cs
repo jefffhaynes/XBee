@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class RxIndicatorFrame : FrameContent, IRxIndicatorDataFrame
+    internal class RxIndicatorFrame : FrameContent, IRxIndicatorDataFrame
     {
         [FieldOrder(0)]
         public LongAddress Source { get; set; }

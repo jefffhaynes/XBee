@@ -1,6 +1,6 @@
 ﻿namespace XBee
 {
-    public abstract class FrameContent
+    internal abstract class FrameContent
     {
     }
 }

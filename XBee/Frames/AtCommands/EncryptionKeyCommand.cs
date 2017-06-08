@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class EncryptionKeyCommand : AtCommand
+    internal class EncryptionKeyCommand : AtCommand
     {
         private const int KeyLength = 16;
 
@@ -13,11 +13,15 @@ namespace XBee.Frames.AtCommands
 
         public EncryptionKeyCommand(byte[] key) : this()
         {
-            if(key == null)
+            if (key == null)
+            {
                 throw new ArgumentNullException(nameof(key));
+            }
 
-            if(key.Length != KeyLength)
+            if (key.Length != KeyLength)
+            {
                 throw new ArgumentException($"Key length must be {KeyLength}", nameof(key));
+            }
 
             Key = key;
         }

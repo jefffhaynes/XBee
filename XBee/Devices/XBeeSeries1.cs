@@ -6,7 +6,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
-    internal class XBeeSeries1 : XBeeNode
+    public class XBeeSeries1 : XBeeNode
     {
         internal XBeeSeries1(XBeeController controller,
             HardwareVersion hardwareVersion = HardwareVersion.XBeeSeries1,
@@ -39,6 +39,28 @@ namespace XBee.Devices
         public virtual Task SetCoordinatorAsync(bool enable)
         {
             return ExecuteAtCommandAsync(new CoordinatorEnableCommand(enable));
+        }
+
+        /// <summary>
+        ///     Gets the Personal Area Network (PAN) ID.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ushort> GetPanIdAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new PanIdCommand())
+                .ConfigureAwait(false);
+
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Sets the Personal Area Network (PAN) ID.  To commit changes to non-volatile memory, use <see cref="XBeeNode.WriteChangesAsync"/>.
+        /// </summary>
+        /// <param name="id">The PAN ID to assign to this node.</param>
+        /// <returns></returns>
+        public Task SetPanIdAsync(ushort id)
+        {
+            return ExecuteAtCommandAsync(new PanIdCommand(id));
         }
 
         /// <summary>

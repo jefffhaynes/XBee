@@ -4,7 +4,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
 {
-    public class TxIPv4Frame : CommandFrameContent
+    internal class TxIPv4Frame : CommandFrameContent
     {
         private const int MaxPayloadLength = 1500;
 
@@ -12,10 +12,14 @@ namespace XBee.Frames
         {
         }
 
-        public TxIPv4Frame(uint address, ushort port, ushort sourcePort, InternetProtocol protocol, TxIPv4Options options, byte[] data)
+        public TxIPv4Frame(uint address, ushort port, ushort sourcePort, InternetProtocol protocol,
+            TxIPv4Options options, byte[] data)
         {
             if (data.Length > MaxPayloadLength)
-                throw new ArgumentException($"Payload must be less than {MaxPayloadLength} bytes in length.", nameof(data));
+            {
+                throw new ArgumentException($"Payload must be less than {MaxPayloadLength} bytes in length.",
+                    nameof(data));
+            }
 
             Address = address;
             Port = port;

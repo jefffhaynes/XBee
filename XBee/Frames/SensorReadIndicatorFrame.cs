@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class SensorReadIndicatorFrame : FrameContent, IRxIndicatorFrame
+    internal class SensorReadIndicatorFrame : FrameContent, IRxIndicatorFrame
     {
         [FieldOrder(0)]
         public LongAddress Source { get; set; }

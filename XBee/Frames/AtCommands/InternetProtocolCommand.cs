@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class InternetProtocolCommand : AtCommand
+    internal class InternetProtocolCommand : AtCommand
     {
         public InternetProtocolCommand() : base("IP")
         {

@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class NodeIdentifierResponseData : AtCommandResponseFrameData
+    internal class NodeIdentifierResponseData : AtCommandResponseFrameData
     {
         [FieldLength(20)]
         [FieldEncoding("ascii")]

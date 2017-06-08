@@ -2,7 +2,7 @@
 
 namespace XBee
 {
-    public class FrameContext
+    internal class FrameContext
     {
         public FrameContext(HardwareVersion? controllerHardwareVersion)
         {

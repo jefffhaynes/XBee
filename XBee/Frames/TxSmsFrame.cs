@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames
 {
-    public class TxSmsFrame : CommandFrameContent
+    internal class TxSmsFrame : CommandFrameContent
     {
         private const int MaxPayloadLength = 140;
 

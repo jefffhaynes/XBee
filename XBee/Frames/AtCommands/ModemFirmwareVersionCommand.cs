@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class ModemFirmwareVersionCommand : AtCommand
+    internal class ModemFirmwareVersionCommand : AtCommand
     {
         public ModemFirmwareVersionCommand() : base("MV")
         {

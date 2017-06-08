@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class HardwareVersionResponseData : AtCommandResponseFrameData
+    internal class HardwareVersionResponseData : AtCommandResponseFrameData
     {
         [FieldOrder(0)]
         public HardwareVersion HardwareVersion { get; set; }

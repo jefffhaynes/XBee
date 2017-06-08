@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class FlowControlThresholdCommand : AtCommand
+    internal class FlowControlThresholdCommand : AtCommand
     {
         public FlowControlThresholdCommand() : base("FT")
         {

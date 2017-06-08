@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public class AtCommandResponseFrame : CommandResponseFrameContent 
+    internal class AtCommandResponseFrame : CommandResponseFrameContent 
     {
         public AtCommandResponseFrameContent Content { get; set; }
     }

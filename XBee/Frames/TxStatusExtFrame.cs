@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class TxStatusExtFrame : CommandResponseFrameContent
+    internal class TxStatusExtFrame : CommandResponseFrameContent
     {
         public TxStatusExtFrame()
         {

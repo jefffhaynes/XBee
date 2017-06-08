@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class ParityCommand : AtCommand
+    internal class ParityCommand : AtCommand
     {
         public ParityCommand() : base("NB")
         {

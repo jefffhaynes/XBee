@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public abstract class AtCommandResponseFrameData
+    internal abstract class AtCommandResponseFrameData
     {
     }
 }

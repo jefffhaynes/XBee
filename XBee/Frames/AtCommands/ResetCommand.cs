@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class ResetCommand : AtCommand
+    internal class ResetCommand : AtCommand
     {
         public ResetCommand() : base("FR")
         {

@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class NetworkDiscoveryResponseData : AtCommandResponseFrameData
+    internal class NetworkDiscoveryResponseData : AtCommandResponseFrameData
     {
         [FieldOrder(0)]
         public ShortAddress ShortAddress { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class CellularDeviceOptionCommand : AtCommand
+    internal class CellularDeviceOptionCommand : AtCommand
     {
         public CellularDeviceOptionCommand() : base("DO")
         {
