@@ -9,7 +9,7 @@ This library is broken into two pieces: a core [.NET Standard library](https://w
  * Simple async/await command and query model
  * [.NET Rx](https://rx.codeplex.com/)  support for async receive and sampling.
 
-The .NET classic PCL is available [here](https://www.nuget.org/packages/XBee/4.2.0).  At some point I will port the classic .NET library to use the new core Standard library or wait until SerialPort is stable in .NET Standard.
+The .NET classic PCL is available [here](https://www.nuget.org/packages/XBee/4.3.0).  At some point I will port the classic .NET library to use the new core Standard library or wait until SerialPort is stable in .NET Standard.
 
 ### Features ###
 
@@ -24,9 +24,9 @@ The .NET classic PCL is available [here](https://www.nuget.org/packages/XBee/4.2
 
 ### Quick Start ###
 
-Here is a simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
+Here is a simple example with a coordinator and an arbitrary number of end devices that we're going to configure and monitor for sampling.
 
-<strong>Ensure the coordinator is in API Mode 1</strong>
+<strong>Ensure that the controller (the physically attached XBee) is in API Mode 1</strong>
 
 ```C#
 
@@ -87,9 +87,16 @@ var remoteNode = await controller.GetNodeAsync(address);
 var serialNumber = await remoteNode.GetSerialNumber();
 ```
 
-The address for the remote node can be determined in a number of ways.  Either connect the remote node to a serial port and use one of the X-CTU utilities (or the above code) or use network discovery.
+The address for the remote node can be determined in a number of ways.  Either connect the remote node physically and use one of the X-CTU utilities (or the above code) or use network discovery.
 
-Now that we have some nodes, let's do something with them...
+In some cases, you may have to cast the node to a specific device class to access functions that are not broadly supported.  For example:
+
+```c#
+var remoteNode = (XBeeSeries1) await controller.GetNodeAsync(address);
+var pullUpResistorConfig = await remoteNode.GetPullUpResistorConfigurationAsync();
+```
+
+
 
 ### Command and Events ###
 
