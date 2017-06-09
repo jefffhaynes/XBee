@@ -88,6 +88,26 @@ namespace XBee.Devices
             return ExecuteAtCommandAsync(new SleepOptionsCommand(options));
         }
 
+        /// <summary>
+        /// Gets the configured pull-up resistor values.
+        /// </summary>
+        public async Task<PullUpResistorConfiguration> GetPullUpResistorConfigurationAsync()
+        {
+            var response =
+                await ExecuteAtQueryAsync<PullUpResistorConfigurationResponseData>(
+                    new PullUpResistorConfigurationCommand());
+            return response.Configuration.GetValueOrDefault();
+        }
+
+        /// <summary>
+        /// Sets the active pull-up resistors.
+        /// </summary>
+        /// <param name="configuration">A set of flags specifying the active pull-ups.</param>
+        public Task SetPullUpResistorConfigurationAsync(PullUpResistorConfiguration configuration)
+        {
+            return ExecuteAtCommandAsync(new PullUpResistorConfigurationCommand(configuration));
+        }
+
         public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken,
             bool enableAck = true)
         {

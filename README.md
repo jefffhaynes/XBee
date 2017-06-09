@@ -131,6 +131,7 @@ Below is a table summarizing the commands supported by this library.
 | IS    | Force Sample           | --                                 | ForceSampleAsync                   | x  | x  |    x   |          |
 | ID    | PAN ID / Module VID    | GetPanIdAsync/GetModuleVidAsync    | SetPanIdAsync/SetModuleVidAsync    | x  | x  |    x   |          |
 | RP    | RSSI PWM Timer         | GetRssiPwmTimeAsync                | SetRssiPwmTimeAsync                | x  | x  |    x   |          |
+| PR    | Pull-up Resistor Config| GetPullUpResistorConfigurationAsync| SetPullUpResistorConfigurationAsync| x  | x  |    x   |          |
 | SM    | Sleep Mode             | GetSleepModeAsync                  | SetSleepModeAsync                  | x  | x  |    x   |          |
 | SO    | Sleep Mode Options     | GetSleepOptionsAsync               | SetSleepOptionsAsync               | x  | x  |    x   |          |
 | SP    | Sleep Period           | GetSleepPeriodAsync                | SetSleepPeriodAsync                |    | x  |    x   |          |

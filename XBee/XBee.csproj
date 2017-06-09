@@ -73,6 +73,7 @@
     <Compile Include="Frames\AtCommands\PanIdCommand.cs" />
     <Compile Include="Frames\AtCommands\Parity.cs" />
     <Compile Include="Frames\AtCommands\ParityCommand.cs" />
+    <Compile Include="Frames\AtCommands\PullUpResistorConfigurationCommand.cs" />
     <Compile Include="Frames\AtCommands\PullUpResistorConfigurationExt.cs" />
     <Compile Include="Frames\AtCommands\PullUpResistorConfiguration.cs" />
     <Compile Include="Frames\AtCommands\RssiPwmTimeCommand.cs" />
