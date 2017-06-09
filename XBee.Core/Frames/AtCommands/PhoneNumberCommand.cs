@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class PhoneNumberCommand : AtCommand
+    internal class PhoneNumberCommand : AtCommand
     {
         public PhoneNumberCommand() : base("PH")
         {

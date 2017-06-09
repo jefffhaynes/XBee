@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class BaudRateResponseData : AtCommandResponseFrameData
+    internal class BaudRateResponseData : AtCommandResponseFrameData
     {
         public uint BaudRateValue { get; set; }
 

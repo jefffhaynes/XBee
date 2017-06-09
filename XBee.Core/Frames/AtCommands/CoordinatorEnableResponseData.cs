@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class CoordinatorEnableResponseData : AtCommandResponseFrameData
+    internal class CoordinatorEnableResponseData : AtCommandResponseFrameData
     {
         [FieldOrder(0)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]

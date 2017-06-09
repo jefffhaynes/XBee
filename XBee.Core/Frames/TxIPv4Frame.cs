@@ -4,7 +4,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
 {
-    public class TxIPv4Frame : CommandFrameContent
+    internal class TxIPv4Frame : CommandFrameContent
     {
         private const int MaxPayloadLength = 1500;
 

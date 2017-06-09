@@ -338,6 +338,46 @@ namespace XBee
         }
 
         /// <summary>
+        /// Gets the Recevied Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
+        /// </summary>
+        /// <returns>The duration for which the RSSI PWM will go high after a receive event.</returns>
+        public virtual async Task<TimeSpan> GetRssiPwmTimeAsync()
+        {
+            var response = await ExecuteAtQueryAsync<RssiPwmTimeResponseData>(new RssiPwmTimeCommand());
+            return response.Timeout;
+        }
+
+        /// <summary>
+        /// Gets the Recevied Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer raw value.
+        /// </summary>
+        /// <returns>The raw value that represents the duration for which the RSSI PWM will go high after a receive event.</returns>
+        public virtual async Task<byte> GetRssiPwmTimeValueAsync()
+        {
+            var response = await ExecuteAtQueryAsync<RssiPwmTimeResponseData>(new RssiPwmTimeCommand());
+            return response.TimeoutValue;
+        }
+
+        /// <summary>
+        /// Sets the Recevied Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
+        /// </summary>
+        /// <param name="timeout">The duration for which the RSSI PWM will go high after a receive event.</param>
+        /// <returns></returns>
+        public virtual Task SetRssiPwmTimeAsync(TimeSpan timeout)
+        {
+            return ExecuteAtCommandAsync(new RssiPwmTimeCommand(timeout));
+        }
+
+        /// <summary>
+        /// Sets the Recevied Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
+        /// </summary>
+        /// <param name="value">The value which represents the duration for which the RSSI PWM will go high after a receive event.</param>
+        /// <returns></returns>
+        public virtual Task SetRssiPwmTimeAsync(byte value)
+        {
+            return ExecuteAtCommandAsync(new RssiPwmTimeCommand(value));
+        }
+
+        /// <summary>
         ///     Gets configuration for a channel on this node.
         /// </summary>
         /// <param name="channel">The channel</param>
@@ -522,18 +562,13 @@ namespace XBee
             return Address;
         }
 
-        //protected void ExecuteAtCommand(AtCommand command)
-        //{
-        //    Controller.ExecuteAtCommand(command);
-        //}
-
-        protected Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
+        internal Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
             where TResponseData : AtCommandResponseFrameData
         {
             return Controller.ExecuteAtQueryAsync<TResponseData>(command, GetAddressInternal());
         }
 
-        protected virtual Task ExecuteAtCommandAsync(AtCommand command, bool queueLocal = false)
+        internal virtual Task ExecuteAtCommandAsync(AtCommand command, bool queueLocal = false)
         {
             return Controller.ExecuteAtCommandAsync(command, GetAddressInternal(), queueLocal);
         }

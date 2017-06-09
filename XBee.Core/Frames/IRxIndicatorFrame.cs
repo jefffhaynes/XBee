@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public interface IRxIndicatorFrame
+    internal interface IRxIndicatorFrame
     {
         NodeAddress GetAddress();
     }

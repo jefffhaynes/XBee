@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class AccessPointNameCommand : AtCommand
+    internal class AccessPointNameCommand : AtCommand
     {
         public AccessPointNameCommand() : base("AN")
         {

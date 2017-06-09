@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class DestinationAddressLowCommand : AtCommand
+    internal class DestinationAddressLowCommand : AtCommand
     {
         public DestinationAddressLowCommand() : base("DL")
         {

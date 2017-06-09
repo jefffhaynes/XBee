@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class ApiEnableCommand : AtCommand
+    internal class ApiEnableCommand : AtCommand
     {
         public ApiEnableCommand() : base("AP")
         {

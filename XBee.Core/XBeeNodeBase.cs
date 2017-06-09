@@ -142,18 +142,13 @@ namespace XBee
             await ExecuteAtCommandAsync(new WriteCommand());
         }
 
-        //protected void ExecuteAtCommand(AtCommand command)
-        //{
-        //    Controller.ExecuteAtCommand(command);
-        //}
-
-        protected async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
+        internal async Task<TResponseData> ExecuteAtQueryAsync<TResponseData>(AtCommand command)
             where TResponseData : AtCommandResponseFrameData
         {
             return await Controller.ExecuteAtQueryAsync<TResponseData>(command, Address);
         }
 
-        protected virtual async Task ExecuteAtCommandAsync(AtCommand command, bool queueLocal = false)
+        internal virtual async Task ExecuteAtCommandAsync(AtCommand command, bool queueLocal = false)
         {
             await Controller.ExecuteAtCommandAsync(command, Address, queueLocal);
         }

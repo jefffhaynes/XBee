@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class ImeiCommand : AtCommand
+    internal class ImeiCommand : AtCommand
     {
         public ImeiCommand() : base("IM")
         {

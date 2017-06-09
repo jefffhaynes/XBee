@@ -3,7 +3,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee
 {
-    public interface IAssociationIndicator
+    internal interface IAssociationIndicator
     {
         Task<AssociationIndicator> GetAssociationAsync();
     }

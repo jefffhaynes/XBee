@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace XBee.Observable
 {
-    public class Source<TSource> : IObservable<TSource>, IDisposable
+    internal class Source<TSource> : IObservable<TSource>, IDisposable
     {
         private readonly List<IObserver<TSource>> _observers;
         private readonly object _observersLock = new object();

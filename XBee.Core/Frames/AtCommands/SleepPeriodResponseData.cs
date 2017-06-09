@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class SleepPeriodResponseData : AtCommandResponseFrameData
+    internal class SleepPeriodResponseData : AtCommandResponseFrameData
     {
         public ushort PeriodBase { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace XBee
 {
-    public class ChecksumFieldValueAttribute : FieldValueAttributeBase
+    internal class ChecksumFieldValueAttribute : FieldValueAttributeBase
     {
         private int _checksum;
 

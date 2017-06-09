@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public class ModemStatusFrame : FrameContent
+    internal class ModemStatusFrame : FrameContent
     {
         public ModemStatus ModemStatus { get; set; }
     }

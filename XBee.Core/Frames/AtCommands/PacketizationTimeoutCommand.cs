@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class PacketizationTimeoutCommand : AtCommand
+    internal class PacketizationTimeoutCommand : AtCommand
     {
         public PacketizationTimeoutCommand() : base("RO")
         {

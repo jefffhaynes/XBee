@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class SerialNumberLowCommand : AtCommand
+    internal class SerialNumberLowCommand : AtCommand
     {
         public SerialNumberLowCommand()
             : base("SL")

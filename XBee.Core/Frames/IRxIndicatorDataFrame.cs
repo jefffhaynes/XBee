@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    interface IRxIndicatorDataFrame : IRxIndicatorFrame
+    internal interface IRxIndicatorDataFrame : IRxIndicatorFrame
     {
         byte[] Data { get; set; }
     }

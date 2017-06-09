@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.ModemStatusData
 {
-    public class StackStatusModemStatusData
+    internal class StackStatusModemStatusData
     {
         [FieldOrder(0)]
         public EmberStatus EmberStatus { get; set; }

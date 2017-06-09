@@ -4,7 +4,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee
 {
-    public class NodeIdentificationFrame : FrameContent
+    internal class NodeIdentificationFrame : FrameContent
     {
         [FieldOrder(0)]
         public LongAddress SenderLongAddress { get; set; }

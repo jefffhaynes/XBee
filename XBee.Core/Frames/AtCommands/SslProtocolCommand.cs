@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class SslProtocolCommand : AtCommand
+    internal class SslProtocolCommand : AtCommand
     {
         public SslProtocolCommand() : base("TL")
         {

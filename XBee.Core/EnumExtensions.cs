@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace XBee
 {
-    public static class EnumExtensions
+    internal static class EnumExtensions
     {
         public static IEnumerable<T> GetFlagValues<T>(this T enumValue) where T : struct
         {

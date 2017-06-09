@@ -119,9 +119,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="protocol"></param>
         /// <returns></returns>
-        public Task SetInternetProtocolAsync(InternetProtocol protocol)
+        public async Task SetInternetProtocolAsync(InternetProtocol protocol)
         {
-            return ExecuteAtCommandAsync(new InternetProtocolCommand(protocol));
+            await ExecuteAtCommandAsync(new InternetProtocolCommand(protocol));
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="protocol"></param>
         /// <returns></returns>
-        public Task SetSslProtocolAsync(SslProtocol protocol)
+        public async Task SetSslProtocolAsync(SslProtocol protocol)
         {
-            return ExecuteAtCommandAsync(new SslProtocolCommand(protocol));
+            await ExecuteAtCommandAsync(new SslProtocolCommand(protocol));
         }
 
         /// <summary>
@@ -161,9 +161,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public Task SetTcpClientConnectionTimeoutAsync(TimeSpan timeout)
+        public async Task SetTcpClientConnectionTimeoutAsync(TimeSpan timeout)
         {
-            return ExecuteAtCommandAsync(new TcpClientConnectionTimeoutCommand(timeout));
+            await ExecuteAtCommandAsync(new TcpClientConnectionTimeoutCommand(timeout));
         }
 
         /// <summary>
@@ -183,9 +183,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="option"></param>
         /// <returns></returns>
-        public Task SetDeviceOptionAsync(CellularDeviceOption option)
+        public async Task SetDeviceOptionAsync(CellularDeviceOption option)
         {
-            return ExecuteAtCommandAsync(new CellularDeviceOptionCommand(option));
+            await ExecuteAtCommandAsync(new CellularDeviceOptionCommand(option));
         }
 
         /// <summary>
@@ -203,9 +203,9 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Task SetAccessPointNameAsync(string name)
+        public async Task SetAccessPointNameAsync(string name)
         {
-            return ExecuteAtCommandAsync(new AccessPointNameCommand(name));
+            await ExecuteAtCommandAsync(new AccessPointNameCommand(name));
         }
 
         /// <summary>
@@ -214,13 +214,13 @@ namespace XBee.Devices
         /// <param name="phoneNumber"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public Task SendSmsAsync(string phoneNumber, string message)
+        public async Task SendSms(string phoneNumber, string message)
         {
             var cleanNumber = phoneNumber.Replace("-", string.Empty)
                 .Replace("(", string.Empty)
                 .Replace(")", string.Empty);
             var txSms = new TxSmsFrame(cleanNumber, message);
-            return Controller.ExecuteAsync(txSms);
+            await Controller.ExecuteAsync(txSms);
         }
 
 // ReSharper disable InconsistentNaming
@@ -242,16 +242,13 @@ namespace XBee.Devices
             await TransmitDataAsync(address, port, 0, protocol, TxIPv4Options.None, data);
         }
 
-        public Task TransmitDataAsync(IPAddress address, ushort port, ushort sourcePort, InternetProtocol protocol,
+        public async Task TransmitDataAsync(IPAddress address, ushort port, ushort sourcePort, InternetProtocol protocol,
             TxIPv4Options options, byte[] data)
         {
             var addressData = address.GetAddressBytes();
             var addressValue = BitConverter.ToUInt32(addressData, 0);
             var txIPv4Frame = new TxIPv4Frame(addressValue, port, sourcePort, protocol, options, data);
-
-            // this kind of sucks but I switched back to a more accurate non-async model but now we're stuck with
-            // the "async" interface.  At some point maybe I'll fix it so it's async all the way down...
-            return Task.Run(() => Controller.ExecuteAsync(txIPv4Frame));
+            await Controller.ExecuteAsync(txIPv4Frame);
         }
 
         protected override NodeAddress GetAddressInternal()
@@ -439,6 +436,26 @@ namespace XBee.Devices
         ///     Not supported on XBee Cellular.  Use overload to specify address.
         /// </summary>
         public override Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override Task<TimeSpan> GetRssiPwmTimeAsync()
+        {
+            throw new NotSupportedException();
+        }
+
+        public override Task<byte> GetRssiPwmTimeValueAsync()
+        {
+            throw new NotSupportedException();
+        }
+
+        public override Task SetRssiPwmTimeAsync(TimeSpan timeout)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override Task SetRssiPwmTimeAsync(byte value)
         {
             throw new NotSupportedException();
         }

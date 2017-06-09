@@ -3,7 +3,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
 {
-    public class AtCommandResponseFrameContent
+    internal class AtCommandResponseFrameContent
     {
         private const int AtCommandFieldLength = 2;
 
@@ -26,9 +26,11 @@ namespace XBee.Frames
         [Subtype("AtCommand", "MY", typeof(PrimitiveResponseData<byte[]>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DH", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DL", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "ID", typeof(PrimitiveResponseData<ushort>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "SM", typeof(PrimitiveResponseData<SleepMode>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "SO", typeof(SleepOptionsResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "SP", typeof(SleepPeriodResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "RP", typeof(RssiPwmTimeResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "SN", typeof(PrimitiveResponseData<ushort>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "ND", typeof(NetworkDiscoveryResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "HV", typeof(HardwareVersionResponseData), BindingMode = BindingMode.OneWay)]

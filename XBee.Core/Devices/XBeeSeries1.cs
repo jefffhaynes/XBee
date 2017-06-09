@@ -42,6 +42,28 @@ namespace XBee.Devices
         }
 
         /// <summary>
+        ///     Gets the Personal Area Network (PAN) ID.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ushort> GetPanIdAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new PanIdCommand())
+                .ConfigureAwait(false);
+
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Sets the Personal Area Network (PAN) ID.  To commit changes to non-volatile memory, use <see cref="XBeeNode.WriteChangesAsync"/>.
+        /// </summary>
+        /// <param name="id">The PAN ID to assign to this node.</param>
+        /// <returns></returns>
+        public Task SetPanIdAsync(ushort id)
+        {
+            return ExecuteAtCommandAsync(new PanIdCommand(id));
+        }
+
+        /// <summary>
         ///     Gets flags indicating the configured sleep options for this node.
         /// </summary>
         public async Task<SleepOptions> GetSleepOptionsAsync()
@@ -64,6 +86,26 @@ namespace XBee.Devices
         public Task SetSleepOptionsAsync(SleepOptions options)
         {
             return ExecuteAtCommandAsync(new SleepOptionsCommand(options));
+        }
+
+        /// <summary>
+        /// Gets the configured pull-up resistor values.
+        /// </summary>
+        public async Task<PullUpResistorConfiguration> GetPullUpResistorConfigurationAsync()
+        {
+            var response =
+                await ExecuteAtQueryAsync<PullUpResistorConfigurationResponseData>(
+                    new PullUpResistorConfigurationCommand());
+            return response.Configuration.GetValueOrDefault();
+        }
+
+        /// <summary>
+        /// Sets the active pull-up resistors.
+        /// </summary>
+        /// <param name="configuration">A set of flags specifying the active pull-ups.</param>
+        public Task SetPullUpResistorConfigurationAsync(PullUpResistorConfiguration configuration)
+        {
+            return ExecuteAtCommandAsync(new PullUpResistorConfigurationCommand(configuration));
         }
 
         public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken,

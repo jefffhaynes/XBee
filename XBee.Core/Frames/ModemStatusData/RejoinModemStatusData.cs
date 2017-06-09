@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.ModemStatusData
 {
-    public class RejoinModemStatusData : ModemStatusExtData
+    internal class RejoinModemStatusData : ModemStatusExtData
     {
         public byte JoinAttemptCount { get; set; }
     }

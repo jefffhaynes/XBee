@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class HardwareVersionCommand : AtCommand
+    internal class HardwareVersionCommand : AtCommand
     {
         public HardwareVersionCommand() : base("HV")
         {

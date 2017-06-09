@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class SourceAddressCommand : AtCommand
+    internal class SourceAddressCommand : AtCommand
     {
         public SourceAddressCommand() : base("MY")
         {

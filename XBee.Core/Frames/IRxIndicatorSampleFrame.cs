@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames
 {
-    public interface IRxIndicatorSampleFrame : IRxIndicatorFrame
+    internal interface IRxIndicatorSampleFrame : IRxIndicatorFrame
     {
         Sample GetSample();
     }

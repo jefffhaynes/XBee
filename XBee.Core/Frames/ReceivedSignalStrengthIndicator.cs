@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class ReceivedSignalStrengthIndicator
+    internal class ReceivedSignalStrengthIndicator
     {
         private const byte MinSignalLoss = 0x17;
         private const byte MaxSignalLoss = 0x64;

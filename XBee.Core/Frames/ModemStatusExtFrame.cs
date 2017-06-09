@@ -3,7 +3,7 @@ using XBee.Frames.ModemStatusData;
 
 namespace XBee.Frames
 {
-    public class ModemStatusExtFrame : FrameContent
+    internal class ModemStatusExtFrame : FrameContent
     {
         [FieldOrder(0)]
         public ModemStatusExt ModemStatus { get; set; }

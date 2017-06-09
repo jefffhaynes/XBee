@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.ModemStatusData
 {
-    public class JoiningModemStatusData
+    internal class JoiningModemStatusData
     {
         [FieldOrder(0)]
         public byte RadioChannel { get; set; }

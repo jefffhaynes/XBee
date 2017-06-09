@@ -2,7 +2,7 @@
 
 namespace XBee
 {
-    public class FrameReceivedEventArgs : EventArgs
+    internal class FrameReceivedEventArgs : EventArgs
     {
         public FrameReceivedEventArgs(FrameContent frameContent)
         {

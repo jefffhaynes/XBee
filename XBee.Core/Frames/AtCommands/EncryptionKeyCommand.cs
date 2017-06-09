@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class EncryptionKeyCommand : AtCommand
+    internal class EncryptionKeyCommand : AtCommand
     {
         private const int KeyLength = 16;
 

@@ -2,7 +2,7 @@
 
 namespace XBee.Frames
 {
-    public class RemoteAtCommandResponseFrame : CommandResponseFrameContent
+    internal class RemoteAtCommandResponseFrame : CommandResponseFrameContent
     {
         [FieldOrder(0)]
         public LongAddress LongAddress { get; set; }

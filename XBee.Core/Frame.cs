@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee
 {
-    public class Frame
+    internal class Frame
     {
         public Frame()
         {

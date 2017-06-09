@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class ExitCommandModeCommand : AtCommand
+    internal class ExitCommandModeCommand : AtCommand
     {
         public ExitCommandModeCommand() : base("CN")
         {

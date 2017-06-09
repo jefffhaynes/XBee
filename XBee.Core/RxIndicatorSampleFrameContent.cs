@@ -6,7 +6,7 @@ using XBee.Frames;
 
 namespace XBee
 {
-    public class RxIndicatorSampleFrameContent
+    internal class RxIndicatorSampleFrameContent
     {
         [FieldOrder(0)]
         public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }

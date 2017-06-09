@@ -3,7 +3,7 @@ using XBee.Frames;
 
 namespace XBee
 {
-    public class FramePayload
+    internal class FramePayload
     {
         public FramePayload()
         {

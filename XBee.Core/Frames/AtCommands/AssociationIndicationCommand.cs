@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class AssociationIndicationCommand : AtCommand
+    internal class AssociationIndicationCommand : AtCommand
     {
         public AssociationIndicationCommand() : base("AI")
         {

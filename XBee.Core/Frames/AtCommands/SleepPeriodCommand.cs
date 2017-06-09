@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Frames.AtCommands
 {
-    public class SleepPeriodCommand : AtCommand
+    internal class SleepPeriodCommand : AtCommand
     {
         public const int PeriodMultiplier = 10;
         private const int PeriodMinBase = 0x20;

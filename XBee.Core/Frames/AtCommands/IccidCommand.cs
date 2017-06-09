@@ -1,6 +1,6 @@
 ﻿namespace XBee.Frames.AtCommands
 {
-    public class IccidCommand : AtCommand
+    internal class IccidCommand : AtCommand
     {
         public IccidCommand() : base("S#")
         {

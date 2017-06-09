@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class TcpClientConnectionTimeoutCommand : AtCommand
+    internal class TcpClientConnectionTimeoutCommand : AtCommand
     {
         public const int ValueMsScale = 100;
 

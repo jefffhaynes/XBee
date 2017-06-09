@@ -2,7 +2,7 @@
 
 namespace XBee.Frames.AtCommands
 {
-    public class InputOutputChangeDetectionResponseData : AtCommandResponseFrameData
+    internal class InputOutputChangeDetectionResponseData : AtCommandResponseFrameData
     {
         [FieldOrder(0)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
