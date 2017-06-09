@@ -8,7 +8,7 @@
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for controlling XBee wireless modules.</description>
-    <releaseNotes>Adds support for S2C</releaseNotes>
+    <releaseNotes>Adds ID, RP, and PR commands.  Bug fixes.</releaseNotes>
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
