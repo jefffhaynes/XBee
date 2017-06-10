@@ -22,15 +22,25 @@ namespace XBee.Classic
 
         public async Task<byte[]> ReadAsync(uint count, CancellationToken cancellationToken)
         {
-            var data = new byte[count];
-            var read = await _serialPort.BaseStream.ReadAsync(data, 0, data.Length, cancellationToken).ConfigureAwait(false);
+            // needed because LoadAsync incorrectly completes sometimes
+            var bufferStream = new MemoryStream();
 
-            if (read != count)
+            do
             {
-                throw new InvalidDataException("BUG: Read is non-blocking");
-            }
+                var data = new byte[count - (uint) bufferStream.Length];
+                var read = await _serialPort.BaseStream.ReadAsync(data, 0, data.Length, cancellationToken)
+                    .ConfigureAwait(false);
 
-            return data;
+
+                await bufferStream.WriteAsync(data, 0, read, cancellationToken);
+
+                if (bufferStream.Length < count)
+                {
+                    await Task.Delay(100, cancellationToken);
+                }
+            } while (bufferStream.Length < count);
+
+            return bufferStream.ToArray();
         }
     }
 }
