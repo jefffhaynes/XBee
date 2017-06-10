@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using XBee.Core;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 

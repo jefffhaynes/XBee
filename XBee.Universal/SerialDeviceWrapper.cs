@@ -13,14 +13,6 @@ namespace XBee.Universal
         public SerialDeviceWrapper(SerialDevice serialDevice)
         {
             _serialDevice = serialDevice;
-            _serialDevice.ErrorReceived += (sender, args) =>
-            {
-
-            };
-            _serialDevice.PinChanged += (sender, args) =>
-            {
-
-            };
         }
 
         public void Write(byte[] data)

@@ -13,7 +13,8 @@ using XBee.Observable;
 using System.Diagnostics;
 #endif
 
-namespace XBee
+// ReSharper disable once CheckNamespace
+namespace XBee.Core
 {
     public class XBeeController : IDisposable
     {
@@ -68,7 +69,7 @@ namespace XBee
         /// </summary>
         public XBeeNode Local { get; private set; }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _sampleSource.Dispose();
             _receivedDataSource.Dispose();

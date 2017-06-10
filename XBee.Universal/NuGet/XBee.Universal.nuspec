@@ -12,7 +12,7 @@
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
-      <dependency id="XBee.Core" version="1.0.0-beta2" />
+      <dependency id="XBee.Core" version="1.0.0-beta4" />
     </dependencies>
   </metadata>
   <files>

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using XBee.Core;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Devices

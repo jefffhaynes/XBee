@@ -1,0 +1,18 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata minClientVersion="3.2">
+    <id>XBee</id>
+    <version>5.0.0-beta1</version>
+    <authors>Jeff Haynes</authors>
+    <owners></owners>
+    <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A .NET library for controlling XBee wireless modules.</description>
+    <releaseNotes>Initial release based on XBee.Core.</releaseNotes>
+    <tags>XBee Wireless</tags>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <dependencies>
+      <dependency id="XBee.Core" version="1.0.0-beta4" />
+    </dependencies>
+  </metadata>
+</package>

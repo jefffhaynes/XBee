@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using XBee.Core;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 

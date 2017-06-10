@@ -5,7 +5,7 @@
     <RootNamespace>XBee</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>.NET Standard library for controlling XBee wireless modules.</Description>
-    <Version>1.0.0-beta3</Version>
+    <Version>1.0.0-beta4</Version>
     <PackageReleaseNotes>Initial release of .NET Standard XBee library</PackageReleaseNotes>
     <PackageTags>XBee Wireless</PackageTags>
     <Authors>Jeff Haynes</Authors>
