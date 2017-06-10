@@ -5,7 +5,7 @@ A [.NET and UWP library](https://www.nuget.org/packages/XBee) for [XBee wireless
 
  * Support for Series1, Series 2, 900HP, and Cellular
  * Simple async/await command and query model
- * [.NET Rx](https://rx.codeplex.com/)  support for async receive and sampling.
+ * [.NET Rx](https://github.com/Reactive-Extensions/Rx.NET) support for async receive and sampling.
 
 ### Features ###
 
