@@ -1,15 +1,11 @@
 XBee
 ====
 
-A [UWP library](https://www.nuget.org/packages/XBee.Universal) for [XBee wireless controllers](http://www.digi.com/xbee/).
-
-This library is broken into two pieces: a core [.NET Standard library](https://www.nuget.org/packages/XBee.Core), and a [UWP wrapper library](https://www.nuget.org/packages/XBee.Universal) that contains the serial device implementation.
+A [.NET and UWP library](https://www.nuget.org/packages/XBee) for [XBee wireless controllers](http://www.digi.com/xbee/).
 
  * Support for Series1, Series 2, 900HP, and Cellular
  * Simple async/await command and query model
  * [.NET Rx](https://rx.codeplex.com/)  support for async receive and sampling.
-
-The .NET classic library is available [here](https://www.nuget.org/packages/XBee/) and has been modified to share the same core.
 
 ### Features ###
 
@@ -22,7 +18,7 @@ The .NET classic library is available [here](https://www.nuget.org/packages/XBee
  * Data transmit
  * Data receive via events or [.NET Rx](https://rx.codeplex.com/)
 
-### Quick Start ###
+### UWP Quick Start ###
 
 Here is a simple example with a coordinator and an arbitrary number of end devices that we're going to configure and monitor for sampling.
 
@@ -38,7 +34,7 @@ if (device == null)
 }
 
 var serialDevice = await SerialDevice.FromIdAsync(d.Id);
-var controller = new XBee.Universal.XBeeController(sd);
+var controller = new XBee.Universal.XBeeController(serialDevice);
 
 // setup a simple callback for each time we discover a node
 controller.NodeDiscovered += async (sender, args) => 
@@ -46,11 +42,11 @@ controller.NodeDiscovered += async (sender, args) =>
     Console.WriteLine("Discovered {0}", args.Name);
     
 	// setup some pins
-    await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel2, InputOutputConfiguration.DigitalIn);
-    await args.Node.SetInputOutputConfiguration(InputOutputChannel.Channel3, InputOutputConfiguration.AnalogIn);
+    await args.Node.SetInputOutputConfigurationAsync(InputOutputChannel.Channel2, InputOutputConfiguration.DigitalIn);
+    await args.Node.SetInputOutputConfigurationAsync(InputOutputChannel.Channel3, InputOutputConfiguration.AnalogIn);
     
 	// set sample rate
-    await args.Node.SetSampleRate(TimeSpan.FromSeconds(5));
+    await args.Node.SetSampleRateAsync(TimeSpan.FromSeconds(5));
     
 	// register callback for sample recieved from this node
 	// TODO: in practice you would want to make sure you only subscribe once (or better yet use Rx)
@@ -58,12 +54,59 @@ controller.NodeDiscovered += async (sender, args) =>
 }
 
 // now discover the network, which will trigger the NodeDiscovered callback for each node found
-await controller.DiscoverNetwork();
+await controller.DiscoverNetworkAsync();
 
 Console.ReadKey();
 
 // wait for the samples to flow in...
 
+```
+
+### .NET Quick Start ###
+
+Here is a simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
+
+<strong>Ensure the coordinator is in API Mode 1</strong>
+
+```C#
+var controller = new XBeeController();
+
+// setup a simple callback for each time we discover a node
+controller.NodeDiscovered += async (sender, args) => 
+{
+    Console.WriteLine("Discovered {0}", args.Name);
+    
+	// setup some pins
+    await args.Node.SetInputOutputConfigurationAsync(InputOutputChannel.Channel2, InputOutputConfiguration.DigitalIn);
+    await args.Node.SetInputOutputConfigurationAsync(InputOutputChannel.Channel3, InputOutputConfiguration.AnalogIn);
+    
+	// set sample rate
+    await args.Node.SetSampleRateAsync(TimeSpan.FromSeconds(5));
+    
+	// register callback for sample recieved from this node
+	// TODO: in practice you would want to make sure you only subscribe once (or better yet use Rx)
+    args.Node.SampleReceived += (node, sample) => Console.WriteLine("Sample recieved: {0}", sample);
+}
+
+// open the connection to our coordinator
+await controller.OpenAsync("COM3", 9600);
+
+// now discover the network, which will trigger the NodeDiscovered callback for each node found
+await controller.DiscoverNetworkAsync();
+
+Console.ReadKey();
+
+// wait for the samples to flow in...
+
+```
+
+If you don't know a priori what port the XBee will be attached to you can also scan for it:
+
+```c#
+var controller = await XBeeController.FindAndOpenAsync(SerialPort.GetPortNames(), 9600);
+
+if(controller != null)
+   // ...
 ```
 
 ### Nodes ###
@@ -76,7 +119,7 @@ While the controller represents the API, if we want to control the node itself w
 var localNode = controller.Local;
 // which is the same as calling await controller.GetNodeAsync(); // (address = null)
 
-var serialNumber = await localNode.GetSerialNumber();
+var serialNumber = await localNode.GetSerialNumberAsync();
 // etc
 ```
 
@@ -84,7 +127,7 @@ This allows us to treat the local node and remote nodes in the same fashion.
 
 ```c#
 var remoteNode = await controller.GetNodeAsync(address);
-var serialNumber = await remoteNode.GetSerialNumber();
+var serialNumber = await remoteNode.GetSerialNumberAsync();
 ```
 
 The address for the remote node can be determined in a number of ways.  Either connect the remote node physically and use one of the X-CTU utilities (or the above code) or use network discovery.
@@ -107,7 +150,7 @@ XBees are based on a sort of command-event model where the coordinator is either
 The first type of command is what XBee calls AT commands.  An example is a command that can be used to configure pins on the XBee, setting pins high or low or reserving them for input.
 
 ```c#
-await node.SetInputOutputConfiguration(InputOutputChannel.Channel4, InputOutputConfiguration.DigitalHigh);
+await node.SetInputOutputConfigurationAsync(InputOutputChannel.Channel4, InputOutputConfiguration.DigitalHigh);
 ```
 
 This will force pin DIO4 high.  Note that which physical pin this translates to depends on the model.
@@ -183,19 +226,19 @@ As such, we can configure a pin to take and return a sample to the coordinator.
 node.SampleReceived += (o, eventArgs) => Console.WriteLine(eventArgs.DigitalSampleState);
 
 // configure a pin for digital sampling
-await node.SetInputOutputConfiguration(InputOutputChannel.Channel5, InputOutputConfiguration.DigitalIn);
+await node.SetInputOutputConfigurationAsync(InputOutputChannel.Channel5, InputOutputConfiguration.DigitalIn);
 ```
 
 At this point the node is set to send samples from pin DIO5 but not necessarily to take samples.  There are three ways to trigger a sample: forced, periodic, or change detect.
 
 ```c#
-await node.ForceSample(); // force
+await node.ForceSampleAsync(); // force
 ```
 ```c#
-await node.SetSampleRate(TimeSpan.FromSeconds(5)); // periodic
+await node.SetSampleRateAsync(TimeSpan.FromSeconds(5)); // periodic
 ```
 ```c#
-await node.SetChangeDetectionChannels(DigitalSampleChannels.Input5); // change detect
+await node.SetChangeDetectionChannelsAsync(DigitalSampleChannels.Input5); // change detect
 ```
 
 The second mechanism for asynchronous remote data transmit is simply the receive side of the transparent serial channel.
