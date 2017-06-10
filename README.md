@@ -14,9 +14,9 @@ A [.NET and UWP library](https://www.nuget.org/packages/XBee) for [XBee wireless
  * Pin configuration
  * Pin control
  * Pin monitoring
- * Digital and analog sample monitoring via events or [.NET Rx](https://rx.codeplex.com/)
+ * Digital and analog sample monitoring via events or [.NET Rx](https://github.com/Reactive-Extensions/Rx.NET)
  * Data transmit
- * Data receive via events or [.NET Rx](https://rx.codeplex.com/)
+ * Data receive via events or [.NET Rx](https://github.com/Reactive-Extensions/Rx.NET)
 
 ### UWP Quick Start ###
 
