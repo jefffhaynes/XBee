@@ -13,19 +13,15 @@ namespace XBee.Frames.AtCommands
         [FieldOrder(2)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBee24C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro24C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
 
         [FieldOrder(3)]
         public string Name { get; set; }
 
         [FieldOrder(4)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.ZNetZigBeeS2, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2B, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBee24S2C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro900HP, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProSX, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         public NetworkDiscoveryResponseDataExtendedInfo ExtendedInfo { get; set; }
 
         [Ignore]
