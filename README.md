@@ -1,7 +1,7 @@
 XBee
 ====
 
-A [.NET and UWP library](https://www.nuget.org/packages/XBee) for [XBee wireless controllers](http://www.digi.com/xbee/).
+A [.NET and UWP library package](https://www.nuget.org/packages/XBee) for [XBee wireless controllers](http://www.digi.com/xbee/).
 
  * Support for Series1, Series 2, 900HP, and Cellular
  * Simple async/await command and query model
