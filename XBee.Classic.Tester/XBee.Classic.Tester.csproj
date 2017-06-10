@@ -101,7 +101,7 @@
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
     </Reference>
     <Reference Include="XBee.Classic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XBee.5.0.0-beta1\lib\net46\XBee.Classic.dll</HintPath>
+      <HintPath>..\packages\XBee.Universal.1.0.0-beta3\lib\net46\XBee.Classic.dll</HintPath>
     </Reference>
     <Reference Include="XBee.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\XBee.Core.1.0.0-beta4\lib\netstandard1.3\XBee.Core.dll</HintPath>
