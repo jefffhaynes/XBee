@@ -4,19 +4,32 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:XBee.Utility.Converters"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-
+<UserControl.Resources>
+    <converters:ZeroToFalseConverter x:Key="ZeroToFalseConverter"/>
+</UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Margin="6" Text="{Binding HardwareVersion}"/>
-        <Button Grid.Row="1" Margin="6" Content="Discover" Command="{Binding DiscoverCommand}"/>
+        <Border Margin="6,6,0,6" Background="Gray" Width="24" Height="24" Visibility="{Binding IsCoordinator}" CornerRadius="12">
+            <TextBlock Text="C" FontSize="16" Margin="0,0,2,2" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+        </Border>
+        <TextBlock Margin="6" Grid.Row="0" Grid.Column="1" Text="{Binding HardwareVersion}" VerticalAlignment="Center"/>
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="6" Command="{Binding DiscoverCommand}" HorizontalAlignment="Right">
+            <Path Data="M2.9719849,19.926018C4.6129761,19.926018 5.9429932,21.258017 5.9429932,22.898001 5.9429932,24.538992 4.6129761,25.869007 2.9719849,25.869007 1.3300171,25.869007 0,24.538992 0,22.898001 0,21.258017 1.3300171,19.926018 2.9719849,19.926018z M27.286011,19.78701C29.890015,19.78701 32,21.896017 32,24.49999 32,27.103992 29.890015,29.213001 27.286011,29.213001 24.682983,29.213001 22.572998,27.103992 22.572998,24.49999 22.572998,21.896017 24.682983,19.78701 27.286011,19.78701z M8.5289917,19.236992L8.9539795,19.956993 6.6109619,21.334005 6.1870117,20.612999z M18.159973,19.008995L22.322998,21.383017 21.542969,22.752005 17.382019,20.379021z M13.28302,13.305994C15.539001,13.305994 17.369019,15.137017 17.369019,17.395012 17.369019,19.650017 15.539001,21.480001 13.28302,21.480001 11.026978,21.480001 9.1959839,19.650017 9.1959839,17.395012 9.1959839,15.137017 11.026978,13.305994 13.28302,13.305994z M12.562988,9.1030235L14.002991,9.1030235 14.002991,12.656001 12.562988,12.656001z M13.28302,0C15.539001,3.6856363E-08 17.369019,1.8300163 17.369019,4.0880112 17.369019,6.3440222 15.539001,8.1740083 13.28302,8.1740083 11.026978,8.1740083 9.1959839,6.3440222 9.1959839,4.0880112 9.1959839,1.8300163 11.026978,3.6856363E-08 13.28302,0z" Stretch="Uniform" Fill="Black" Width="16" Height="16" />
+        </Button>
         
-        <ListView Grid.Row="2" Margin="6" ItemsSource="{Binding Nodes}"/>
+        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="6" BorderThickness="1" BorderBrush="Black"
+                  ItemsSource="{Binding Nodes}" Visibility="{Binding Nodes.Count, Converter={StaticResource ZeroToFalseConverter}}"/>
     </Grid>
 </UserControl>

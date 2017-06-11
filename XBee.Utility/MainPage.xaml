@@ -104,7 +104,7 @@
                         </Grid>
                     </Border>
                     <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="1,0,0,0">
-                        <ListView ItemsSource="{Binding DiscoveredControllers}" SelectedItem="{Binding SelectedHardware, Mode=TwoWay}" Margin="6">
+                        <ListView ItemsSource="{Binding DiscoveredControllers}" SelectedItem="{Binding SelectedHardware, Mode=TwoWay}" >
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <controls:XBeeControllerControl/>
