@@ -97,7 +97,8 @@ namespace XBee.Devices
             var response =
                 await ExecuteAtQueryAsync<PullUpResistorConfigurationResponseData>(
                     new PullUpResistorConfigurationCommand());
-            return response.Configuration.GetValueOrDefault();
+
+            return response == null ? PullUpResistorConfiguration.None : response.Configuration.GetValueOrDefault();
         }
 
         /// <summary>

@@ -28,6 +28,8 @@ namespace XBee.Frames.AtCommands
         }
 
         [Ignore]
-        public TimeSpan Timeout => TimeSpan.FromMilliseconds((byte)Parameter * TimeoutUnitMs);
+        public TimeSpan Timeout => Parameter == null
+            ? TimeSpan.Zero
+            : TimeSpan.FromMilliseconds((byte) Parameter * TimeoutUnitMs);
     }
 }

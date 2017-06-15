@@ -1,4 +1,5 @@
 ﻿using System;
+using XBee.Devices;
 
 namespace XBee.Classic.Tester
 {
@@ -14,6 +15,22 @@ namespace XBee.Classic.Tester
             {
                 return;
             }
+
+            var local = controller.Local as XBeeSeries1;
+            var panIdTask = local.GetPanIdAsync();
+            panIdTask.Wait();
+
+            var panId = panIdTask.Result;
+
+            var pullupTask = local.GetPullUpResistorConfigurationAsync();
+            pullupTask.Wait();
+
+            var pullupConfig = pullupTask.Result;
+
+            var rssiCycleTask = local.GetRssiPwmTimeAsync();
+            rssiCycleTask.Wait();
+
+            var rssiCycle = rssiCycleTask.Result;
 
             Console.WriteLine("Found controller.");
             controller.NodeDiscovered += (sender, eventArgs) => Console.WriteLine($"{eventArgs.Name} discovered.");

@@ -14,6 +14,6 @@ namespace XBee.Frames.AtCommands
         }
 
         [Ignore]
-        public ushort Id => (ushort) Parameter;
+        public ushort Id => (ushort?) Parameter ?? default(ushort);
     }
 }
