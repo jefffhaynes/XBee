@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -51,9 +52,10 @@ namespace XBee.Utility.ViewModels
         public async Task RefreshDevicesAsync()
         {
             var devices = await DeviceInformation.FindAllAsync(SerialDevice.GetDeviceSelector());
-            var serialDeviceTasks = devices.Select(device => SerialDevice.FromIdAsync(device.Id).AsTask());
+            var serialDeviceTasks = devices.Select(device => TryGetSerialDeviceFromIdAsync(device.Id));
             var serialDevices = await Task.WhenAll(serialDeviceTasks);
-            var serialDeviceViewModels = serialDevices.Select(serialDevice => new SerialDeviceViewModel(serialDevice))
+            var serialDeviceViewModels = serialDevices.Where(serialDevice => serialDevice != null)
+                .Select(serialDevice => new SerialDeviceViewModel(serialDevice))
                 .ToList();
 
             var newDevices = serialDeviceViewModels.Except(SerialDevices).ToList();
@@ -69,6 +71,20 @@ namespace XBee.Utility.ViewModels
             {
                 SerialDevices.Remove(missingDevice);
             }
+        }
+
+        private async Task<SerialDevice> TryGetSerialDeviceFromIdAsync(string id)
+        {
+            try
+            {
+                return await SerialDevice.FromIdAsync(id);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+            return null;
         }
 
         private async void ConnectAsync()
