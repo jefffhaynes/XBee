@@ -8,17 +8,19 @@ using XBee.Classic;
 // ReSharper disable once CheckNamespace
 namespace XBee
 {
+    /// <summary>
+    ///     Represents the connected XBee controller module.
+    /// </summary>
     public class XBeeController : Core.XBeeController
     {
         private readonly SerialPort _serialPort;
 
-        public XBeeController(SerialPort serialPort) : base(new SerialPortWrapper(serialPort))
+        private XBeeController(SerialPort serialPort) : base(new SerialPortWrapper(serialPort))
         {
             _serialPort = serialPort;
-            _serialPort.Open();
         }
 
-        public XBeeController(string portName, int baudRate) : this(new SerialPort(portName, baudRate))
+        public XBeeController() : this(new SerialPort())
         {
         }
 
@@ -27,14 +29,23 @@ namespace XBee
             return FindAndOpenAsync(SerialPort.GetPortNames(), baudRate);
         }
 
+        public Task OpenAsync(string portName, int baudRate)
+        {
+            _serialPort.PortName = portName;
+            _serialPort.BaudRate = baudRate;
+            _serialPort.Open();
+
+            return GetHardwareVersionAsync();
+        }
+
         public static async Task<XBeeController> FindAndOpenAsync(IEnumerable<string> portNames, int baudRate)
         {
             foreach (var portName in portNames)
             {
                 try
                 {
-                    var controller = new XBeeController(portName, baudRate);
-                    await controller.GetHardwareVersionAsync();
+                    var controller = new XBeeController();
+                    await controller.OpenAsync(portName, baudRate);
                     return controller;
                 }
                 catch (InvalidOperationException)

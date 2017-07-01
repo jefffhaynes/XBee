@@ -41,7 +41,7 @@ namespace XBee.Core
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
         private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
 
-        private readonly ISerialDevice _serialDevice;
+        protected readonly ISerialDevice _serialDevice;
 
         private readonly BinarySerializer _serializer = new BinarySerializer {Endianness = Endianness.Big};
 

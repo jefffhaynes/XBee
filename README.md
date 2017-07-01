@@ -62,14 +62,14 @@ Console.ReadKey();
 
 ```
 
-### .NET Classic Quick Start ###
+### .NET Quick Start ###
 
 Here is a simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
 
 <strong>Ensure the coordinator is in API Mode 1</strong>
 
 ```C#
-var controller = await XBeeController.FindAndOpenAsync(9600); // OR: new Controller("COM3", 9600);
+var controller = new XBeeController();
 
 // setup a simple callback for each time we discover a node
 controller.NodeDiscovered += async (sender, args) => 
@@ -88,10 +88,15 @@ controller.NodeDiscovered += async (sender, args) =>
     args.Node.SampleReceived += (node, sample) => Console.WriteLine("Sample recieved: {0}", sample);
 }
 
+// open the connection to our coordinator
+await controller.OpenAsync("COM3", 9600);
+
 // now discover the network, which will trigger the NodeDiscovered callback for each node found
 await controller.DiscoverNetworkAsync();
 
 Console.ReadKey();
+
+controller.Dispose();
 
 // wait for the samples to flow in...
 

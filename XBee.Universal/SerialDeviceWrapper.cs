@@ -7,15 +7,26 @@ using Windows.Storage.Streams;
 
 namespace XBee.Universal
 {
+    /// <summary>
+    /// Represents an abstraction layer for serial devices.
+    /// </summary>
     public class SerialDeviceWrapper : ISerialDevice
     {
         private readonly SerialDevice _serialDevice;
 
+        /// <summary>
+        /// Instantiates a new SerialDeviceWrapper.
+        /// </summary>
+        /// <param name="serialDevice"></param>
         public SerialDeviceWrapper(SerialDevice serialDevice)
         {
             _serialDevice = serialDevice;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
         public void Write(byte[] data)
         {
             using (var writer = new DataWriter(_serialDevice.OutputStream))
@@ -26,6 +37,12 @@ namespace XBee.Universal
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<byte[]> ReadAsync(uint count, CancellationToken cancellationToken)
         {
             // needed because LoadAsync incorrectly completes sometimes
