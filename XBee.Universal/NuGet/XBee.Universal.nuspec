@@ -2,18 +2,18 @@
 <package >
   <metadata minClientVersion="3.2">
     <id>XBee</id>
-    <version>5.1.0</version>
+    <version>5.2.0-beta</version>
     <authors>Jeff Haynes</authors>
     <owners></owners>
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/xbcs.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A UWP and .NET classic library for controlling XBee wireless modules.</description>
-    <releaseNotes>Changes .NET classic controller to match classic interface.</releaseNotes>
+    <releaseNotes>Core.XBeeController is now named Core.XBeeControllerBase and is abstract.</releaseNotes>
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
-      <dependency id="XBee.Core" version="1.0.0" />
+      <dependency id="XBee.Core" version="1.2.0-beta" />
     </dependencies>
   </metadata>
   <files>

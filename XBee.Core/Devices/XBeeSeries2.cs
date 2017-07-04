@@ -6,7 +6,7 @@ namespace XBee.Devices
 {
     public class XBeeSeries2 : XBeeSeries2Base, IAssociationIndicator, IDisassociation
     {
-        public XBeeSeries2(XBeeController controller, HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2, NodeAddress address = null) : base(controller, hardwareVersion, address)
+        public XBeeSeries2(XBeeControllerBase controller, HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2, NodeAddress address = null) : base(controller, hardwareVersion, address)
         {
         }
 

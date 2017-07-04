@@ -9,7 +9,7 @@ namespace XBee.Devices
     // ReSharper disable once InconsistentNaming
     public class XBeePro900HP : XBeeSeries2Base
     {
-        internal XBeePro900HP(XBeeController controller, 
+        internal XBeePro900HP(XBeeControllerBase controller, 
             HardwareVersion hardwareVersion = HardwareVersion.XBeePro900HP,
             NodeAddress address = null) : base(controller, hardwareVersion, address)
         {

@@ -1,11 +1,17 @@
-﻿using Windows.Devices.SerialCommunication;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Windows.Devices.Enumeration;
+using Windows.Devices.SerialCommunication;
+using XBee.Core;
 
 namespace XBee.Universal
 {
     /// <summary>
     /// 
     /// </summary>
-    public class XBeeController : Core.XBeeController
+    public class XBeeController : XBeeControllerBase
     {
         /// <summary>
         /// 
@@ -13,6 +19,60 @@ namespace XBee.Universal
         /// <param name="serialDevice"></param>
         public XBeeController(SerialDevice serialDevice) : base(new SerialDeviceWrapper(serialDevice))
         {
+        }
+
+        public static async Task<List<XBeeController>> FindControllersAsync(int baudRate)
+        {
+            var controllers = new List<XBeeController>();
+
+            var devices = await DeviceInformation.FindAllAsync(Windows.Devices.SerialCommunication.SerialDevice.GetDeviceSelector());
+
+            foreach (var device in devices)
+            {
+                var serialDevice = await TryGetSerialDeviceFromIdAsync(device.Id).ConfigureAwait(false);
+
+                if (serialDevice != null)
+                {
+                    var controller = await TryGetControllerAsync(serialDevice).ConfigureAwait(false);
+
+                    if (controller != null)
+                    {
+                        controllers.Add(controller);
+                    }
+                }
+            }
+
+            return controllers;
+        }
+
+        private static async Task<SerialDevice> TryGetSerialDeviceFromIdAsync(string id)
+        {
+            try
+            {
+                return await Windows.Devices.SerialCommunication.SerialDevice.FromIdAsync(id);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+            return null;
+        }
+
+        private static async Task<XBeeController> TryGetControllerAsync(SerialDevice device)
+        {
+            var controller = new XBeeController(device);
+
+            try
+            {
+                await controller.GetHardwareVersionAsync().ConfigureAwait(false);
+                return controller;
+            }
+            catch (TimeoutException)
+            {
+            }
+
+            return null;
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using XBee.Devices;
+using XBee.Universal;
 
 namespace XBee.Utility.ViewModels
 {
@@ -89,7 +90,7 @@ namespace XBee.Utility.ViewModels
 
         private async void ConnectAsync()
         {
-            var controller = new Universal.XBeeController(SelectedSerialDevice.SerialDevice);
+            var controller = new XBeeController(SelectedSerialDevice.SerialDevice);
 
             try
             {

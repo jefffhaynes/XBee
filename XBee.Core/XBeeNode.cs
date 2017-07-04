@@ -13,9 +13,9 @@ namespace XBee
     {
         private static readonly TimeSpan HardwareResetTime = TimeSpan.FromMilliseconds(200);
 
-        protected readonly XBeeController Controller;
+        protected readonly XBeeControllerBase Controller;
 
-        internal XBeeNode(XBeeController controller, HardwareVersion hardwareVersion, NodeAddress address = null)
+        internal XBeeNode(XBeeControllerBase controller, HardwareVersion hardwareVersion, NodeAddress address = null)
         {
             Controller = controller;
             HardwareVersion = hardwareVersion;
@@ -321,7 +321,7 @@ namespace XBee
         /// Sets the network discovery timeout used by this node when it is acting as a coordinator.  This
         /// value will be included in discovery requests and used by the responding nodes to randomly
         /// choose a delay before responding.  Note that this value is independent of any timeout value
-        /// specified when calling <see cref="XBeeController.DiscoverNetworkAsync(TimeSpan,CancellationToken)"/>.
+        /// specified when calling <see cref="XBeeControllerBase.DiscoverNetworkAsync(TimeSpan,CancellationToken)"/>.
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>

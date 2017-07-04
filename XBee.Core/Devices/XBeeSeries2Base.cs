@@ -9,7 +9,7 @@ namespace XBee.Devices
 {
     public abstract class XBeeSeries2Base : XBeeNode
     {
-        internal XBeeSeries2Base(XBeeController controller,
+        internal XBeeSeries2Base(XBeeControllerBase controller,
             HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2,
             NodeAddress address = null) : base(controller, hardwareVersion, address)
         {

@@ -16,7 +16,7 @@ using System.Diagnostics;
 // ReSharper disable once CheckNamespace
 namespace XBee.Core
 {
-    public class XBeeController : IDisposable
+    public abstract class XBeeControllerBase : IDisposable
     {
         private static readonly ConcurrentDictionary<byte, TaskCompletionSource<CommandResponseFrameContent>>
             ExecuteTaskCompletionSources =
@@ -52,7 +52,7 @@ namespace XBee.Core
         private CancellationTokenSource _listenerCancellationTokenSource;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
-        public XBeeController(ISerialDevice serialDevice)
+        public XBeeControllerBase(ISerialDevice serialDevice)
         {
             SerialDevice = serialDevice;
 

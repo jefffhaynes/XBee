@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Threading.Tasks;
 using XBee.Classic;
+using XBee.Core;
 
 // ReSharper disable once CheckNamespace
 namespace XBee
@@ -11,7 +12,7 @@ namespace XBee
     /// <summary>
     ///     Represents the connected XBee controller module.
     /// </summary>
-    public class XBeeController : Core.XBeeController
+    public class XBeeController : XBeeControllerBase
     {
         private readonly SerialPort _serialPort;
 

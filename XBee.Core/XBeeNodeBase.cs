@@ -9,9 +9,9 @@ namespace XBee
     public abstract class XBeeNodeBase
     {
         private static readonly TimeSpan HardwareResetTime = TimeSpan.FromMilliseconds(200);
-        protected XBeeController Controller;
+        protected XBeeControllerBase Controller;
 
-        protected XBeeNodeBase(XBeeController controller, HardwareVersion hardwareVersion, NodeAddress address = null)
+        protected XBeeNodeBase(XBeeControllerBase controller, HardwareVersion hardwareVersion, NodeAddress address = null)
         {
             Controller = controller;
             HardwareVersion = hardwareVersion;

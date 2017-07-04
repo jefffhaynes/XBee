@@ -12,7 +12,7 @@ namespace XBee.Devices
     {
         private const string NotSupportedMessage = "This feature is not supported on the XBee Cellular device.";
 
-        public XBeeCellular(XBeeController controller, HardwareVersion hardwareVersion, NodeAddress address = null)
+        public XBeeCellular(XBeeControllerBase controller, HardwareVersion hardwareVersion, NodeAddress address = null)
             : base(controller, hardwareVersion, address)
         {
         }

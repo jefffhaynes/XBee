@@ -9,7 +9,7 @@ namespace XBee.Devices
 {
     public class XBeeSeries1 : XBeeNode, IAssociationIndicator, IDisassociation
     {
-        internal XBeeSeries1(XBeeController controller,
+        internal XBeeSeries1(XBeeControllerBase controller,
             HardwareVersion hardwareVersion = HardwareVersion.XBeeSeries1,
             NodeAddress address = null) : base(controller, hardwareVersion, address)
         {
