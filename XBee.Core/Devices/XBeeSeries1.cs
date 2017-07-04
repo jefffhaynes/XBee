@@ -7,7 +7,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
-    public class XBeeSeries1 : XBeeNode, IAssociationIndicator
+    public class XBeeSeries1 : XBeeNode, IAssociationIndicator, IDisassociation
     {
         internal XBeeSeries1(XBeeController controller,
             HardwareVersion hardwareVersion = HardwareVersion.XBeeSeries1,
@@ -74,6 +74,15 @@ namespace XBee.Devices
                     new AssociationIndicationCommand()).ConfigureAwait(false);
 
             return response.Value;
+        }
+
+        /// <summary>
+        /// Forces device to disassociate with current coordinator and attempt to reassociate.
+        /// </summary>
+        /// <returns></returns>
+        public Task DisassociateAsync()
+        {
+            return ExecuteAtCommandAsync(new ForceDisassociationCommand());
         }
 
         /// <summary>

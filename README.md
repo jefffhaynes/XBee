@@ -166,6 +166,7 @@ Below is a table summarizing the commands supported by this library.
 | HV    | Hardware Version       | GetHardwareVersionAsync            | --                                 | x  | x  |    x   |    x     |
 | AP    | API Mode               | GetApiModeAsync                    | SetApiModeAsync                    | x  | x  |    x   |    x     |
 | AI    | Association Indicator  | GetAssociationAsync                | --                                 | x  | x  |        |    x     |
+| DA    | Force Disassociation   | DisassociateAsync                  | --                                 | x  | x  |        |          |
 | BD    | Interface Data Rate    | GetBaudRateAsync                   | SetBaudRateAsync                   | x  | x  |    x   |    x     |
 | NB    | Parity                 | GetParityAsync                     | SetParityAsync                     | x  | x  |    x   |    x     |
 | SB    | Stop Bits              | GetStopBitsAsync                   | SetStopBitsAsync                   | x  | x  |    x   |    x     |
