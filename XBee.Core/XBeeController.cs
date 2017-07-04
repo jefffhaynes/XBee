@@ -111,6 +111,11 @@ namespace XBee.Core
         public event EventHandler<NodeIdentificationEventArgs> NodeIdentificationReceived;
 
         /// <summary>
+        ///  Occurs when a modem status frame is received.
+        /// </summary>
+        public event EventHandler<ModemStatusChangedEventArgs> ModemStatusChanged;
+
+        /// <summary>
         ///     Create a node.
         /// </summary>
         /// <param name="address">The address of the node or null for the controller node.</param>
@@ -610,7 +615,12 @@ namespace XBee.Core
         {
             if (content is ModemStatusFrame modemStatusFrame)
             {
-                _modemResetTaskCompletionSource?.SetResult(modemStatusFrame.ModemStatus);
+                if (modemStatusFrame.ModemStatus == ModemStatus.HardwareReset)
+                {
+                    _modemResetTaskCompletionSource?.SetResult(modemStatusFrame.ModemStatus);
+                }
+
+                ModemStatusChanged?.Invoke(this, new ModemStatusChangedEventArgs(modemStatusFrame.ModemStatus));
             }
             else if (content is CommandResponseFrameContent commandResponse)
             {

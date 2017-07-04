@@ -6,7 +6,7 @@
     <authors>Jeff Haynes</authors>
     <owners></owners>
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/XBee.Core/xbcs.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/xbcs.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A UWP and .NET classic library for controlling XBee wireless modules.</description>
     <releaseNotes>Changes .NET classic controller to match classic interface.</releaseNotes>

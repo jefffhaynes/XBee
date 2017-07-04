@@ -86,6 +86,48 @@ namespace XBee.Devices
         }
 
         /// <summary>
+        /// Gets end device association options.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<EndDeviceAssociationOptions> GetEndDeviceAssociationOptionsAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<EndDeviceAssociationOptions>>(
+                new EndDeviceAssociationOptionsCommand()).ConfigureAwait(false);
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Sets end device association options.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task SetEndDeviceAssociationOptionsAsync(EndDeviceAssociationOptions options)
+        {
+            return ExecuteAtCommandAsync(new EndDeviceAssociationOptionsCommand(options));
+        }
+
+        /// <summary>
+        /// Gets coordinator association options.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CoordinatorAssociationOptions> GetCoordinatorAssociationOptionsAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<CoordinatorAssociationOptions>>(
+                new CoordinatorAssociationOptionsCommand()).ConfigureAwait(false);
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Sets coordinator association options.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task SetCoordinatorAssociationOptionsAsync(CoordinatorAssociationOptions options)
+        {
+            return ExecuteAtCommandAsync(new CoordinatorAssociationOptionsCommand(options));
+        }
+
+        /// <summary>
         ///     Gets flags indicating the configured sleep options for this node.
         /// </summary>
         public async Task<SleepOptions> GetSleepOptionsAsync()

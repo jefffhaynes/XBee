@@ -17,6 +17,8 @@ namespace XBee.Frames
         [FieldOrder(2)]
         [Subtype("AtCommand", "AP", typeof(PrimitiveResponseData<ApiMode>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "AI", typeof(PrimitiveResponseData<AssociationIndicator>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "A1", typeof(PrimitiveResponseData<EndDeviceAssociationOptions>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "A2", typeof(PrimitiveResponseData<CoordinatorAssociationOptions>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "BD", typeof(BaudRateResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "NB", typeof(PrimitiveResponseData<Parity>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "SB", typeof(PrimitiveResponseData<StopBits>), BindingMode = BindingMode.OneWay)]

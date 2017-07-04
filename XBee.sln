@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0385EB39-DC13-4C78-9261-A8043F11B384}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		XBee.Core\xbcs.png = XBee.Core\xbcs.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBee.Core", "XBee.Core\XBee.Core.csproj", "{780A3581-45F7-4AE6-9D43-6922B7E18D13}"

@@ -15,7 +15,7 @@
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
     <AssemblyVersion>1.2.0.0</AssemblyVersion>
     <FileVersion>1.2.0.0</FileVersion>
-    <PackageIconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/XBee.Core/xbcs.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/xbcs.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
