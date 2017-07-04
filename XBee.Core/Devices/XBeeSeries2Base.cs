@@ -7,7 +7,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
-    public abstract class XBeeSeries2Base : XBeeNode, IAssociationIndicator
+    public abstract class XBeeSeries2Base : XBeeNode
     {
         internal XBeeSeries2Base(XBeeController controller,
             HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2,

@@ -33,6 +33,7 @@ namespace XBee.Frames
         [Subtype("AtCommand", "RP", typeof(RssiPwmTimeResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "SN", typeof(PrimitiveResponseData<ushort>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "ND", typeof(NetworkDiscoveryResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "NT", typeof(NetworkDiscoveryTimeoutResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "HV", typeof(HardwareVersionResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "CE", typeof(CoordinatorEnableResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "NI", typeof(NodeIdentifierResponseData), BindingMode = BindingMode.OneWay)]
