@@ -18,18 +18,6 @@ namespace XBee.Devices
         }
 
         /// <summary>
-        ///     Gets the network association state for this node.
-        /// </summary>
-        public async Task<AssociationIndicator> GetAssociationAsync()
-        {
-            var response = await
-                Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
-                    new AssociationIndicationCommand());
-
-            return response.Value;
-        }
-
-        /// <summary>
         ///     Occurs when an SMS message is received.
         /// </summary>
         public event EventHandler<SmsReceivedEventArgs> SmsReceived
@@ -42,6 +30,18 @@ namespace XBee.Devices
         {
             add => Controller.InternetDataReceived += value;
             remove => Controller.InternetDataReceived -= value;
+        }
+        
+        /// <summary>
+        ///     Gets the network association state for this node.
+        /// </summary>
+        public async Task<AssociationIndicator> GetAssociationAsync()
+        {
+            var response = await
+                Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
+                    new AssociationIndicationCommand()).ConfigureAwait(false);
+
+            return response.Value;
         }
 
         /// <summary>

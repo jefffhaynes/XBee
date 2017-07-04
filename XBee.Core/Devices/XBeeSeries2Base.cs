@@ -16,18 +16,6 @@ namespace XBee.Devices
         }
 
         /// <summary>
-        ///     Gets the network association state for this node.
-        /// </summary>
-        public async Task<AssociationIndicator> GetAssociationAsync()
-        {
-            var response = await
-                Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
-                    new AssociationIndicationCommand()).ConfigureAwait(false);
-
-            return response.Value;
-        }
-
-        /// <summary>
         ///     Gets flags indicating the configured sleep options for this node.
         /// </summary>
         public async Task<SleepOptionsExt> GetSleepOptionsAsync()

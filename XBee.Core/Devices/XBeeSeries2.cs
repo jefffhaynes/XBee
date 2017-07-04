@@ -4,7 +4,7 @@ using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
-    public class XBeeSeries2 : XBeeSeries2Base
+    public class XBeeSeries2 : XBeeSeries2Base, IAssociationIndicator
     {
         public XBeeSeries2(XBeeController controller, HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2, NodeAddress address = null) : base(controller, hardwareVersion, address)
         {
@@ -31,6 +31,17 @@ namespace XBee.Devices
         {
             return ExecuteAtCommandAsync(new PanIdCommandExt(id));
         }
+        
+        /// <summary>
+        ///     Gets the network association state for this node.
+        /// </summary>
+        public async Task<AssociationIndicator> GetAssociationAsync()
+        {
+            var response = await
+                Controller.ExecuteAtQueryAsync<PrimitiveResponseData<AssociationIndicator>>(
+                    new AssociationIndicationCommand()).ConfigureAwait(false);
 
+            return response.Value;
+        }
     }
 }
