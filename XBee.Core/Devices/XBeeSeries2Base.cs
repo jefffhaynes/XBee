@@ -118,7 +118,7 @@ namespace XBee.Devices
                 throw new InvalidOperationException("Can't send data to local device.");
             }
 
-            var transmitRequest = new TxRequestExtFrame(Address.LongAddress, data);
+            var transmitRequest = new TxRequestExtFrame(Address.LongAddress, Address.ShortAddress, data);
 
             if (!enableAck)
             {

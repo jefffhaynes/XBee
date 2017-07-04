@@ -578,7 +578,7 @@ namespace XBee
         {
             if (e.Address.Equals(GetAddressInternal()))
             {
-                DataReceived?.Invoke(this, new DataReceivedEventArgs(e.Data));
+                DataReceived?.Invoke(this, new DataReceivedEventArgs(Address, e.Data));
             }
         }
 

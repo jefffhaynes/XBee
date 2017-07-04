@@ -2,11 +2,8 @@
 {
     public class SourcedDataReceivedEventArgs : DataReceivedEventArgs
     {
-        internal SourcedDataReceivedEventArgs(NodeAddress address, byte[] data) : base(data)
+        public SourcedDataReceivedEventArgs(NodeAddress sourceAddress, byte[] data) : base(sourceAddress, data)
         {
-            Address = address;
         }
-
-        public NodeAddress Address { get; }
     }
 }

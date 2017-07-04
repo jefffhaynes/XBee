@@ -4,16 +4,14 @@ namespace XBee.Frames
 {
     internal class TxRequestExtFrame : CommandFrameContent
     {
-        private static readonly byte[] ReservedData = {0xff, 0xfe};
-
         public TxRequestExtFrame()
         {
-            Reserved = ReservedData;
         }
 
-        public TxRequestExtFrame(LongAddress destination, byte[] data) : this()
+        public TxRequestExtFrame(LongAddress destination, ShortAddress shortDestination, byte[] data)
         {
             Destination = destination;
+            ShortDestination = shortDestination;
             Data = data;
         }
 
@@ -21,8 +19,7 @@ namespace XBee.Frames
         public LongAddress Destination { get; set; }
 
         [FieldOrder(1)]
-        [FieldLength(2)]
-        public byte[] Reserved { get; set; }
+        public ShortAddress ShortDestination { get;set; }
 
         [FieldOrder(2)]
         public byte BroadcastRadius { get; set; }

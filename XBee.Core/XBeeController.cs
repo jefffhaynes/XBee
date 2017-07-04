@@ -41,7 +41,7 @@ namespace XBee.Core
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
         private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
 
-        protected readonly ISerialDevice _serialDevice;
+        protected readonly ISerialDevice SerialDevice;
 
         private readonly BinarySerializer _serializer = new BinarySerializer {Endianness = Endianness.Big};
 
@@ -54,7 +54,7 @@ namespace XBee.Core
 
         public XBeeController(ISerialDevice serialDevice)
         {
-            _serialDevice = serialDevice;
+            SerialDevice = serialDevice;
 
 #if DEBUG
             _serializer.MemberDeserialized += OnMemberDeserialized;
@@ -196,7 +196,7 @@ namespace XBee.Core
                     {
                         return;
                     }
-
+                    
                     var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
 
                     // XBees have trouble recovering from discovery
@@ -258,7 +258,7 @@ namespace XBee.Core
 
         public async Task<HardwareVersion> GetHardwareVersionAsync(NodeAddress address = null)
         {
-            if (_hardwareVersion != null)
+            if (address == null && _hardwareVersion != null)
             {
                 return _hardwareVersion.Value;
             }
@@ -442,7 +442,7 @@ namespace XBee.Core
 
             lock (_executionLock)
             {
-                var stream = new SerialDeviceStream(_serialDevice);
+                var stream = new SerialDeviceStream(SerialDevice);
                 var frame = new Frame(frameContent);
                 _serializer.Serialize(stream, frame);
             }
@@ -578,7 +578,7 @@ namespace XBee.Core
 
                     do
                     {
-                        var stream = new SerialDeviceStream(_serialDevice);
+                        var stream = new SerialDeviceStream(SerialDevice);
 
                         // ReSharper disable InconsistentlySynchronizedField
                         var frame = await _serializer
