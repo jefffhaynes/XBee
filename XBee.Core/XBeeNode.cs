@@ -530,6 +530,26 @@ namespace XBee
         }
 
         /// <summary>
+        /// Gets the transmit power level for this module.  Refer to documentation for dBm equivelent.
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<byte> GetPowerLevelValueAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new PowerLevelCommand());
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Sets the transmit power level for this module.  Refer to documentation for dBm equivelent.
+        /// </summary>
+        /// <param name="powerLevel"></param>
+        /// <returns></returns>
+        public virtual Task SetPowerLevelValueAsync(byte powerLevel)
+        {
+            return ExecuteAtCommandAsync(new PowerLevelCommand(powerLevel));
+        }
+
+        /// <summary>
         ///     Commit configuration changes to this node.
         /// </summary>
         /// <returns></returns>

@@ -403,6 +403,22 @@ namespace XBee.Devices
         /// <summary>
         ///     Not supported on XBee Cellular.
         /// </summary>
+        public override Task<byte> GetPowerLevelValueAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        ///     Not supported on XBee Cellular.
+        /// </summary>
+        public override Task SetPowerLevelValueAsync(byte powerLevel)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        ///     Not supported on XBee Cellular.
+        /// </summary>
         public override Task<InputOutputConfiguration> GetInputOutputConfigurationAsync(InputOutputChannel channel)
         {
             throw new NotSupportedException(NotSupportedMessage);

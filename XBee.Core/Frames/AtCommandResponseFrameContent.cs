@@ -63,6 +63,7 @@ namespace XBee.Frames
         [Subtype("AtCommand", "TM", typeof(TcpClientConnectionTimeoutResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DO", typeof(PrimitiveResponseData<CellularDeviceOption>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "AN", typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "PL", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         public AtCommandResponseFrameData Data { get; set; }
     }
 }
