@@ -24,17 +24,23 @@ Here is a simple example with a coordinator and an arbitrary number of end devic
 
 <strong>Ensure that the controller (the physically attached XBee) is in API Mode 1</strong>
 
+Note that for UWP apps, you will need to declare a serial communications device capability in your app manifest.
+
+```xml
+  <Capabilities>
+    <DeviceCapability Name="serialcommunication">
+      <Device Id="any">
+        <Function Type="name:serialPort" />
+      </Device>
+    </DeviceCapability>
+  </Capabilities>
+ ```
+
 ```C#
 
-var devices = await DeviceInformation.FindAllAsync(SerialDevice.GetDeviceSelector());
-var device = devices.FirstOrDefault();
-if (device == null)
-{
-    return;
-}
+var controllers = await XBeeController.FindControllersAsync(9600);
 
-var serialDevice = await SerialDevice.FromIdAsync(d.Id);
-var controller = new XBee.Universal.XBeeController(serialDevice);
+var controller = controllers.First();
 
 // setup a simple callback for each time we discover a node
 controller.NodeDiscovered += async (sender, args) => 

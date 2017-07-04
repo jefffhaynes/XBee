@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="3.2">
     <id>XBee</id>
-    <version>5.2.0-beta</version>
+    <version>5.2.0</version>
     <authors>Jeff Haynes</authors>
     <owners></owners>
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
@@ -13,7 +13,7 @@
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
-      <dependency id="XBee.Core" version="1.2.0-beta" />
+      <dependency id="XBee.Core" version="1.3.0" />
     </dependencies>
   </metadata>
   <files>

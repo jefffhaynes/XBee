@@ -52,6 +52,8 @@ namespace XBee.Utility.ViewModels
 
         public async Task RefreshDevicesAsync()
         {
+            var controllers = await XBeeController.FindControllersAsync(9600);
+
             var devices = await DeviceInformation.FindAllAsync(SerialDevice.GetDeviceSelector());
             var serialDeviceTasks = devices.Select(device => TryGetSerialDeviceFromIdAsync(device.Id));
             var serialDevices = await Task.WhenAll(serialDeviceTasks);
