@@ -53,7 +53,7 @@ namespace XBee.Test
         [TestMethod]
         public void TxRequestFrameTest()
         {
-            var txRequestFrame = new TxRequestExtFrame(new LongAddress(0x0013A200400A0127),
+            var txRequestFrame = new TxRequestExtFrame(new LongAddress(0x0013A200400A0127), ShortAddress.Disabled, 
                 new byte[] {0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x30, 0x41}) {FrameId = 0x01};
 
             var expectedValue = new byte[]
