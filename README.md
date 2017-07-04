@@ -181,7 +181,7 @@ Below is a table summarizing the commands supported by this library.
 | ND    | Network Discovery      | --                                 | DiscoverNetworkAsync               | x  | x  |    x   |          |
 | NT    | Discovery Timeout      | GetNetworkDiscoveryTimeoutAsync    | SetNetworkDiscoveryTimeoutAsync    | x  | x  |    x   |          |
 | AI    | Association Indicator  | GetAssociationAsync                | --                                 | x  | x  |        |    x     |
-| DA    | Force Disassociation   | DisassociateAsync                  | --                                 | x  | x  |        |          |
+| DA    | Force Disassociation   | --                                 | DisassociateAsync                  | x  | x  |        |          |
 | D(N)  | DIO Configuration      | GetInputOutputConfigurationAsync   | SetInputOutputConfigurationAsync   | x  | x  |    x   |          |
 | IC    | Input Change           | GetChangeDetectionChannelsAsync    | SetChangeDetectionChannelsAsync    | x  | x  |    x   |          |
 | IR    | Sample Rate            | GetSampleRateAsync                 | SetSampleRateAsync                 | x  | x  |    x   |          |
