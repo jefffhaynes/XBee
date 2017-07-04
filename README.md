@@ -165,8 +165,7 @@ Below is a table summarizing the commands supported by this library.
 |:-----:|:-----------------------|:-----------------------------------|:-----------------------------------|:--:|:--:|:------:|:--------:|
 | HV    | Hardware Version       | GetHardwareVersionAsync            | --                                 | x  | x  |    x   |    x     |
 | AP    | API Mode               | GetApiModeAsync                    | SetApiModeAsync                    | x  | x  |    x   |    x     |
-| AI    | Association Indicator  | GetAssociationAsync                | --                                 | x  | x  |        |    x     |
-| DA    | Force Disassociation   | DisassociateAsync                  | --                                 | x  | x  |        |          |
+| RE    | Restore Defaults       | RestoreDefaultsAsync               | SetApiModeAsync                    | x  | x  |    x   |    x     |
 | BD    | Interface Data Rate    | GetBaudRateAsync                   | SetBaudRateAsync                   | x  | x  |    x   |    x     |
 | NB    | Parity                 | GetParityAsync                     | SetParityAsync                     | x  | x  |    x   |    x     |
 | SB    | Stop Bits              | GetStopBitsAsync                   | SetStopBitsAsync                   | x  | x  |    x   |    x     |
@@ -178,7 +177,10 @@ Below is a table summarizing the commands supported by this library.
 | SH/SL | Serial Number          | GetSerialNumberAsync               | --                                 | x  | x  |    x   |          |
 | DH/DL | Destination Address    | GetAddressAsync                    | SetDestinationAddressAsync         | x  | x  |    x   |          |
 | MY    | Source Address         | GetAddressAsync                    | SetSourceAddressAsync              | x  | x  |    x   |  Note 1  |
-| ND    | Node Discovery         | --                                 | DiscoverNetworkAsync               | x  | x  |    x   |          |
+| ND    | Network Discovery      | --                                 | DiscoverNetworkAsync               | x  | x  |    x   |          |
+| NT    | Discovery Timeout      | GetNetworkDiscoveryTimeoutAsync    | SetNetworkDiscoveryTimeoutAsync    | x  | x  |    x   |          |
+| AI    | Association Indicator  | GetAssociationAsync                | --                                 | x  | x  |        |    x     |
+| DA    | Force Disassociation   | DisassociateAsync                  | --                                 | x  | x  |        |          |
 | D(N)  | DIO Configuration      | GetInputOutputConfigurationAsync   | SetInputOutputConfigurationAsync   | x  | x  |    x   |          |
 | IC    | Input Change           | GetChangeDetectionChannelsAsync    | SetChangeDetectionChannelsAsync    | x  | x  |    x   |          |
 | IR    | Sample Rate            | GetSampleRateAsync                 | SetSampleRateAsync                 | x  | x  |    x   |          |

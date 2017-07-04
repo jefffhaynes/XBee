@@ -323,6 +323,22 @@ namespace XBee.Devices
         /// <summary>
         ///     Not supported on XBee Cellular.
         /// </summary>
+        public override Task SetNetworkDiscoveryTimeoutAsync(TimeSpan timeout)
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        ///     Not supported on XBee Cellular.
+        /// </summary>
+        public override Task<TimeSpan> GetNetworkDiscoveryAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        /// <summary>
+        ///     Not supported on XBee Cellular.
+        /// </summary>
         public override Task<DigitalSampleChannels> GetChangeDetectionChannelsAsync()
         {
             throw new NotSupportedException(NotSupportedMessage);

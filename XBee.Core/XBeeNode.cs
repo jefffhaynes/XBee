@@ -318,6 +318,31 @@ namespace XBee
         }
 
         /// <summary>
+        /// Sets the network discovery timeout used by this node when it is acting as a coordinator.  This
+        /// value will be included in discovery requests and used by the responding nodes to randomly
+        /// choose a delay before responding.  Note that this value is independent of any timeout value
+        /// specified when calling <see cref="XBeeController.DiscoverNetworkAsync(TimeSpan,CancellationToken)"/>.
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public virtual Task SetNetworkDiscoveryTimeoutAsync(TimeSpan timeout)
+        {
+            return ExecuteAtCommandAsync(new NetworkDiscoveryTimeoutCommand(timeout));
+        }
+
+        /// <summary>
+        /// Gets the network discovery timeout used by this node when it is acting as a coordinator.
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<TimeSpan> GetNetworkDiscoveryAsync()
+        {
+            var response =
+                await ExecuteAtQueryAsync<NetworkDiscoveryTimeoutResponseData>(new NetworkDiscoveryTimeoutCommand());
+
+            return response.Timeout;
+        }
+
+        /// <summary>
         ///     Gets the configured sleep mode for this node.
         /// </summary>
         /// <returns>The sleep mode</returns>
@@ -441,6 +466,15 @@ namespace XBee
         public virtual Task ForceSampleAsync()
         {
             return ExecuteAtCommandAsync(new ForceSampleCommand());
+        }
+
+        /// <summary>
+        /// Restore module parameters to factory defaults.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Task RestoreDefaultsAsync()
+        {
+            return ExecuteAtCommandAsync(new RestoreDefaultsCommand());
         }
 
         /// <summary>
