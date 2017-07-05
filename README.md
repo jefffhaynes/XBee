@@ -22,9 +22,7 @@ A [.NET and UWP library package](https://www.nuget.org/packages/XBee) for [XBee 
 
 Here is a simple example with a coordinator and an arbitrary number of end devices that we're going to configure and monitor for sampling.
 
-<strong>Ensure that the controller (the physically attached XBee) is in API Mode 1</strong>
-
-Note that for UWP apps, you will need to declare a serial communications device capability in your app manifest.
+Note that for UWP apps you will need to declare a serial communications device capability in your app manifest.
 
 ```xml
   <Capabilities>
@@ -35,6 +33,8 @@ Note that for UWP apps, you will need to declare a serial communications device 
     </DeviceCapability>
   </Capabilities>
  ```
+
+<strong>Ensure that the controller (the physically attached XBee) is in API Mode 1</strong>
 
 ```C#
 

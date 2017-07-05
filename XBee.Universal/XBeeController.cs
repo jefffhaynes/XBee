@@ -21,6 +21,11 @@ namespace XBee.Universal
         {
         }
 
+        /// <summary>
+        /// Find all connected XBee controllers at the given baud rate.
+        /// </summary>
+        /// <param name="baudRate"></param>
+        /// <returns></returns>
         public static async Task<List<XBeeController>> FindControllersAsync(int baudRate)
         {
             var controllers = new List<XBeeController>();
