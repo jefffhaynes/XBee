@@ -36,7 +36,7 @@ namespace XBee.Tester
             //    Console.ReadKey();s
             //}
 
-            Console.SetBufferSize(80, 10000);
+            //Console.SetBufferSize(80, 10000);
 
             MainAsync();
 
@@ -58,6 +58,8 @@ namespace XBee.Tester
             //await _xbee.OpenAsync("COM4", 115200);
 
             _xbee = await XBeeController.FindAndOpenAsync(SerialPort.GetPortNames(), 9600);
+
+            Discover();
 
             //_xbee.FrameMemberSerializing += XbeeOnFrameMemberSerializing;
             //_xbee.FrameMemberSerialized += XbeeOnFrameMemberSerialized;
@@ -102,19 +104,19 @@ namespace XBee.Tester
             //var tcpClientTimeout = await cellularNode.GetTcpClientConnectionTimeoutAsync();
             //Console.WriteLine(tcpClientTimeout);
 
-            var accessPointName = await cellularNode.GetAccessPointNameAsync();
-            Console.WriteLine(accessPointName);
+            //var accessPointName = await cellularNode.GetAccessPointNameAsync();
+            //Console.WriteLine(accessPointName);
 
-            var address = await cellularNode.GetIPAddressAsync();
-            Console.WriteLine(address);
+            //var address = await cellularNode.GetIPAddressAsync();
+            //Console.WriteLine(address);
 
-            cellularNode.InternetDataReceived +=
-                (sender, args) => Console.WriteLine($"{args.SourceAddress}: {BitConverter.ToString(args.Data)}");
+            //cellularNode.InternetDataReceived +=
+            //    (sender, args) => Console.WriteLine($"{args.SourceAddress}: {BitConverter.ToString(args.Data)}");
 
-            await cellularNode.TransmitDataAsync(IPAddress.Parse("127.0.0.1"), 80, Encoding.UTF8.GetBytes("hello world"));
-            //await cellularNode.SendSms("7032179771", "hello world");
+            //await cellularNode.TransmitDataAsync(IPAddress.Parse("127.0.0.1"), 80, Encoding.UTF8.GetBytes("hello world"));
+            ////await cellularNode.SendSms("7032179771", "hello world");
 
-            cellularNode.SmsReceived += (sender, args) => Console.WriteLine($"{args.PhoneNumber}: {args.Message}");
+            //cellularNode.SmsReceived += (sender, args) => Console.WriteLine($"{args.PhoneNumber}: {args.Message}");
         }
 
 
@@ -157,10 +159,10 @@ namespace XBee.Tester
 
             Console.WriteLine("Discovering network...");
 
-            _xbee.NodeDiscovered += async (sender, args) =>
+            _xbee.NodeDiscovered += (sender, args) =>
             {
-                Console.WriteLine("---------------- Discovered '{0}'", args.Name);
-                await args.Node.SetApiModeAsync(ApiMode.Enabled);
+                Console.WriteLine("---------------- Discovered '{0}'", args.Node.Address.ShortAddress);
+                //await args.Node.SetApiModeAsync(ApiMode.Enabled);
 
                 //Console.WriteLine("Sending data to '{0}'", args.Name);
                 //await args.Node.TransmitDataAsync(Encoding.ASCII.GetBytes("Hello!"));
