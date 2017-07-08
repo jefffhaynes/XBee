@@ -7,6 +7,7 @@ namespace XBee
     {
         public static readonly ShortAddress Broadcast = new ShortAddress(0xffff);
         public static readonly ShortAddress Disabled = new ShortAddress(0xfffe);
+        public static readonly ShortAddress Coordinator = new ShortAddress(0);
 
         public ShortAddress()
         {
@@ -18,11 +19,28 @@ namespace XBee
             Value = value;
         }
 
-        public ushort Value { get; set; }
+        public ushort Value { get; }
+
+        [Ignore]
+        public bool IsBroadcast => Value == Broadcast.Value;
+
+        [Ignore]
+        public bool IsDisabled => Value == Disabled.Value;
+
+        [Ignore]
+        public bool IsCoordinator => Value == Coordinator.Value;
 
         public bool Equals(ShortAddress other)
         {
-            return other != null && Value.Equals(other.Value);
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return Value == other.Value;
         }
 
         public override string ToString()
@@ -30,10 +48,26 @@ namespace XBee
             return Value.ToString("X4");
         }
 
-        [Ignore]
-        public bool IsBroadcast => Value == Broadcast.Value;
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+            return Equals((ShortAddress) obj);
+        }
 
-        [Ignore]
-        public bool IsDisabled => Value == Disabled.Value;
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 }

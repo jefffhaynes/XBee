@@ -286,9 +286,7 @@ namespace XBee
         public virtual async Task SetDestinationAddressAsync(LongAddress address)
         {
             await ExecuteAtCommandAsync(new DestinationAddressHighCommand(address.High)).ConfigureAwait(false);
-            Address.LongAddress.High = address.High;
             await ExecuteAtCommandAsync(new DestinationAddressLowCommand(address.Low)).ConfigureAwait(false);
-            Address.LongAddress.Low = address.Low;
         }
 
         /// <summary>

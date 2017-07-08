@@ -2,7 +2,7 @@
 
 namespace XBee
 {
-    public class NodeAddress : IEquatable<NodeAddress>
+    public class NodeAddress
     {
         public static readonly NodeAddress Broadcast = new NodeAddress(LongAddress.Broadcast);
 
@@ -16,40 +16,61 @@ namespace XBee
             ShortAddress = shortAddress;
         }
 
-        public NodeAddress(LongAddress longAddress) : this(longAddress, ShortAddress.Broadcast)
+        public NodeAddress(LongAddress longAddress) : this(longAddress, ShortAddress.Disabled)
         {
         }
 
-        public NodeAddress(ShortAddress shortAddress) : this(LongAddress.Broadcast, shortAddress)
+        public NodeAddress(ShortAddress shortAddress) : this(LongAddress.Disabled, shortAddress)
         {
         }
 
-        public LongAddress LongAddress { get; set; }
+        public LongAddress LongAddress { get; }
 
-        public ShortAddress ShortAddress { get; set; }
-
-
-        public bool Is16BitDisabled => ShortAddress.Equals(ShortAddress.Broadcast) ||
-                                       ShortAddress.Equals(ShortAddress.Disabled);
+        public ShortAddress ShortAddress { get; }
 
         public bool Equals(NodeAddress other)
         {
-            if (Is16BitDisabled)
+            if (ReferenceEquals(null, other))
             {
-                return other != null && LongAddress.Equals(other.LongAddress);
+                return false;
             }
-
-            if (LongAddress.Equals(LongAddress.Broadcast))
+            if (ReferenceEquals(this, other))
             {
-                return other != null && ShortAddress.Equals(other.ShortAddress);
+                return true;
             }
-
-            return other != null && LongAddress.Equals(other.LongAddress);
+            return Equals(LongAddress, other.LongAddress) && Equals(ShortAddress, other.ShortAddress);
         }
+
 
         public override string ToString()
         {
             return $"{LongAddress}, {ShortAddress}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+            return Equals((NodeAddress) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((LongAddress != null ? LongAddress.GetHashCode() : 0) * 397) ^
+                       (ShortAddress != null ? ShortAddress.GetHashCode() : 0);
+            }
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Devices.Enumeration;
@@ -52,31 +51,20 @@ namespace XBee.Utility.ViewModels
 
         public async Task RefreshDevicesAsync()
         {
-            var controllers = await XBeeController.FindControllersAsync(9600);
-
             var devices = await DeviceInformation.FindAllAsync(SerialDevice.GetDeviceSelector());
-            var serialDeviceTasks = devices.Select(device => TryGetSerialDeviceFromIdAsync(device.Id));
-            var serialDevices = await Task.WhenAll(serialDeviceTasks);
-            var serialDeviceViewModels = serialDevices.Where(serialDevice => serialDevice != null)
-                .Select(serialDevice => new SerialDeviceViewModel(serialDevice))
-                .ToList();
-
-            var newDevices = serialDeviceViewModels.Except(SerialDevices).ToList();
-            var missingDevices = SerialDevices.Except(serialDeviceViewModels).ToList();
-            
-            foreach (var serialDevice in newDevices)
+            foreach (var device in devices)
             {
-                SerialDevices.Add(serialDevice);
-                serialDevice.SerialDevice.ReadTimeout = TimeSpan.MaxValue;
-            }
+                var serialDevice = await TryGetSerialDeviceFromIdAsync(device.Id);
 
-            foreach (var missingDevice in missingDevices)
-            {
-                SerialDevices.Remove(missingDevice);
+                if (serialDevice != null)
+                {
+                    var serialDeviceViewModel = new SerialDeviceViewModel(serialDevice);
+                    SerialDevices.Add(serialDeviceViewModel);
+                }
             }
         }
 
-        private async Task<SerialDevice> TryGetSerialDeviceFromIdAsync(string id)
+        private static async Task<SerialDevice> TryGetSerialDeviceFromIdAsync(string id)
         {
             try
             {
