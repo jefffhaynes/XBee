@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using XBee.Devices;
 
 namespace XBee.Classic.Tester
@@ -12,7 +13,7 @@ namespace XBee.Classic.Tester
             //var controller = controllerTask.Result;
 
             var controller = new XBeeController();
-            var openTask = controller.OpenAsync("COM9", 9600);
+            var openTask = controller.OpenAsync("COM4", 9600);
             openTask.Wait();
 
             if (controller == null)
@@ -43,12 +44,13 @@ namespace XBee.Classic.Tester
             //var rssiCycle = rssiCycleTask.Result;
 
             Console.WriteLine("Found controller.");
-            //controller.NodeDiscovered += (sender, eventArgs) =>
-            //{
-            //    Console.WriteLine($"{eventArgs.Name} discovered.");
-            //};
-            //var discoverTask = controller.DiscoverNetworkAsync();
-            //discoverTask.Wait();
+            controller.NodeDiscovered += (sender, eventArgs) =>
+            {
+                Console.WriteLine($"{eventArgs.Name} discovered.");
+                eventArgs.Node.TransmitDataAsync(Enumerable.Repeat((byte) 5, 400).ToArray());
+            };
+            var discoverTask = controller.DiscoverNetworkAsync();
+            discoverTask.Wait();
             Console.WriteLine("Discovery finished.");
             Console.ReadKey();
         }

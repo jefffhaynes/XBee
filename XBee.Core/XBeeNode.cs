@@ -459,6 +459,13 @@ namespace XBee
         }
 
         /// <summary>
+        /// Get the maximum support payload length.  This value could vary based on device settings such
+        /// as security or routing settings.
+        /// </summary>
+        /// <returns></returns>
+        public abstract Task<uint> GetMaximumTransmitPayloadLengthAsync();
+
+        /// <summary>
         ///     Force this node to take and report a sample on configured channels.
         /// </summary>
         public virtual Task ForceSampleAsync()
@@ -501,9 +508,8 @@ namespace XBee
         /// <returns>True if encryption is enabled</returns>
         public virtual async Task<bool> IsEncryptionEnabledAsync()
         {
-            var response =
-                await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new EncryptionEnableCommand())
-                    .ConfigureAwait(false);
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new EncryptionEnableCommand())
+                .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -511,9 +517,10 @@ namespace XBee
         ///     Used to enable encryption on this node.
         /// </summary>
         /// <param name="enabled">True to enable encryption</param>
-        public Task SetEncryptionEnabledAsync(bool enabled)
+        public async Task SetEncryptionEnabledAsync(bool enabled)
         {
-            return ExecuteAtCommandAsync(new EncryptionEnableCommand(enabled));
+            await ExecuteAtCommandAsync(new EncryptionEnableCommand(enabled)).ConfigureAwait(false);
+            OnMaxPayloadLengthDirty();
         }
 
         /// <summary>
@@ -608,6 +615,10 @@ namespace XBee
         public virtual XBeeStream GetSerialStream()
         {
             return new XBeeStream(this);
+        }
+
+        protected virtual void OnMaxPayloadLengthDirty()
+        {
         }
 
         protected virtual NodeAddress GetAddressInternal()

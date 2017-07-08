@@ -17,6 +17,8 @@ namespace XBee.Devices
         {
         }
 
+        private const uint MaximumPayloadLength = 1500;
+
         /// <summary>
         ///     Occurs when an SMS message is received.
         /// </summary>
@@ -250,6 +252,11 @@ namespace XBee.Devices
             var addressValue = BitConverter.ToUInt32(addressData, 0);
             var txIPv4Frame = new TxIPv4Frame(addressValue, port, sourcePort, protocol, options, data);
             await Controller.ExecuteAsync(txIPv4Frame);
+        }
+        
+        public override Task<uint> GetMaximumTransmitPayloadLengthAsync()
+        {
+            return Task.FromResult(MaximumPayloadLength);
         }
 
         protected override NodeAddress GetAddressInternal()

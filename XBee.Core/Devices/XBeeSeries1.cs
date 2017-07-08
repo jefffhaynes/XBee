@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using XBee.Core;
@@ -14,6 +15,11 @@ namespace XBee.Devices
             NodeAddress address = null) : base(controller, hardwareVersion, address)
         {
         }
+
+        private const uint MaxTransmitPayloadLength = 100;
+        private const uint MaxTransmitPayloadLengthWithSecurity = 95;
+
+        private uint? _maxPayloadLength;
 
         /// <summary>
         ///     Gets a value that indicates whether this node is a coordinator node.
@@ -173,6 +179,20 @@ namespace XBee.Devices
             return ExecuteAtCommandAsync(new PullUpResistorConfigurationCommand(configuration));
         }
 
+        /// <summary>
+        /// Get the maximum support payload length.  This value could vary based on device settings such
+        /// as security or routing settings.
+        /// </summary>
+        /// <returns></returns>
+        public override async Task<uint> GetMaximumTransmitPayloadLengthAsync()
+        {
+            var isEncryptionEnabled = await IsEncryptionEnabledAsync().ConfigureAwait(false);
+
+            var maxPayloadLength = isEncryptionEnabled ? MaxTransmitPayloadLengthWithSecurity : MaxTransmitPayloadLength;
+
+            return maxPayloadLength;
+        }
+
         public override async Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken,
             bool enableAck = true)
         {
@@ -180,22 +200,37 @@ namespace XBee.Devices
             {
                 throw new InvalidOperationException("Can't send data to local device.");
             }
-
-            var transmitRequest = new TxRequestFrame(Address.LongAddress, data);
-
-            if (!enableAck)
+            
+            if (_maxPayloadLength == null)
             {
-                transmitRequest.Options = TransmitOptions.DisableAck;
-                await Controller.ExecuteAsync(transmitRequest).ConfigureAwait(false);
+                _maxPayloadLength = await GetMaximumTransmitPayloadLengthAsync();
             }
-            else
-            {
-                var response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest, cancellationToken)
-                    .ConfigureAwait(false);
+            
+            var dataStream = new MemoryStream(data);
 
-                if (response.Status != DeliveryStatus.Success)
+            int read;
+            // ReSharper disable once PossibleInvalidOperationException
+            byte[] block = new byte[_maxPayloadLength.Value];
+            while ((read = dataStream.Read(block, 0, block.Length)) > 0)
+            {
+                var readBlock = new byte[read];
+                Array.Copy(block, readBlock, readBlock.Length);
+                var transmitRequest = new TxRequestFrame(Address.LongAddress, readBlock);
+                
+                if (!enableAck)
                 {
-                    throw new XBeeException($"Delivery failed with status code '{response.Status}'.");
+                    transmitRequest.Options = TransmitOptions.DisableAck;
+                    await Controller.ExecuteAsync(transmitRequest).ConfigureAwait(false);
+                }
+                else
+                {
+                    var response = await Controller.ExecuteQueryAsync<TxStatusFrame>(transmitRequest, cancellationToken)
+                        .ConfigureAwait(false);
+
+                    if (response.Status != DeliveryStatus.Success)
+                    {
+                        throw new XBeeException($"Delivery failed with status code '{response.Status}'.");
+                    }
                 }
             }
         }
@@ -203,6 +238,11 @@ namespace XBee.Devices
         public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
             return TransmitDataAsync(data, CancellationToken.None, enableAck);
+        }
+
+        protected override void OnMaxPayloadLengthDirty()
+        {
+            _maxPayloadLength = null;
         }
     }
 }
