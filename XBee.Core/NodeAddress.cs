@@ -4,6 +4,8 @@ namespace XBee
 {
     public class NodeAddress : IEquatable<NodeAddress>
     {
+        public static readonly NodeAddress Broadcast = new NodeAddress(LongAddress.Broadcast);
+
         public NodeAddress()
         {
         }

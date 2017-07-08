@@ -18,18 +18,22 @@ namespace XBee.Core
 {
     public abstract class XBeeControllerBase : IDisposable
     {
-        private static readonly ConcurrentDictionary<byte, TaskCompletionSource<CommandResponseFrameContent>>
-            ExecuteTaskCompletionSources =
+        private readonly ConcurrentDictionary<byte, TaskCompletionSource<CommandResponseFrameContent>>
+            _executeTaskCompletionSources =
                 new ConcurrentDictionary<byte, TaskCompletionSource<CommandResponseFrameContent>>();
 
-        private static readonly ConcurrentDictionary<byte, Action<CommandResponseFrameContent>> ExecuteCallbacks =
+        private readonly ConcurrentDictionary<byte, Action<CommandResponseFrameContent>> _executeCallbacks =
             new ConcurrentDictionary<byte, Action<CommandResponseFrameContent>>();
 
-        private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(300);
-        private static readonly TimeSpan DefaultRemoteQueryTimeout = TimeSpan.FromSeconds(300);
-        private static readonly TimeSpan DefaultLocalQueryTimeout = TimeSpan.FromSeconds(300);
+        private static readonly ConcurrentDictionary<NodeAddress, HardwareVersion> NodeHardwareVersionCache =
+            new ConcurrentDictionary<NodeAddress, HardwareVersion>();
 
-        private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(30);
+        private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan DefaultRemoteQueryTimeout = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan DefaultLocalQueryTimeout = TimeSpan.FromSeconds(10);
+
+        private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(10);
+
         private readonly FrameContext _frameContext = new FrameContext(null);
         private readonly object _frameIdLock = new object();
 
@@ -43,7 +47,7 @@ namespace XBee.Core
 
         protected readonly ISerialDevice SerialDevice;
 
-        private readonly BinarySerializer _serializer = new BinarySerializer {Endianness = Endianness.Big};
+        private static readonly BinarySerializer Serializer = new BinarySerializer {Endianness = Endianness.Big};
 
         private byte _frameId = byte.MinValue;
 
@@ -52,15 +56,15 @@ namespace XBee.Core
         private CancellationTokenSource _listenerCancellationTokenSource;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
 
-        public XBeeControllerBase(ISerialDevice serialDevice)
+        protected XBeeControllerBase(ISerialDevice serialDevice)
         {
             SerialDevice = serialDevice;
 
 #if DEBUG
-            _serializer.MemberDeserialized += OnMemberDeserialized;
-            _serializer.MemberDeserializing += OnMemberDeserializing;
-            _serializer.MemberSerialized += OnMemberSerialized;
-            _serializer.MemberSerializing += OnMemberSerializing;
+            Serializer.MemberDeserialized += OnMemberDeserialized;
+            Serializer.MemberDeserializing += OnMemberDeserializing;
+            Serializer.MemberSerialized += OnMemberSerialized;
+            Serializer.MemberSerializing += OnMemberSerializing;
 #endif
         }
 
@@ -230,8 +234,8 @@ namespace XBee.Core
         /// </summary>
         public event EventHandler<MemberSerializedEventArgs> FrameMemberSerialized
         {
-            add => _serializer.MemberSerialized += value;
-            remove => _serializer.MemberSerialized -= value;
+            add => Serializer.MemberSerialized += value;
+            remove => Serializer.MemberSerialized -= value;
         }
 
         /// <summary>
@@ -239,8 +243,8 @@ namespace XBee.Core
         /// </summary>
         public event EventHandler<MemberSerializedEventArgs> FrameMemberDeserialized
         {
-            add => _serializer.MemberDeserialized += value;
-            remove => _serializer.MemberDeserialized -= value;
+            add => Serializer.MemberDeserialized += value;
+            remove => Serializer.MemberDeserialized -= value;
         }
 
         /// <summary>
@@ -248,8 +252,8 @@ namespace XBee.Core
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> FrameMemberSerializing
         {
-            add => _serializer.MemberSerializing += value;
-            remove => _serializer.MemberSerializing -= value;
+            add => Serializer.MemberSerializing += value;
+            remove => Serializer.MemberSerializing -= value;
         }
 
         /// <summary>
@@ -257,8 +261,8 @@ namespace XBee.Core
         /// </summary>
         public event EventHandler<MemberSerializingEventArgs> FrameMemberDeserializing
         {
-            add => _serializer.MemberDeserializing += value;
-            remove => _serializer.MemberDeserializing -= value;
+            add => Serializer.MemberDeserializing += value;
+            remove => Serializer.MemberDeserializing -= value;
         }
 
         public async Task<HardwareVersion> GetHardwareVersionAsync(NodeAddress address = null)
@@ -268,11 +272,22 @@ namespace XBee.Core
                 return _hardwareVersion.Value;
             }
 
-            var version =
-                await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
-                    TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+            HardwareVersion hardwareVersion;
+            if (address == null || !NodeHardwareVersionCache.TryGetValue(address, out hardwareVersion))
+            {
+                var version =
+                    await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
+                        TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
-            return version.HardwareVersion;
+                hardwareVersion = version.HardwareVersion;
+
+                if (address != null)
+                {
+                    NodeHardwareVersionCache.TryAdd(address, hardwareVersion);
+                }
+            }
+
+            return hardwareVersion;
         }
 
 
@@ -308,7 +323,7 @@ namespace XBee.Core
             var delayTask = Task.Delay(timeout, cancellationToken);
 
             var taskCompletionSource =
-                ExecuteTaskCompletionSources.AddOrUpdate(frame.FrameId,
+                _executeTaskCompletionSources.AddOrUpdate(frame.FrameId,
                     b => new TaskCompletionSource<CommandResponseFrameContent>(),
                     (b, source) => new TaskCompletionSource<CommandResponseFrameContent>());
 
@@ -449,7 +464,7 @@ namespace XBee.Core
             {
                 var stream = new SerialDeviceStream(SerialDevice);
                 var frame = new Frame(frameContent);
-                _serializer.Serialize(stream, frame);
+                Serializer.Serialize(stream, frame);
             }
         }
 
@@ -526,14 +541,14 @@ namespace XBee.Core
                 }
             });
 
-            ExecuteCallbacks.AddOrUpdate(frame.FrameId, b => callbackProxy, (b, source) => callbackProxy);
+            _executeCallbacks.AddOrUpdate(frame.FrameId, b => callbackProxy, (b, source) => callbackProxy);
 
             await ExecuteAsync(frame).ConfigureAwait(false);
 
             await Task.Delay(timeout, cancellationToken);
 
             Action<CommandResponseFrameContent> action;
-            ExecuteCallbacks.TryRemove(frame.FrameId, out action);
+            _executeCallbacks.TryRemove(frame.FrameId, out action);
         }
 
         private XBeeNode CreateNode(HardwareVersion hardwareVersion, NodeAddress address = null)
@@ -586,7 +601,7 @@ namespace XBee.Core
                         var stream = new SerialDeviceStream(SerialDevice);
 
                         // ReSharper disable InconsistentlySynchronizedField
-                        var frame = await _serializer
+                        var frame = await Serializer
                             .DeserializeAsync<Frame>(stream, _frameContext, cancellationToken)
                             .ConfigureAwait(false);
                         // ReSharper restore InconsistentlySynchronizedField
@@ -627,14 +642,14 @@ namespace XBee.Core
                 var frameId = commandResponse.FrameId;
 
                 TaskCompletionSource<CommandResponseFrameContent> taskCompletionSource;
-                if (ExecuteTaskCompletionSources.TryRemove(frameId, out taskCompletionSource))
+                if (_executeTaskCompletionSources.TryRemove(frameId, out taskCompletionSource))
                 {
                     taskCompletionSource.SetResult(commandResponse);
                 }
                 else
                 {
                     Action<CommandResponseFrameContent> callback;
-                    if (ExecuteCallbacks.TryGetValue(frameId, out callback))
+                    if (_executeCallbacks.TryGetValue(frameId, out callback))
                     {
                         callback(commandResponse);
                     }
