@@ -26,7 +26,7 @@ namespace XBee.Universal
         /// </summary>
         /// <param name="baudRate"></param>
         /// <returns></returns>
-        public static async Task<List<XBeeController>> FindControllersAsync(int baudRate)
+        public static async Task<List<XBeeController>> FindControllersAsync(uint baudRate)
         {
             var controllers = new List<XBeeController>();
 
@@ -38,6 +38,9 @@ namespace XBee.Universal
 
                 if (serialDevice != null)
                 {
+                    serialDevice.BaudRate = baudRate;
+                    serialDevice.DataBits = 8;
+
                     var controller = await TryGetControllerAsync(serialDevice).ConfigureAwait(false);
 
                     if (controller != null)
