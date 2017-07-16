@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace XBee
+﻿namespace XBee
 {
     public class NodeAddress
     {
@@ -26,7 +24,7 @@ namespace XBee
 
         public LongAddress LongAddress { get; }
 
-        public ShortAddress ShortAddress { get; }
+        public ShortAddress ShortAddress { get; internal set; }
 
         public bool Equals(NodeAddress other)
         {
@@ -40,8 +38,7 @@ namespace XBee
             }
             return Equals(LongAddress, other.LongAddress) && Equals(ShortAddress, other.ShortAddress);
         }
-
-
+        
         public override string ToString()
         {
             return $"{LongAddress}, {ShortAddress}";
@@ -53,24 +50,18 @@ namespace XBee
             {
                 return false;
             }
+
             if (ReferenceEquals(this, obj))
             {
                 return true;
             }
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-            return Equals((NodeAddress) obj);
+
+            return obj.GetType() == GetType() && Equals((NodeAddress) obj);
         }
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                return ((LongAddress != null ? LongAddress.GetHashCode() : 0) * 397) ^
-                       (ShortAddress != null ? ShortAddress.GetHashCode() : 0);
-            }
+            return LongAddress != null ? LongAddress.GetHashCode() : 0;
         }
     }
 }

@@ -6,11 +6,11 @@ namespace XBee.Frames
     {
         public TxStatusExtFrame()
         {
-            Reserved = ShortAddress.Broadcast;
+            ShortAddress = ShortAddress.Broadcast;
         }
 
         [FieldOrder(0)]
-        public ShortAddress Reserved { get; set; }
+        public ShortAddress ShortAddress { get; set; }
 
         [FieldOrder(1)]
         public byte RetryCount { get; set; }

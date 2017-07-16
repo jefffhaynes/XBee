@@ -151,8 +151,14 @@ namespace XBee.Devices
 
                     if (response.DeliveryStatus != DeliveryStatusExt.Success)
                     {
+                        // per documentation, set short address to unknown on failure
+                        Address.ShortAddress = ShortAddress.Disabled;
+
                         throw new XBeeException($"Delivery failed with status code '{response.DeliveryStatus}'.");
                     }
+
+                    // per documention, update short address
+                    Address.ShortAddress = response.ShortAddress;
                 }
             }
         }
@@ -179,8 +185,14 @@ namespace XBee.Devices
 
             if (response.DeliveryStatus != DeliveryStatusExt.Success)
             {
+                // per documentation, set short address to unknown on failure
+                Address.ShortAddress = ShortAddress.Disabled;
+
                 throw new XBeeException($"Delivery failed with status code '{response.DeliveryStatus}'.");
             }
+
+            // per documention, update short address
+            Address.ShortAddress = response.ShortAddress;
         }
 
         public override Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)
