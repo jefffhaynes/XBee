@@ -2,18 +2,18 @@
 <package >
   <metadata minClientVersion="3.2">
     <id>XBee</id>
-    <version>5.3.0</version>
+    <version>5.3.2</version>
     <authors>Jeff Haynes</authors>
     <owners></owners>
     <projectUrl>https://github.com/jefffhaynes/XBee</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/xbcs.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A UWP and .NET classic library for controlling XBee wireless modules.</description>
-    <releaseNotes>Core update.</releaseNotes>
+    <releaseNotes>Fixes issue with FindControllersAsync.</releaseNotes>
     <tags>XBee Wireless</tags>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <dependencies>
-      <dependency id="XBee.Core" version="1.4.1" />
+      <dependency id="XBee.Core" version="1.4.2" />
     </dependencies>
   </metadata>
   <files>

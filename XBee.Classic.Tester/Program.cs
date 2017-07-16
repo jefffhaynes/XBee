@@ -13,7 +13,7 @@ namespace XBee.Classic.Tester
             //var controller = controllerTask.Result;
 
             var controller = new XBeeController();
-            var openTask = controller.OpenAsync("COM4", 9600);
+            var openTask = controller.OpenAsync("COM4", 115200);
             openTask.Wait();
 
             if (controller == null)
@@ -21,6 +21,12 @@ namespace XBee.Classic.Tester
                 return;
             }
             
+            var s2 = new XBeeSeries2(controller);
+            var s2Task = s2.GetPanIdAsync();
+            s2Task.Wait();
+
+            return;
+
             var local = controller.Local as XBeeSeries1;
 
             controller.ModemStatusChanged += (sender, eventArgs) =>
@@ -28,8 +34,8 @@ namespace XBee.Classic.Tester
                 Console.WriteLine($"Modem status: {eventArgs.Status}");
             };
 
-            //var panIdTask = local.GetPanIdAsync();
-            //panIdTask.Wait();
+            var panIdTask = local.GetPanIdAsync();
+            panIdTask.Wait();
 
             //var panId = panIdTask.Result;
 

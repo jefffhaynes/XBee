@@ -49,7 +49,9 @@ namespace XBee
         {
             NodeIdentifierResponseData response =
                 await ExecuteAtQueryAsync<NodeIdentifierResponseData>(new NodeIdentifierCommand());
-            return response.Id;
+
+            var id = response.Id;
+            return id?.Replace("/0", string.Empty);
         }
 
         /// <summary>

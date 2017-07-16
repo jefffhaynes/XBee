@@ -14,6 +14,6 @@ namespace XBee.Frames.AtCommands
         }
 
         [Ignore]
-        public ulong Id => (ulong) Parameter;
+        public ulong Id => (ulong?)Parameter ?? default(ulong);
     }
 }
