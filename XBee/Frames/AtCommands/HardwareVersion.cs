@@ -13,6 +13,7 @@
         XBeePro900HP = 0x23,   // XSC_GEN3
         XBee24C = 0x2E,        // XB24C_TH_DIP
         XBeePro24C = 0x2D,     // XBP24C_TH_DIP
+        XBeePro24CSmt = 0x30,  // XBP24C_S2C_SMT
         XBeeProSX = 0x31,      // XK9X-DMS-0
         XBeeCellular = 0x40    
     }
