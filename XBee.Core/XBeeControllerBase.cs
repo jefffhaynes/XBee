@@ -569,6 +569,8 @@ namespace XBee.Core
                     return new XBeeSeries2(this, HardwareVersion.XBee24C, address);
                 case HardwareVersion.XBeePro24C:
                     return new XBeeSeries2(this, HardwareVersion.XBeePro24C, address);
+                case HardwareVersion.XBeePro24CSmt:
+                    return new XBeeSeries2(this, HardwareVersion.XBeePro24CSmt, address);
                 case HardwareVersion.XBeePro900:
                     return new XBeePro900HP(this, HardwareVersion.XBeePro900, address);
                 case HardwareVersion.XBeePro900HP:
