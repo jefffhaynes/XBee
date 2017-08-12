@@ -91,6 +91,19 @@ namespace XBee.Utility.ViewModels
                 if (node is XBeeSeries1 series1)
                 {
                     isCoord = await series1.IsCoordinatorAsync();
+                    //var rp = await series1.GetPullUpResistorConfigurationAsync();
+                    //var panId = await series1.GetPanIdAsync();
+                }
+
+                if (node is XBeeSeries2 series2)
+                {
+                    //var sleepOptions = await series2.GetSleepOptionsAsync();
+                    //var association = await series2.GetAssociationAsync();
+                    //var baudRate = await series2.GetBaudRateAsync();
+                    //var panId = await series2.GetPanIdAsync();
+                    //var rp = await series2.GetPullUpResistorConfigurationAsync();
+                    //var pr = await series2.GetRssiPwmTimeAsync();
+                    //var cd = await series2.GetChangeDetectionChannelsAsync();
                 }
 
                 DiscoveredControllers.Add(new XBeeControllerViewModel(controller, hardwareVersion, isCoord));

@@ -12,7 +12,9 @@ namespace XBee.Devices
     {
         internal XBeeSeries1(XBeeControllerBase controller,
             HardwareVersion hardwareVersion = HardwareVersion.XBeeSeries1,
-            NodeAddress address = null) : base(controller, hardwareVersion, address)
+            ushort firmwareVersion = 0,
+            XBeeProtocol protocol = XBeeProtocol.Unknown,
+            NodeAddress address = null) : base(controller, hardwareVersion, firmwareVersion, protocol, address)
         {
         }
 
@@ -33,7 +35,7 @@ namespace XBee.Devices
 
             if (response.EnableState == null)
             {
-                throw new InvalidOperationException("No valid coordinator state returned.");
+                throw new InvalidDataException();
             }
 
             return response.EnableState.Value == CoordinatorEnableState.Coordinator;
@@ -54,10 +56,15 @@ namespace XBee.Devices
         /// <returns></returns>
         public async Task<ushort> GetPanIdAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new PanIdCommand())
+            var response = await ExecuteAtQueryAsync<PanIdResponseData>(new PanIdCommand())
                 .ConfigureAwait(false);
 
-            return response.Value;
+            if (response.Id == null)
+            {
+                throw new InvalidDataException();
+            }
+
+            return response.Id.Value;
         }
 
         /// <summary>
@@ -143,7 +150,7 @@ namespace XBee.Devices
 
             if (response.Options == null)
             {
-                throw new InvalidOperationException("No valid sleep options returned.");
+                throw new InvalidDataException();
             }
 
             return response.Options.Value;

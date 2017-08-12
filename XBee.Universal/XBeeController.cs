@@ -47,6 +47,10 @@ namespace XBee.Universal
                     {
                         controllers.Add(controller);
                     }
+                    else
+                    {
+                        serialDevice.Dispose();
+                    }
                 }
             }
 

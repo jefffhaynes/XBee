@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using XBee.Core;
 using XBee.Frames.AtCommands;
 
@@ -6,7 +7,11 @@ namespace XBee.Devices
 {
     public class XBeeSeries2 : XBeeSeries2Base, IAssociationIndicator, IDisassociation
     {
-        public XBeeSeries2(XBeeControllerBase controller, HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2, NodeAddress address = null) : base(controller, hardwareVersion, address)
+        public XBeeSeries2(XBeeControllerBase controller, 
+            HardwareVersion hardwareVersion = HardwareVersion.XBeeProS2,
+            ushort firmwareVersion = 0,
+            XBeeProtocol protocol = XBeeProtocol.Unknown,
+            NodeAddress address = null) : base(controller, hardwareVersion, firmwareVersion, protocol, address)
         {
         }
 
@@ -16,10 +21,20 @@ namespace XBee.Devices
         /// <returns></returns>
         public async Task<ulong> GetPanIdAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ulong>>(new PanIdCommandExt())
+            var response = await ExecuteAtQueryAsync<PanIdResponseData>(new PanIdCommandExt())
                 .ConfigureAwait(false);
 
-            return response.Value;
+            if (response.IdExt != null)
+            {
+                return response.IdExt.Value;
+            }
+
+            if (response.Id != null)
+            {
+                return response.Id.Value;
+            }
+
+            throw new InvalidDataException();
         }
 
         /// <summary>

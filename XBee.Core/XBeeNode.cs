@@ -15,10 +15,12 @@ namespace XBee
 
         protected readonly XBeeControllerBase Controller;
 
-        internal XBeeNode(XBeeControllerBase controller, HardwareVersion hardwareVersion, NodeAddress address = null)
+        internal XBeeNode(XBeeControllerBase controller, HardwareVersion hardwareVersion, ushort firmwareVersion, XBeeProtocol protocol, NodeAddress address = null)
         {
             Controller = controller;
             HardwareVersion = hardwareVersion;
+            FirmwareVersion = firmwareVersion;
+            Protocol = protocol;
             Address = address;
 
             Controller.DataReceived += ControllerOnDataReceived;
@@ -30,6 +32,16 @@ namespace XBee
         ///     The hardware version for this node.
         /// </summary>
         public HardwareVersion HardwareVersion { get; }
+
+        /// <summary>
+        /// The firmware version for this node.
+        /// </summary>
+        public ushort FirmwareVersion { get; }
+
+        /// <summary>
+        /// The protocol corresponding to the hardware and firmware version for this node.
+        /// </summary>
+        public XBeeProtocol Protocol { get; }
 
         /// <summary>
         ///     The address of this node.

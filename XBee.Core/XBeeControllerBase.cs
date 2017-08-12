@@ -4,7 +4,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using BinarySerialization;
-using XBee.Devices;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 using XBee.Observable;
@@ -27,6 +26,8 @@ namespace XBee.Core
 
         private static readonly ConcurrentDictionary<NodeAddress, HardwareVersion> NodeHardwareVersionCache =
             new ConcurrentDictionary<NodeAddress, HardwareVersion>();
+        private static readonly ConcurrentDictionary<NodeAddress, ushort> FirmwareVersionCache =
+            new ConcurrentDictionary<NodeAddress, ushort>();
 
         private static readonly TimeSpan ModemResetTimeout = TimeSpan.FromSeconds(10);
         private static readonly TimeSpan DefaultRemoteQueryTimeout = TimeSpan.FromSeconds(10);
@@ -34,7 +35,7 @@ namespace XBee.Core
 
         private static readonly TimeSpan NetworkDiscoveryTimeout = TimeSpan.FromSeconds(10);
 
-        private readonly FrameContext _frameContext = new FrameContext(null);
+        private readonly FrameContext _frameContext = new FrameContext();
         private readonly object _frameIdLock = new object();
 
         private readonly SemaphoreSlim _initializeSemaphoreSlim = new SemaphoreSlim(1);
@@ -52,6 +53,7 @@ namespace XBee.Core
         private byte _frameId = byte.MinValue;
 
         private HardwareVersion? _hardwareVersion;
+        private ushort? _firmwareVersion;
         private bool _isInitialized;
         private CancellationTokenSource _listenerCancellationTokenSource;
         private TaskCompletionSource<ModemStatus> _modemResetTaskCompletionSource;
@@ -123,9 +125,9 @@ namespace XBee.Core
         ///     Create a node.
         /// </summary>
         /// <param name="address">The address of the node or null for the controller node.</param>
-        /// <param name="autodetectHardwareVersion">If true query node for hardware version.  Otherwise assume controller version.</param>
+        /// <param name="autodetectProtocol">If true query node for hardware version.  Otherwise assume controller version.</param>
         /// <returns>The specified node.</returns>
-        public async Task<XBeeNode> GetNodeAsync(NodeAddress address = null, bool autodetectHardwareVersion = true)
+        public async Task<XBeeNode> GetNodeAsync(NodeAddress address = null, bool autodetectProtocol = true)
         {
             await InitializeAsync().ConfigureAwait(false);
 
@@ -134,20 +136,31 @@ namespace XBee.Core
                 return Local;
             }
 
-            HardwareVersion version;
+            HardwareVersion hardwareVersion;
+            ushort firmwareVersion;
 
-            if (autodetectHardwareVersion)
+            if (autodetectProtocol)
             {
-                version = await
+                hardwareVersion = await
                     TaskExtensions.Retry(async () => await GetHardwareVersionAsync(address), TimeSpan.FromSeconds(5),
+                        typeof(TimeoutException), typeof(AtCommandException)).ConfigureAwait(false);
+
+                firmwareVersion = await
+                    TaskExtensions.Retry(async () => await GetFirmwareVersionAsync(address), TimeSpan.FromSeconds(5),
                         typeof(TimeoutException), typeof(AtCommandException)).ConfigureAwait(false);
             }
             else
             {
-                version = Local.HardwareVersion;
+                hardwareVersion = Local.HardwareVersion;
+                firmwareVersion = Local.FirmwareVersion;
             }
+            
+            return await Task.FromResult(CreateNode(hardwareVersion, firmwareVersion, address)).ConfigureAwait(false);
+        }
 
-            return await Task.FromResult(CreateNode(version, address)).ConfigureAwait(false);
+        private XBeeNode CreateNode(HardwareVersion hardwareVersion, ushort firmwareVersion, NodeAddress address = null)
+        {
+            return DeviceFactory.CreateDevice(hardwareVersion, firmwareVersion, address, this);
         }
 
         /// <summary>
@@ -155,10 +168,11 @@ namespace XBee.Core
         /// </summary>
         /// <param name="address">The address of the node or null for the controller node.</param>
         /// <param name="version">The hardware version to use for the specified node.</param>
+        /// <param name="protocol">The protocol to use or null for default.</param>
         /// <returns>The specified node.</returns>
-        public Task<XBeeNode> GetNodeAsync(NodeAddress address, HardwareVersion version)
+        public Task<XBeeNode> GetNodeAsync(NodeAddress address, HardwareVersion version, XBeeProtocol protocol = XBeeProtocol.Unknown)
         {
-            return Task.FromResult(CreateNode(version, address));
+            return Task.FromResult(CreateNode(version, 0, address));
         }
 
         /// <summary>
@@ -288,6 +302,31 @@ namespace XBee.Core
             }
 
             return hardwareVersion;
+        }
+
+        public async Task<ushort> GetFirmwareVersionAsync(NodeAddress address = null)
+        {
+            if (address == null && _firmwareVersion != null)
+            {
+                return _firmwareVersion.Value;
+            }
+
+            ushort firmwareVersion;
+            if (address == null || !FirmwareVersionCache.TryGetValue(address, out firmwareVersion))
+            {
+                var version =
+                    await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new FirmwareVersionCommand(), address,
+                        TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+
+                firmwareVersion = version.Value;
+
+                if (address != null)
+                {
+                    FirmwareVersionCache.TryAdd(address, firmwareVersion);
+                }
+            }
+
+            return firmwareVersion;
         }
 
 
@@ -491,14 +530,22 @@ namespace XBee.Core
                 // Unfortunately the protocol changes based on what type of hardware we're using...
                 var hardwareVersion = await GetHardwareVersionAsync().ConfigureAwait(false);
 
+                Listen(true);
+
+                var firmwareVersion = await GetFirmwareVersionAsync().ConfigureAwait(false);
+
+                var protocol = DeviceFactory.GetProtocol(hardwareVersion, firmwareVersion);
+
                 _frameContext.ControllerHardwareVersion = hardwareVersion;
+                _frameContext.Protocol = protocol;
 
                 // start receiving frames
                 Listen();
 
-                Local = CreateNode(hardwareVersion);
+                Local = CreateNode(hardwareVersion, firmwareVersion);
 
                 _hardwareVersion = hardwareVersion;
+                _firmwareVersion = firmwareVersion;
             }
             catch
             {
@@ -547,41 +594,6 @@ namespace XBee.Core
 
             Action<CommandResponseFrameContent> action;
             _executeCallbacks.TryRemove(frame.FrameId, out action);
-        }
-
-        private XBeeNode CreateNode(HardwareVersion hardwareVersion, NodeAddress address = null)
-        {
-            switch (hardwareVersion)
-            {
-                case HardwareVersion.XBeeSeries1:
-                    return new XBeeSeries1(this, HardwareVersion.XBeeSeries1, address);
-                case HardwareVersion.XBeeProSeries1:
-                    return new XBeeSeries1(this, HardwareVersion.XBeeProSeries1, address);
-                case HardwareVersion.ZNetZigBeeS2:
-                    return new XBeeSeries2(this, HardwareVersion.ZNetZigBeeS2, address);
-                case HardwareVersion.XBeeProS2:
-                    return new XBeeSeries2(this, HardwareVersion.XBeeProS2, address);
-                case HardwareVersion.XBeeProS2B:
-                    return new XBeeSeries2(this, HardwareVersion.XBeeProS2B, address);
-                case HardwareVersion.XBee24S2C:
-                    return new XBeeSeries2(this, HardwareVersion.XBee24S2C, address);
-                case HardwareVersion.XBee24C:
-                    return new XBeeSeries2(this, HardwareVersion.XBee24C, address);
-                case HardwareVersion.XBeePro24C:
-                    return new XBeeSeries2(this, HardwareVersion.XBeePro24C, address);
-                case HardwareVersion.XBeePro24CSmt:
-                    return new XBeeSeries2(this, HardwareVersion.XBeePro24CSmt, address);
-                case HardwareVersion.XBeePro900:
-                    return new XBeePro900HP(this, HardwareVersion.XBeePro900, address);
-                case HardwareVersion.XBeePro900HP:
-                    return new XBeePro900HP(this, HardwareVersion.XBeePro900HP, address);
-                case HardwareVersion.XBeeProSX:
-                    return new XBeePro900HP(this, HardwareVersion.XBeeProSX, address);
-                case HardwareVersion.XBeeCellular:
-                    return new XBeeCellular(this, HardwareVersion.XBeeCellular, address);
-                default:
-                    throw new NotSupportedException($"Hardware version {hardwareVersion} not supported.");
-            }
         }
 
         private void Listen(bool once = false)

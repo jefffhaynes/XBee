@@ -10,8 +10,10 @@ namespace XBee.Devices
     public class XBeePro900HP : XBeeSeries2Base
     {
         internal XBeePro900HP(XBeeControllerBase controller, 
-            HardwareVersion hardwareVersion = HardwareVersion.XBeePro900HP,
-            NodeAddress address = null) : base(controller, hardwareVersion, address)
+            HardwareVersion hardwareVersion,
+            ushort firmwareVersion,
+            XBeeProtocol protocol,
+            NodeAddress address = null) : base(controller, hardwareVersion, firmwareVersion, protocol, address)
         {
         }
 

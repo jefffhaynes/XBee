@@ -3,7 +3,7 @@ using BinarySerialization;
 
 namespace XBee.Converters
 {
-    public class BitCountingConverter : IValueConverter
+    internal class BitCountingConverter : IValueConverter
     {
         public object Convert(object value, object parameter, BinarySerializationContext ctx)
         {
