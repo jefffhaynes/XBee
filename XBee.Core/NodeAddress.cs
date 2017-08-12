@@ -36,6 +36,17 @@
             {
                 return true;
             }
+
+            if (LongAddress.IsDisabled)
+            {
+                return Equals(ShortAddress, other.ShortAddress);
+            }
+
+            if (ShortAddress.IsDisabled)
+            {
+                return Equals(LongAddress, other.LongAddress);
+            }
+
             return Equals(LongAddress, other.LongAddress) && Equals(ShortAddress, other.ShortAddress);
         }
         

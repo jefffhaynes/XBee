@@ -110,6 +110,7 @@ namespace XBee.Utility.ViewModels
             }
             catch (TimeoutException)
             {
+                controller.Dispose();
             }
         }
     }

@@ -42,6 +42,9 @@ namespace XBee
         [Ignore]
         public bool IsCoordinator => Value == Coordinator.Value;
 
+        [Ignore]
+        public bool IsDisabled => Value == Disabled.Value;
+
         public bool Equals(LongAddress other)
         {
             if (ReferenceEquals(null, other))

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
 using Windows.UI.Core;
 using XBee.Frames.AtCommands;

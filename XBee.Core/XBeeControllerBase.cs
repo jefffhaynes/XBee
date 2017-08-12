@@ -532,6 +532,7 @@ namespace XBee.Core
 
                 Listen(true);
 
+                // Unfortunately the protocol changes based on what type of firmware we're using...
                 var firmwareVersion = await GetFirmwareVersionAsync().ConfigureAwait(false);
 
                 var protocol = DeviceFactory.GetProtocol(hardwareVersion, firmwareVersion);
