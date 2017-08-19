@@ -6,7 +6,7 @@
         {
         }
 
-        public ParityCommand(Parity parity)
+        public ParityCommand(Parity parity) : this()
         {
             Parameter = parity;
         }

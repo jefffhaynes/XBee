@@ -8,7 +8,7 @@ namespace XBee.Frames.AtCommands
         {
         }
 
-        public PanIdCommand(ushort id)
+        public PanIdCommand(ushort id) : this()
         {
             Parameter = id;
         }

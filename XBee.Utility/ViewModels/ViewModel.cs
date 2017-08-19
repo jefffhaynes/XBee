@@ -91,6 +91,7 @@ namespace XBee.Utility.ViewModels
                 if (node is XBeeSeries1 series1)
                 {
                     isCoord = await series1.IsCoordinatorAsync();
+                    await series1.SetPanIdAsync(3535);
                     //var rp = await series1.GetPullUpResistorConfigurationAsync();
                     //var panId = await series1.GetPanIdAsync();
                 }

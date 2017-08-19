@@ -6,7 +6,7 @@
         {
         }
 
-        public CellularDeviceOptionCommand(CellularDeviceOption option)
+        public CellularDeviceOptionCommand(CellularDeviceOption option) : this()
         {
             Parameter = option;
         }

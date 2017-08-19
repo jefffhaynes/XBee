@@ -6,7 +6,7 @@
         {
         }
 
-        public InternetProtocolCommand(InternetProtocol protocol)
+        public InternetProtocolCommand(InternetProtocol protocol) : this()
         {
             Parameter = protocol;
         }

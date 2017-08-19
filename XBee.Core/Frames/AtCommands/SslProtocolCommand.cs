@@ -6,7 +6,7 @@
         {
         }
 
-        public SslProtocolCommand(SslProtocol protocol)
+        public SslProtocolCommand(SslProtocol protocol) : this()
         {
             Parameter = protocol;
         }

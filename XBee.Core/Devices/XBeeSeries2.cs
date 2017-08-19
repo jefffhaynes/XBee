@@ -36,16 +36,6 @@ namespace XBee.Devices
 
             throw new InvalidDataException();
         }
-
-        /// <summary>
-        /// Sets the Personal Area Network (PAN) ID.  To commit changes to non-volatile memory, use <see cref="XBeeNode.WriteChangesAsync"/>.
-        /// </summary>
-        /// <param name="id">The PAN ID to assign to this node.</param>
-        /// <returns></returns>
-        public Task SetPanIdAsync(ulong id)
-        {
-            return ExecuteAtCommandAsync(new PanIdCommandExt(id));
-        }
         
         /// <summary>
         ///     Gets the network association state for this node.

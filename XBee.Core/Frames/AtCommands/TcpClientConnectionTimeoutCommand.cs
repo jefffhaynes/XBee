@@ -10,7 +10,7 @@ namespace XBee.Frames.AtCommands
         {
         }
 
-        public TcpClientConnectionTimeoutCommand(TimeSpan timeout)
+        public TcpClientConnectionTimeoutCommand(TimeSpan timeout) : this()
         {
             if (timeout < TimeSpan.Zero)
             {

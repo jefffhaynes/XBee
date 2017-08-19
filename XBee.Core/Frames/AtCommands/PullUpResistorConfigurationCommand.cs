@@ -6,12 +6,12 @@
         {
         }
 
-        public PullUpResistorConfigurationCommand(PullUpResistorConfiguration configuration)
+        public PullUpResistorConfigurationCommand(PullUpResistorConfiguration configuration) : this()
         {
             Parameter = configuration;
         }
 
-        public PullUpResistorConfigurationCommand(PullUpResistorConfigurationExt configuration)
+        public PullUpResistorConfigurationCommand(PullUpResistorConfigurationExt configuration) : this()
         {
             Parameter = configuration;
         }

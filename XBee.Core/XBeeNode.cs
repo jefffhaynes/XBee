@@ -328,6 +328,36 @@ namespace XBee
         }
 
         /// <summary>
+        /// Sets the Personal Area Network (PAN) ID.  To commit changes to non-volatile memory, use <see cref="XBeeNode.WriteChangesAsync"/>.
+        /// </summary>
+        /// <param name="id">The PAN ID to assign to this node.</param>
+        /// <returns></returns>
+        public Task SetPanIdAsync(ushort id)
+        {
+            if (Protocol != XBeeProtocol.Raw && Protocol != XBeeProtocol.DigiMesh)
+            {
+                throw new InvalidOperationException("Protocol mismatch.  Try SetPanIdAsync(ulong).");
+            }
+
+            return ExecuteAtCommandAsync(new PanIdCommand(id));
+        }
+
+        /// <summary>
+        /// Sets the Personal Area Network (PAN) ID.  To commit changes to non-volatile memory, use <see cref="XBeeNode.WriteChangesAsync"/>.
+        /// </summary>
+        /// <param name="id">The PAN ID to assign to this node.</param>
+        /// <returns></returns>
+        public Task SetPanIdAsync(ulong id)
+        {
+            if (Protocol == XBeeProtocol.Raw && Protocol == XBeeProtocol.DigiMesh)
+            {
+                throw new InvalidOperationException("Protocol mismatch.  Try SetPanIdAsync(ushort).");
+            }
+
+            return ExecuteAtCommandAsync(new PanIdCommandExt(id));
+        }
+
+        /// <summary>
         /// Sets the network discovery timeout used by this node when it is acting as a coordinator.  This
         /// value will be included in discovery requests and used by the responding nodes to randomly
         /// choose a delay before responding.  Note that this value is independent of any timeout value

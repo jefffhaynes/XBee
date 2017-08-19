@@ -11,7 +11,7 @@ namespace XBee.Frames.AtCommands
         {
         }
 
-        public RssiPwmTimeCommand(TimeSpan timeout)
+        public RssiPwmTimeCommand(TimeSpan timeout) : this()
         {
             if (timeout < TimeSpan.Zero)
             {
