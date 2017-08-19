@@ -5,8 +5,8 @@
     <RootNamespace>XBee</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>.NET Standard library for controlling XBee wireless modules.</Description>
-    <Version>1.5-beta</Version>
-    <PackageReleaseNotes>Bug fixes, significant changes to protocol detection</PackageReleaseNotes>
+    <Version>1.5</Version>
+    <PackageReleaseNotes>Bug fixes, adds protocol detection</PackageReleaseNotes>
     <PackageTags>XBee Wireless</PackageTags>
     <Authors>Jeff Haynes</Authors>
     <Company />

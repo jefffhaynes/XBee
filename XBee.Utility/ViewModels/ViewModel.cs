@@ -98,6 +98,7 @@ namespace XBee.Utility.ViewModels
 
                 if (node is XBeeSeries2 series2)
                 {
+                    await series2.SetPanIdAsync(3535);
                     //var sleepOptions = await series2.GetSleepOptionsAsync();
                     //var association = await series2.GetAssociationAsync();
                     //var baudRate = await series2.GetBaudRateAsync();

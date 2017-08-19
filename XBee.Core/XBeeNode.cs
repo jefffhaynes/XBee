@@ -349,7 +349,7 @@ namespace XBee
         /// <returns></returns>
         public Task SetPanIdAsync(ulong id)
         {
-            if (Protocol == XBeeProtocol.Raw && Protocol == XBeeProtocol.DigiMesh)
+            if (Protocol == XBeeProtocol.Raw || Protocol == XBeeProtocol.DigiMesh)
             {
                 throw new InvalidOperationException("Protocol mismatch.  Try SetPanIdAsync(ushort).");
             }
