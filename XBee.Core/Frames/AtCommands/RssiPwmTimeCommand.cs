@@ -22,7 +22,7 @@ namespace XBee.Frames.AtCommands
             Parameter = (byte) Math.Min(ms, byte.MaxValue);
         }
 
-        public RssiPwmTimeCommand(byte value)
+        public RssiPwmTimeCommand(byte value) : this()
         {
             Parameter = value;
         }
