@@ -184,6 +184,7 @@ Below is a table summarizing the commands supported by this library.
 | SH/SL | Serial Number          | GetSerialNumberAsync               | --                                 | x  | x  |    x   |          |
 | DH/DL | Destination Address    | GetAddressAsync                    | SetDestinationAddressAsync         | x  | x  |    x   |          |
 | MY    | Source Address         | GetAddressAsync                    | SetSourceAddressAsync              | x  | x  |    x   |  Note 1  |
+| SC    | Scan Channels          | GetScanChannelsAsync               | SetScanChannelsAsync               | x  | x  |    x   |          |
 | ND    | Network Discovery      | --                                 | DiscoverNetworkAsync               | x  | x  |    x   |          |
 | NT    | Discovery Timeout      | GetNetworkDiscoveryTimeoutAsync    | SetNetworkDiscoveryTimeoutAsync    | x  | x  |    x   |          |
 | AI    | Association Indicator  | GetAssociationAsync                | --                                 | x  | x  |        |    x     |
