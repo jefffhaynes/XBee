@@ -5,7 +5,7 @@
     <RootNamespace>XBee</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>.NET Standard library for controlling XBee wireless modules.</Description>
-    <Version>1.5.1</Version>
+    <Version>1.5.2</Version>
     <PackageReleaseNotes>Fixes bug in modem status frame</PackageReleaseNotes>
     <PackageTags>XBee Wireless</PackageTags>
     <Authors>Jeff Haynes</Authors>
@@ -13,8 +13,8 @@
     <PackageProjectUrl>https://github.com/jefffhaynes/XBee</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jefffhaynes/XBee</RepositoryUrl>
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
-    <AssemblyVersion>1.5.1.0</AssemblyVersion>
-    <FileVersion>1.5.1.0</FileVersion>
+    <AssemblyVersion>1.5.2.0</AssemblyVersion>
+    <FileVersion>1.5.2.0</FileVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/xbcs.png</PackageIconUrl>
   </PropertyGroup>
 
