@@ -25,6 +25,7 @@ namespace XBee.Frames
         [Subtype("AtCommand", "RO", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "FT", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "CH", typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
+        [Subtype("AtCommand", "SC", typeof(PrimitiveResponseData<ScanChannels>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "MY", typeof(PrimitiveResponseData<byte[]>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DH", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
         [Subtype("AtCommand", "DL", typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]

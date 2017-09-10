@@ -256,6 +256,28 @@ namespace XBee
         }
 
         /// <summary>
+        /// Get the configured channels to use or scan.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ScanChannels> GetScanChannelsAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ScanChannels>>(new ScanChannelsCommand())
+                .ConfigureAwait(false);
+
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Set the channels to use or scan.
+        /// </summary>
+        /// <param name="scanChannels"></param>
+        /// <returns></returns>
+        public Task SetScanChannelsAsync(ScanChannels scanChannels)
+        {
+            return ExecuteAtCommandAsync(new ScanChannelsCommand(scanChannels));
+        }
+
+        /// <summary>
         ///     Used to explicitly exit command mode.
         /// </summary>
         /// <returns></returns>
