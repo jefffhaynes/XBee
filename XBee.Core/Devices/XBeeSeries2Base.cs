@@ -156,7 +156,7 @@ namespace XBee.Devices
         /// </summary>
         /// <param name="enable"></param>
         /// <returns></returns>
-        public Task IsChannelVerificationEnabledAsync(bool enable)
+        public Task SetChannelVerificationEnabledAsync(bool enable)
         {
             return ExecuteAtCommandAsync(new ChannelVerificationCommand(enable));
         }
@@ -180,6 +180,27 @@ namespace XBee.Devices
         public Task SetNetworkWatchdogTimeoutAsync(ushort minutes)
         {
             return ExecuteAtCommandAsync(new NetworkWatchdogTimeoutCommand(minutes));
+        }
+
+        /// <summary>
+        /// Indicates whether join notification is enabled or not.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> IsJoinNotificationEnabledAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new JoinNotificationCommand())
+                .ConfigureAwait(false);
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Enable or disable join notifications.
+        /// </summary>
+        /// <param name="enable"></param>
+        /// <returns></returns>
+        public Task SetJoinNotificationEnabledAsync(bool enable)
+        {
+            return ExecuteAtCommandAsync(new JoinNotificationCommand(enable));
         }
 
         /// <summary>

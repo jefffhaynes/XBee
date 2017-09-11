@@ -205,8 +205,9 @@ Below is a table summarizing the commands supported by this library.
 | SN    | Sleep Period Count     | GetSleepPeriodCountAsync                | SetSleepPeriodCountAsync                |    | x  |    x   |          |
 | ZS    | Stack Profile          | GetStackProfileAsync                    | SetStackProfileAsync                    |    | x  |    x   |          |
 | NJ    | Node Join Time         | GetNodeJoinTimeAsync                    | SetNodeJoinTimeAsync                    |    | x  |    x   |          |
-| JV    | Channel Verification   | IsChannelVerificationEnabledAsync       | IsChannelVerificationEnabledAsync       |    | x  |    x   |          |
+| JV    | Channel Verification   | IsChannelVerificationEnabledAsync       | SetChannelVerificationEnabledAsync      |    | x  |    x   |          |
 | NW    | Network Watchdog       | GetNetworkWatchdogTimeoutAsync          | SetNetworkWatchdogTimeoutAsync          |    | x  |    x   |          |
+| JN    | Join Notification      | IsJoinNotificationEnabledAsync          | SetJoinNotificationEnabledAsync         |    | x  |    x   |          |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync                | SetEncryptionEnabledAsync               | x  | x  |    x   |          |
 | KY    | Encryption Key         | --                                      | SetEncryptionKeyAsync                   | x  | x  |    x   |          |
 | CE    | Coordinator Enable     | IsCoordinatorAsync                      | SetCoordinatorAsync                     | x  |    |        |          |
