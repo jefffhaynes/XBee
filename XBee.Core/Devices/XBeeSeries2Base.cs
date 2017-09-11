@@ -127,7 +127,8 @@ namespace XBee.Devices
         /// <returns></returns>
         public async Task<byte> GetNodeJoinTimeAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new NodeJoinTimeCommand());
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new NodeJoinTimeCommand())
+                .ConfigureAwait(false);
             return response.Value;
         }
 
@@ -137,6 +138,48 @@ namespace XBee.Devices
         public Task SetNodeJoinTimeAsync(byte seconds)
         {
             return ExecuteAtCommandAsync(new NodeJoinTimeCommand(seconds));
+        }
+
+        /// <summary>
+        /// Indicates whether channel verification is enabled or not.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> IsChannelVerificationEnabledAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<bool>>(new ChannelVerificationCommand())
+                .ConfigureAwait(false);
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Enable or disable channel verification.
+        /// </summary>
+        /// <param name="enable"></param>
+        /// <returns></returns>
+        public Task IsChannelVerificationEnabledAsync(bool enable)
+        {
+            return ExecuteAtCommandAsync(new ChannelVerificationCommand(enable));
+        }
+
+        /// <summary>
+        /// Get the network watchdog timeout value in minutes.  Zero is disabled.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ushort> GetNetworkWatchdogTimeoutAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new NetworkWatchdogTimeoutCommand())
+                .ConfigureAwait(false);
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Set the network watchdog timeout.  Zero is disabled.
+        /// </summary>
+        /// <param name="minutes"></param>
+        /// <returns></returns>
+        public Task SetNetworkWatchdogTimeoutAsync(ushort minutes)
+        {
+            return ExecuteAtCommandAsync(new NetworkWatchdogTimeoutCommand(minutes));
         }
 
         /// <summary>
