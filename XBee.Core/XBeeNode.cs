@@ -259,7 +259,7 @@ namespace XBee
         /// Get the configured channels to use or scan.
         /// </summary>
         /// <returns></returns>
-        public async Task<ScanChannels> GetScanChannelsAsync()
+        public virtual async Task<ScanChannels> GetScanChannelsAsync()
         {
             var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ScanChannels>>(new ScanChannelsCommand())
                 .ConfigureAwait(false);
@@ -272,7 +272,7 @@ namespace XBee
         /// </summary>
         /// <param name="scanChannels"></param>
         /// <returns></returns>
-        public Task SetScanChannelsAsync(ScanChannels scanChannels)
+        public virtual Task SetScanChannelsAsync(ScanChannels scanChannels)
         {
             return ExecuteAtCommandAsync(new ScanChannelsCommand(scanChannels));
         }

@@ -473,7 +473,7 @@ namespace XBee.Devices
         /// </summary>
         public override Task TransmitDataAsync(byte[] data, bool enableAck = true)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException(NotSupportedMessage);
         }
 
         /// <summary>
@@ -481,27 +481,32 @@ namespace XBee.Devices
         /// </summary>
         public override Task TransmitDataAsync(byte[] data, CancellationToken cancellationToken, bool enableAck = true)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException(NotSupportedMessage);
         }
 
         public override Task<TimeSpan> GetRssiPwmTimeAsync()
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException(NotSupportedMessage);
         }
 
         public override Task<byte> GetRssiPwmTimeValueAsync()
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException(NotSupportedMessage);
         }
 
         public override Task SetRssiPwmTimeAsync(TimeSpan timeout)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException(NotSupportedMessage);
         }
 
         public override Task SetRssiPwmTimeAsync(byte value)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException(NotSupportedMessage);
+        }
+
+        public override Task<ScanChannels> GetScanChannelsAsync()
+        {
+            throw new NotSupportedException(NotSupportedMessage);
         }
 
         #endregion
