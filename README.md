@@ -185,6 +185,7 @@ Below is a table summarizing the commands supported by this library.
 | DH/DL | Destination Address    | GetAddressAsync                    | SetDestinationAddressAsync         | x  | x  |    x   |          |
 | MY    | Source Address         | GetAddressAsync                    | SetSourceAddressAsync              | x  | x  |    x   |  Note 1  |
 | SC    | Scan Channels          | GetScanChannelsAsync               | SetScanChannelsAsync               | x  | x  |    x   |          |
+| SD    | Scan Duration          | GetScanDurationAsync               | SetScanDurationAsync               | x  | x  |    x   |          |
 | ND    | Network Discovery      | --                                 | DiscoverNetworkAsync               | x  | x  |    x   |          |
 | NT    | Discovery Timeout      | GetNetworkDiscoveryTimeoutAsync    | SetNetworkDiscoveryTimeoutAsync    | x  | x  |    x   |          |
 | AI    | Association Indicator  | GetAssociationAsync                | --                                 | x  | x  |        |    x     |
@@ -202,6 +203,7 @@ Below is a table summarizing the commands supported by this library.
 | SO    | Sleep Mode Options     | GetSleepOptionsAsync               | SetSleepOptionsAsync               | x  | x  |    x   |          |
 | SP    | Sleep Period           | GetSleepPeriodAsync                | SetSleepPeriodAsync                |    | x  |    x   |          |
 | SN    | Sleep Period Count     | GetSleepPeriodCountAsync           | SetSleepPeriodCountAsync           |    | x  |    x   |          |
+| ZS    | Stack Profile          | GetStackProfileAsync               | SetStackProfileAsync               |    | x  |    x   |          |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync           | SetEncryptionEnabledAsync          | x  | x  |    x   |          |
 | KY    | Encryption Key         | --                                 | SetEncryptionKeyAsync              | x  | x  |    x   |          |
 | CE    | Coordinator Enable     | IsCoordinatorAsync                 | SetCoordinatorAsync                | x  |    |        |          |

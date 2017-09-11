@@ -101,6 +101,27 @@ namespace XBee.Devices
         }
 
         /// <summary>
+        /// Get the ZigBee stack profile value.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<byte> GetStackProfileAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new StackProfileCommand())
+                .ConfigureAwait(false);
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Set the ZigBee stack profile value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Task SetStackProfileAsync(byte value)
+        {
+            return ExecuteAtCommandAsync(new StackProfileCommand(value));
+        }
+
+        /// <summary>
         /// Get the maximum support payload length.  This value could vary based on device settings such
         /// as security or routing settings.
         /// </summary>
