@@ -122,6 +122,24 @@ namespace XBee.Devices
         }
 
         /// <summary>
+        /// Get the time nodes are allowed to join in seconds.  A value of 0xff means ∞.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<byte> GetNodeJoinTimeAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new NodeJoinTimeCommand());
+            return response.Value;
+        }
+
+        /// <summary>
+        /// Set the time nodes are allowed to join in seconds.  A value of 0xff means ∞.
+        /// </summary>
+        public Task SetNodeJoinTimeAsync(byte seconds)
+        {
+            return ExecuteAtCommandAsync(new NodeJoinTimeCommand(seconds));
+        }
+
+        /// <summary>
         /// Get the maximum support payload length.  This value could vary based on device settings such
         /// as security or routing settings.
         /// </summary>

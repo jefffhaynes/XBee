@@ -27,6 +27,7 @@ namespace XBee.Frames
         [Subtype(nameof(AtCommand), OperatingChannelCommand.Name, typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), ScanChannelsCommand.Name, typeof(PrimitiveResponseData<ScanChannels>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), ScanDurationCommand.Name, typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
+        [Subtype(nameof(AtCommand), NodeJoinTimeCommand.Name, typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), SourceAddressCommand.Name, typeof(PrimitiveResponseData<byte[]>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), StackProfileCommand.Name, typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), DestinationAddressHighCommand.Name, typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
