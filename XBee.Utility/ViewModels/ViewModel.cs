@@ -91,14 +91,14 @@ namespace XBee.Utility.ViewModels
                 if (node is XBeeSeries1 series1)
                 {
                     isCoord = await series1.IsCoordinatorAsync();
-                    await series1.SetPanIdAsync(3535);
+                    //await series1.SetPanIdAsync(3535);
                     //var rp = await series1.GetPullUpResistorConfigurationAsync();
                     //var panId = await series1.GetPanIdAsync();
                 }
 
                 if (node is XBeeSeries2 series2)
                 {
-                    await series2.SetRssiPwmTimeAsync(33);
+                    //await series2.SetRssiPwmTimeAsync(33);
                     //var sleepOptions = await series2.GetSleepOptionsAsync();
                     //var association = await series2.GetAssociationAsync();
                     //var baudRate = await series2.GetBaudRateAsync();
