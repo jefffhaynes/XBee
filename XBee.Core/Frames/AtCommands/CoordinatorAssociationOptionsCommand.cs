@@ -2,7 +2,9 @@
 {
     internal class CoordinatorAssociationOptionsCommand : AtCommand
     {
-        public CoordinatorAssociationOptionsCommand() : base("A2")
+        public const string Name = "A2";
+
+        public CoordinatorAssociationOptionsCommand() : base(Name)
         {
         }
 

@@ -2,7 +2,9 @@
 {
     internal class RestoreDefaultsCommand : AtCommand
     {
-        public RestoreDefaultsCommand() : base("RE")
+        public const string Name = "RE";
+
+        public RestoreDefaultsCommand() : base(Name)
         {
         }
     }

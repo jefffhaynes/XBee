@@ -157,3 +157,4 @@ $RECYCLE.BIN/
 /packages
 *.DotSettings
 *.nupkg
+*.ide

@@ -2,7 +2,9 @@
 {
     internal class PowerLevelCommand : AtCommand
     {
-        public PowerLevelCommand() : base("PL")
+        public const string Name = "PL";
+
+        public PowerLevelCommand() : base(Name)
         {
         }
 

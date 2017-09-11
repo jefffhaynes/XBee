@@ -5,7 +5,9 @@ namespace XBee.Frames.AtCommands
 {
     internal class SampleRateCommand : AtCommand
     {
-        public SampleRateCommand() : base("IR")
+        public const string Name = "IR";
+
+        public SampleRateCommand() : base(Name)
         {
         }
 

@@ -2,7 +2,9 @@
 {
     internal class NetworkOperatorCommand : AtCommand
     {
-        public NetworkOperatorCommand() : base("MN")
+        public const string Name = "MN";
+
+        public NetworkOperatorCommand() : base(Name)
         {
         }
     }

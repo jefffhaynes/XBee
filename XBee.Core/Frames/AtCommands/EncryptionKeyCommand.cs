@@ -5,9 +5,11 @@ namespace XBee.Frames.AtCommands
 {
     internal class EncryptionKeyCommand : AtCommand
     {
+        public const string Name = "KY";
+
         private const int KeyLength = 16;
 
-        public EncryptionKeyCommand() : base("KY")
+        public EncryptionKeyCommand() : base(Name)
         {
         }
 

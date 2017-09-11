@@ -2,7 +2,9 @@
 {
     internal class ParityCommand : AtCommand
     {
-        public ParityCommand() : base("NB")
+        public const string Name = "NB";
+
+        public ParityCommand() : base(Name)
         {
         }
 

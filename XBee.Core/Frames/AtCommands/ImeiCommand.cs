@@ -2,7 +2,9 @@
 {
     internal class ImeiCommand : AtCommand
     {
-        public ImeiCommand() : base("IM")
+        public const string Name = "IM";
+
+        public ImeiCommand() : base(Name)
         {
         }
     }

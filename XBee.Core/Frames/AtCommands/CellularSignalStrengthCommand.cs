@@ -2,7 +2,9 @@
 {
     internal class CellularSignalStrengthCommand : AtCommand
     {
-        public CellularSignalStrengthCommand() : base("DB")
+        public const string Name = "DB";
+
+        public CellularSignalStrengthCommand() : base(Name)
         {
         }
     }

@@ -4,7 +4,9 @@ namespace XBee.Frames.AtCommands
 {
     internal class SourceAddressCommand : AtCommand
     {
-        public SourceAddressCommand() : base("MY")
+        public const string Name = "MY";
+
+        public SourceAddressCommand() : base(Name)
         {
         }
 

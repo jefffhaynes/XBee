@@ -2,7 +2,9 @@
 {
     internal class ModemFirmwareVersionCommand : AtCommand
     {
-        public ModemFirmwareVersionCommand() : base("MV")
+        public const string Name = "MV";
+
+        public ModemFirmwareVersionCommand() : base(Name)
         {
         }
     }

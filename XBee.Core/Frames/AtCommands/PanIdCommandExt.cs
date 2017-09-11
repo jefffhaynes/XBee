@@ -4,7 +4,7 @@ namespace XBee.Frames.AtCommands
 {
     internal class PanIdCommandExt : AtCommand
     {
-        public PanIdCommandExt() : base("ID")
+        public PanIdCommandExt() : base(PanIdCommand.Name)
         {
         }
 

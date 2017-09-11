@@ -4,9 +4,11 @@ namespace XBee.Frames.AtCommands
 {
     internal class TcpClientConnectionTimeoutCommand : AtCommand
     {
+        public const string Name = "TM";
+
         public const int ValueMsScale = 100;
 
-        public TcpClientConnectionTimeoutCommand() : base("TM")
+        public TcpClientConnectionTimeoutCommand() : base(Name)
         {
         }
 

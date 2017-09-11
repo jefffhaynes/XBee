@@ -5,8 +5,10 @@ namespace XBee.Frames.AtCommands
 {
     internal class NodeIdentifierCommand : AtCommand
     {
+        public const string Name = "NI";
+
         public NodeIdentifierCommand()
-            : base("NI")
+            : base(Name)
         {
         }
 

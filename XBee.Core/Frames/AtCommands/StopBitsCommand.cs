@@ -2,7 +2,9 @@
 {
     internal class StopBitsCommand : AtCommand
     {
-        public StopBitsCommand() : base("SB")
+        public const string Name = "SB";
+
+        public StopBitsCommand() : base(Name)
         {
         }
 

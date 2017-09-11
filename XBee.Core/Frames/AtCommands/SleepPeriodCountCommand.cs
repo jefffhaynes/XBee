@@ -2,7 +2,9 @@
 {
     internal class SleepPeriodCountCommand : AtCommand
     {
-        public SleepPeriodCountCommand() : base("SN")
+        public const string Name = "SN";
+
+        public SleepPeriodCountCommand() : base(Name)
         {
         }
 

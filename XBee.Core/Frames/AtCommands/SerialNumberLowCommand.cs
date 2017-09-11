@@ -2,8 +2,10 @@
 {
     internal class SerialNumberLowCommand : AtCommand
     {
+        public const string Name = "SL";
+
         public SerialNumberLowCommand()
-            : base("SL")
+            : base(Name)
         {
         }
     }

@@ -2,7 +2,9 @@
 {
     internal class OperatingChannelCommand : AtCommand
     {
-        public OperatingChannelCommand() : base("CH")
+        public const string Name = "CH";
+
+        public OperatingChannelCommand() : base(Name)
         {
         }
 

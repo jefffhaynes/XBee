@@ -2,7 +2,9 @@
 {
     internal class ForceDisassociationCommand : AtCommand
     {
-        public ForceDisassociationCommand() : base("DA")
+        public const string Name = "DA";
+
+        public ForceDisassociationCommand() : base(Name)
         {
         }
     }

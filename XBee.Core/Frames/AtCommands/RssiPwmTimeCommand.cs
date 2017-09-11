@@ -5,9 +5,11 @@ namespace XBee.Frames.AtCommands
 {
     internal class RssiPwmTimeCommand : AtCommand
     {
+        public const string Name = "RP";
+
         public const int TimeoutUnitMs = 100;
 
-        public RssiPwmTimeCommand() : base("RP")
+        public RssiPwmTimeCommand() : base(Name)
         {
         }
 

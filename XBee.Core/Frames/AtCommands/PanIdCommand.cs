@@ -4,7 +4,9 @@ namespace XBee.Frames.AtCommands
 {
     internal class PanIdCommand : AtCommand
     {
-        public PanIdCommand() : base("ID")
+        public const string Name = "ID";
+
+        public PanIdCommand() : base(Name)
         {
         }
 

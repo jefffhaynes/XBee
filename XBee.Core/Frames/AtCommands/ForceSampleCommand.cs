@@ -2,7 +2,9 @@
 {
     internal class ForceSampleCommand : AtCommand
     {
-        public ForceSampleCommand() : base("IS")
+        public const string Name = "IS";
+
+        public ForceSampleCommand() : base(Name)
         {
         }
     }

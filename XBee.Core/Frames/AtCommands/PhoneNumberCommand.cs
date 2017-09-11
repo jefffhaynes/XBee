@@ -2,7 +2,9 @@
 {
     internal class PhoneNumberCommand : AtCommand
     {
-        public PhoneNumberCommand() : base("PH")
+        public const string Name = "PH";
+
+        public PhoneNumberCommand() : base(Name)
         {
         }
     }

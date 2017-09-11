@@ -2,7 +2,9 @@
 {
     internal class EndDeviceAssociationOptionsCommand : AtCommand
     {
-        public EndDeviceAssociationOptionsCommand() : base("A1")
+        public const string Name = "A1";
+
+        public EndDeviceAssociationOptionsCommand() : base(Name)
         {
         }
 

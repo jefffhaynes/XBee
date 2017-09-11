@@ -2,7 +2,9 @@
 {
     internal class ExitCommandModeCommand : AtCommand
     {
-        public ExitCommandModeCommand() : base("CN")
+        public const string Name = "CN";
+
+        public ExitCommandModeCommand() : base(Name)
         {
         }
     }

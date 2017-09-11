@@ -2,7 +2,9 @@
 {
     internal class ScanChannelsCommand : AtCommand
     {
-        public ScanChannelsCommand() : base("SC")
+        public const string Name = "SC";
+
+        public ScanChannelsCommand() : base(Name)
         {
         }
 

@@ -2,7 +2,9 @@
 {
     internal class NetworkDiscoveryCommand : AtCommand
     {
-        public NetworkDiscoveryCommand() : base("ND")
+        public const string Name = "ND";
+
+        public NetworkDiscoveryCommand() : base(Name)
         {
         }
     }

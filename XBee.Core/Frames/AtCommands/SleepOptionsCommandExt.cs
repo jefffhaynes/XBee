@@ -4,7 +4,7 @@ namespace XBee.Frames.AtCommands
 {
     internal class SleepOptionsCommandExt : AtCommand
     {
-        public SleepOptionsCommandExt() : base("SO")
+        public SleepOptionsCommandExt() : base(SleepOptionsCommand.Name)
         {
         }
 

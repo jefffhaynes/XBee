@@ -2,7 +2,9 @@
 {
     internal class CellularDeviceOptionCommand : AtCommand
     {
-        public CellularDeviceOptionCommand() : base("DO")
+        public const string Name = "DO";
+
+        public CellularDeviceOptionCommand() : base(Name)
         {
         }
 

@@ -2,7 +2,9 @@
 {
     internal class BaudRateCommand : AtCommand
     {
-        public BaudRateCommand() : base("BD")
+        public const string Name = "BD";
+
+        public BaudRateCommand() : base(Name)
         {
         }
 

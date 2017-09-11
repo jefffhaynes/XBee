@@ -2,7 +2,9 @@
 {
     internal class HardwareVersionCommand : AtCommand
     {
-        public HardwareVersionCommand() : base("HV")
+        public const string Name = "HV";
+
+        public HardwareVersionCommand() : base(Name)
         {
         }
     }

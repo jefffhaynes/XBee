@@ -4,7 +4,9 @@ namespace XBee.Frames.AtCommands
 {
     internal class DestinationAddressLowCommand : AtCommand
     {
-        public DestinationAddressLowCommand() : base("DL")
+        public const string Name = "DL";
+
+        public DestinationAddressLowCommand() : base(Name)
         {
         }
 

@@ -2,7 +2,9 @@
 {
     internal class FirmwareVersionCommand : AtCommand
     {
-        public FirmwareVersionCommand() : base("VR")
+        public const string Name = "VR";
+
+        public FirmwareVersionCommand() : base(Name)
         {
         }
     }

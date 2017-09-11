@@ -5,6 +5,8 @@ namespace XBee.Frames.AtCommands
 {
     internal class SleepPeriodCommand : AtCommand
     {
+        public const string Name = "SP";
+
         public const int PeriodMultiplier = 10;
         private const int PeriodMinBase = 0x20;
         private const int PeriodMaxBase = 0xaf0;
@@ -12,7 +14,7 @@ namespace XBee.Frames.AtCommands
         private static readonly TimeSpan PeriodMin = TimeSpan.FromMilliseconds(PeriodMinBase * PeriodMultiplier);
         private static readonly TimeSpan PeriodMax = TimeSpan.FromMilliseconds(PeriodMaxBase * PeriodMultiplier);
 
-        public SleepPeriodCommand() : base("SP")
+        public SleepPeriodCommand() : base(Name)
         {
         }
 

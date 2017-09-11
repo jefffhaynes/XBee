@@ -2,7 +2,9 @@
 {
     internal class InternetProtocolCommand : AtCommand
     {
-        public InternetProtocolCommand() : base("IP")
+        public const string Name = "IP";
+
+        public InternetProtocolCommand() : base(Name)
         {
         }
 

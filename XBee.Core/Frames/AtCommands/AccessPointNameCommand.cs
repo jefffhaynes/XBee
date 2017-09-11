@@ -2,7 +2,9 @@
 {
     internal class AccessPointNameCommand : AtCommand
     {
-        public AccessPointNameCommand() : base("AN")
+        public const string Name = "AN";
+
+        public AccessPointNameCommand() : base(Name)
         {
         }
 

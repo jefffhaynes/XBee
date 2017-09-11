@@ -4,7 +4,9 @@ namespace XBee.Frames.AtCommands
 {
     internal class EncryptionEnableCommand : AtCommand
     {
-        public EncryptionEnableCommand() : base("EE")
+        public const string Name = "EE";
+
+        public EncryptionEnableCommand() : base(Name)
         {
         }
 

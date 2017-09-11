@@ -2,7 +2,9 @@
 {
     internal class FlowControlThresholdCommand : AtCommand
     {
-        public FlowControlThresholdCommand() : base("FT")
+        public const string Name = "FT";
+
+        public FlowControlThresholdCommand() : base(Name)
         {
         }
 

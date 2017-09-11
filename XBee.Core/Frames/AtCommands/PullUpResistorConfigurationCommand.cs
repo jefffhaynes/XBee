@@ -2,7 +2,9 @@
 {
     internal class PullUpResistorConfigurationCommand : AtCommand
     {
-        public PullUpResistorConfigurationCommand() : base("PR")
+        public const string Name = "PR";
+
+        public PullUpResistorConfigurationCommand() : base(Name)
         {
         }
 

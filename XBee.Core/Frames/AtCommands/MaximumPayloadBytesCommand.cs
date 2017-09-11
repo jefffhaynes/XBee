@@ -2,7 +2,9 @@
 {
     internal class MaximumPayloadBytesCommand : AtCommand
     {
-        public MaximumPayloadBytesCommand() : base("NP")
+        public const string Name = "NP";
+
+        public MaximumPayloadBytesCommand() : base(Name)
         {
         }
     }

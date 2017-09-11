@@ -4,12 +4,14 @@ namespace XBee.Frames.AtCommands
 {
     internal class NetworkDiscoveryTimeoutCommand : AtCommand
     {
+        public const string Name = "NT";
+
         public const int ValueMsScale = 100;
 
         public static readonly TimeSpan TimeoutMin = TimeSpan.FromMilliseconds(0x20 * ValueMsScale);
         public static readonly TimeSpan TimeoutMax = TimeSpan.FromMilliseconds(0xFF * ValueMsScale);
 
-        public NetworkDiscoveryTimeoutCommand() : base("NT")
+        public NetworkDiscoveryTimeoutCommand() : base(Name)
         {
         }
 

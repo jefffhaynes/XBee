@@ -2,7 +2,9 @@
 {
     internal class PacketizationTimeoutCommand : AtCommand
     {
-        public PacketizationTimeoutCommand() : base("RO")
+        public const string Name = "RO";
+
+        public PacketizationTimeoutCommand() : base(Name)
         {
         }
 

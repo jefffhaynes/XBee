@@ -2,7 +2,9 @@
 {
     internal class IccidCommand : AtCommand
     {
-        public IccidCommand() : base("S#")
+        public const string Name = "S#";
+
+        public IccidCommand() : base(Name)
         {
         }
     }

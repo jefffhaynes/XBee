@@ -4,7 +4,7 @@ namespace XBee.Frames.AtCommands
 {
     internal class CoordinatorEnableCommandExt : AtCommand
     {
-        public CoordinatorEnableCommandExt() : base("CE")
+        public CoordinatorEnableCommandExt() : base(CoordinatorEnableCommand.Name)
         {
         }
 

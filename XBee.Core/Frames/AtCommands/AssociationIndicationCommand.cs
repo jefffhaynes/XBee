@@ -2,7 +2,9 @@
 {
     internal class AssociationIndicationCommand : AtCommand
     {
-        public AssociationIndicationCommand() : base("AI")
+        public const string Name = "AI";
+
+        public AssociationIndicationCommand() : base(Name)
         {
         }
     }

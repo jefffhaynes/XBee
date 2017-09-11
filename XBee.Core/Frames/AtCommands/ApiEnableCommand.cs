@@ -2,7 +2,9 @@
 {
     internal class ApiEnableCommand : AtCommand
     {
-        public ApiEnableCommand() : base("AP")
+        public const string Name = "AP";
+
+        public ApiEnableCommand() : base(Name)
         {
         }
 

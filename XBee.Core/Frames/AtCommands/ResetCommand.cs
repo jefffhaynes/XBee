@@ -2,7 +2,9 @@
 {
     internal class ResetCommand : AtCommand
     {
-        public ResetCommand() : base("FR")
+        public const string Name = "FR";
+  
+        public ResetCommand() : base(Name)
         {
         }
     }

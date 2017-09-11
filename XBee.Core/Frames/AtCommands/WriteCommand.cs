@@ -2,7 +2,9 @@
 {
     internal class WriteCommand : AtCommand
     {
-        public WriteCommand() : base("WR")
+        public const string Name = "WR";
+
+        public WriteCommand() : base(Name)
         {
         }
     }

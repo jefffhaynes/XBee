@@ -5,7 +5,9 @@ namespace XBee.Frames.AtCommands
 {
     internal class InputOutputChangeDetectionCommand : AtCommand
     {
-        public InputOutputChangeDetectionCommand() : base("IC")
+        public const string Name = "IC";
+
+        public InputOutputChangeDetectionCommand() : base(Name)
         {
         }
 

@@ -2,7 +2,9 @@
 {
     internal class SslProtocolCommand : AtCommand
     {
-        public SslProtocolCommand() : base("TL")
+        public const string Name = "TL";
+
+        public SslProtocolCommand() : base(Name)
         {
         }
 
