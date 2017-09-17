@@ -11,11 +11,7 @@ namespace XBee.Frames.AtCommands
         public LongAddress LongAddress { get; set; }
 
         [FieldOrder(2)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProSeries1, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeeProS2, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBee24C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
-        [SerializeWhen("ControllerHardwareVersion", HardwareVersion.XBeePro24C, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
+        [SerializeWhen("Protocol", XBeeProtocol.Raw, RelativeSourceMode = RelativeSourceMode.SerializationContext)]
         public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
 
         [FieldOrder(3)]

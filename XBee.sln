@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0385EB39-DC13-4C78-9261-A8043F11B384}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		xbcs.png = xbcs.png
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBee.Core", "XBee.Core\XBee.Core.csproj", "{780A3581-45F7-4AE6-9D43-6922B7E18D13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XBee.Core", "XBee.Core\XBee.Core.csproj", "{780A3581-45F7-4AE6-9D43-6922B7E18D13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBee.Universal", "XBee.Universal\XBee.Universal.csproj", "{499B0DB9-85C1-4DD3-9AA8-72F19932567E}"
 EndProject
@@ -118,5 +118,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DFE487B4-9B2C-4ECD-B7B4-2D601531F84D}
 	EndGlobalSection
 EndGlobal

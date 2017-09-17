@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -724,6 +725,10 @@ namespace XBee.Core
                     idFrame.NodeIdentificationReason, idFrame.ReceiveOptions,
                     idFrame.DigiProfileId, idFrame.ManufacturerId);
                 NodeIdentificationReceived?.Invoke(this, idEvent);
+            }
+            else
+            {
+                Debug.WriteLine($"Unsupported frame: {content}");
             }
         }
 
