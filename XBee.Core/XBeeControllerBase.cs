@@ -155,8 +155,8 @@ namespace XBee.Core
                 hardwareVersion = Local.HardwareVersion;
                 firmwareVersion = Local.FirmwareVersion;
             }
-            
-            return await Task.FromResult(CreateNode(hardwareVersion, firmwareVersion, address)).ConfigureAwait(false);
+
+            return CreateNode(hardwareVersion, firmwareVersion, address);
         }
 
         private XBeeNode CreateNode(HardwareVersion hardwareVersion, ushort firmwareVersion, NodeAddress address = null)
@@ -212,36 +212,38 @@ namespace XBee.Core
             var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
 
             return ExecuteMultiQueryAsync(atCommandFrame, new Action<AtCommandResponseFrame>(
-                async frame =>
-                {
-                    var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
+                async frame => await OnNodeDiscovered(frame, cancellationToken)), timeout, cancellationToken);
+        }
 
-                    if (NodeDiscovered == null || discoveryData?.LongAddress == null || discoveryData.IsCoordinator)
-                    {
-                        return;
-                    }
-                    
-                    var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
+        private async Task OnNodeDiscovered(AtCommandResponseFrame frame, CancellationToken cancellationToken)
+        {
+            var discoveryData = (NetworkDiscoveryResponseData) frame.Content.Data;
 
-                    // XBees have trouble recovering from discovery
-                    await Task.Delay(500, cancellationToken);
+            if (NodeDiscovered == null || discoveryData?.LongAddress == null || discoveryData.IsCoordinator)
+            {
+                return;
+            }
 
-                    try
-                    {
-                        var node = await GetNodeAsync(address);
+            var address = new NodeAddress(discoveryData.LongAddress, discoveryData.ShortAddress);
+            
+            // XBees have trouble recovering from discovery
+            await Task.Delay(1000, cancellationToken);
 
-                        var signalStrength = discoveryData.ReceivedSignalStrengthIndicator?.SignalStrength;
+            try
+            {
+                var node = await GetNodeAsync(address);
 
-                        NodeDiscovered?.Invoke(this,
-                            new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
-                                node));
-                    }
-                    catch (TimeoutException)
-                    {
-                        /* if we timeout getting the remote node info, no need to bubble up.  
+                var signalStrength = discoveryData.ReceivedSignalStrengthIndicator?.SignalStrength;
+
+                NodeDiscovered?.Invoke(this,
+                    new NodeDiscoveredEventArgs(discoveryData.Name, signalStrength,
+                        node));
+            }
+            catch (TimeoutException)
+            {
+                /* if we timeout getting the remote node info, no need to bubble up.  
                              * We just won't include the node in discovery */
-                    }
-                }), timeout, cancellationToken);
+            }
         }
 
         /// <summary>

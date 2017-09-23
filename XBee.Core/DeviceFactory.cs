@@ -70,92 +70,92 @@ namespace XBee
             {
                 case HardwareVersion.XBeeSeries1:
                 case HardwareVersion.XBeeProSeries1:
-                {
-                    if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("8"))
                     {
-                        return XBeeProtocol.DigiMesh;
-                    }
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("8"))
+                        {
+                            return XBeeProtocol.DigiMesh;
+                        }
 
-                    return XBeeProtocol.Raw;
-                }
+                        return XBeeProtocol.Raw;
+                    }
 
                 case HardwareVersion.ZNetZigBeeS2:
                 case HardwareVersion.XBeeProS2:
-                {
-                    if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("1") && firmwareVersionHex.EndsWith("20")
-                        || firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("2"))
-                        return XBeeProtocol.ZigBee;
+                    {
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("1") && firmwareVersionHex.EndsWith("20")
+                            || firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("2"))
+                            return XBeeProtocol.ZigBee;
 
-                    if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("3"))
-                        return XBeeProtocol.SmartEnergy;
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("3"))
+                            return XBeeProtocol.SmartEnergy;
 
-                    return XBeeProtocol.ZNet;
-                }
+                        return XBeeProtocol.ZNet;
+                    }
 
                 case HardwareVersion.XBeePro900:
-                {
-                    if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("8")
-                        || firmwareVersionHex.Length == 4 && firmwareVersionHex[1] == '8'
-                        || firmwareVersionHex.Length == 5 && firmwareVersionHex[1] == '8')
-                        return XBeeProtocol.DigiMesh;
-                    return XBeeProtocol.DigiPoint;
-                }
+                    {
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("8")
+                            || firmwareVersionHex.Length == 4 && firmwareVersionHex[1] == '8'
+                            || firmwareVersionHex.Length == 5 && firmwareVersionHex[1] == '8')
+                            return XBeeProtocol.DigiMesh;
+                        return XBeeProtocol.DigiPoint;
+                    }
 
                 case HardwareVersion.XBeePro868:
                     return XBeeProtocol.DigiPoint;
                 case HardwareVersion.XBeeProS2B:
-                {
-                    if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("3"))
-                        return XBeeProtocol.SmartEnergy;
-                    return XBeeProtocol.ZigBee;
-                }
+                    {
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("3"))
+                            return XBeeProtocol.SmartEnergy;
+                        return XBeeProtocol.ZigBee;
+                    }
 
                 case HardwareVersion.XBeeProS2C:
                 case HardwareVersion.XBee24S2C:
-                {
-                    if (firmwareVersionHex.Length == 4 &&
-                        (firmwareVersionHex.StartsWith("5") || firmwareVersionHex.StartsWith("6")))
-                        return XBeeProtocol.SmartEnergy;
-                    if (firmwareVersionHex.StartsWith("2"))
-                        return XBeeProtocol.Raw;
-                    if (firmwareVersionHex.StartsWith("9"))
-                        return XBeeProtocol.DigiMesh;
-                    return XBeeProtocol.ZigBee;
-                }
+                    {
+                        if (firmwareVersionHex.Length == 4 &&
+                            (firmwareVersionHex.StartsWith("5") || firmwareVersionHex.StartsWith("6")))
+                            return XBeeProtocol.SmartEnergy;
+                        if (firmwareVersionHex.StartsWith("2"))
+                            return XBeeProtocol.Raw;
+                        if (firmwareVersionHex.StartsWith("9"))
+                            return XBeeProtocol.DigiMesh;
+                        return XBeeProtocol.ZigBee;
+                    }
 
                 case HardwareVersion.XBeePro900HP:
-                {
-                    if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("8"))
-                        return XBeeProtocol.DigiMesh;
-                    if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("1"))
-                        return XBeeProtocol.DigiPoint;
-                    return XBeeProtocol.XC;
+                    {
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("8"))
+                            return XBeeProtocol.DigiMesh;
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("1"))
+                            return XBeeProtocol.DigiPoint;
+                        return XBeeProtocol.XC;
                     }
 
                 case HardwareVersion.XBeeProSX:
-                {
-                    if (firmwareVersionHex.StartsWith("2"))
-                        return XBeeProtocol.XTend;
-                    if (firmwareVersionHex.StartsWith("8"))
-                        return XBeeProtocol.XTendDigiMesh;
-                    return XBeeProtocol.SX;
-                }
+                    {
+                        if (firmwareVersionHex.StartsWith("2"))
+                            return XBeeProtocol.XTend;
+                        if (firmwareVersionHex.StartsWith("8"))
+                            return XBeeProtocol.XTendDigiMesh;
+                        return XBeeProtocol.SX;
+                    }
 
                 case HardwareVersion.XBee24C:
                 case HardwareVersion.XBeePro24C:
                 case HardwareVersion.XBeePro24CSmt:
-                {
-                    if (firmwareVersionHex.Length == 4 &&
-                        (firmwareVersionHex.StartsWith("5") || firmwareVersionHex.StartsWith("6")))
-                        return XBeeProtocol.SmartEnergy;
-                    if (firmwareVersionHex.StartsWith("2"))
-                        return XBeeProtocol.Raw;
-                    if (firmwareVersionHex.StartsWith("9"))
-                        return XBeeProtocol.DigiMesh;
-                    return XBeeProtocol.ZigBee;
-                }
+                    {
+                        if (firmwareVersionHex.Length == 4 &&
+                            (firmwareVersionHex.StartsWith("5") || firmwareVersionHex.StartsWith("6")))
+                            return XBeeProtocol.SmartEnergy;
+                        if (firmwareVersionHex.StartsWith("2"))
+                            return XBeeProtocol.Raw;
+                        if (firmwareVersionHex.StartsWith("9"))
+                            return XBeeProtocol.DigiMesh;
+                        return XBeeProtocol.ZigBee;
+                    }
 
-                    case HardwareVersion.XBeeCellular:
+                case HardwareVersion.XBeeCellular:
                     return XBeeProtocol.Cellular;
 
 
