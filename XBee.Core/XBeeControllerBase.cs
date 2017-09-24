@@ -639,7 +639,7 @@ namespace XBee.Core
                 {
                     _listenLock.Release();
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
         private void ProcessFrame(FrameContent content)

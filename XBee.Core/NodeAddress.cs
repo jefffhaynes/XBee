@@ -32,17 +32,18 @@
             {
                 return false;
             }
+
             if (ReferenceEquals(this, other))
             {
                 return true;
             }
 
-            if (LongAddress.IsDisabled)
+            if (LongAddress.IsDisabled || other.LongAddress.IsDisabled)
             {
                 return Equals(ShortAddress, other.ShortAddress);
             }
 
-            if (ShortAddress.IsDisabled)
+            if (ShortAddress.IsDisabled || other.ShortAddress.IsDisabled)
             {
                 return Equals(LongAddress, other.LongAddress);
             }
