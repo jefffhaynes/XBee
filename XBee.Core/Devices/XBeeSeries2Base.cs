@@ -204,6 +204,16 @@ namespace XBee.Devices
         }
 
         /// <summary>
+        /// Simulate pushing the commissioning button.
+        /// </summary>
+        /// <param name="count">The number of times the button should be "pressed".</param>
+        /// <returns></returns>
+        public Task PushCommissioningButtonAsync(byte count = 1)
+        {
+            return ExecuteAtCommandAsync(new PushCommissioningButtonCommand(count));
+        }
+
+        /// <summary>
         /// Get the maximum support payload length.  This value could vary based on device settings such
         /// as security or routing settings.
         /// </summary>

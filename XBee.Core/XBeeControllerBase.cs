@@ -9,10 +9,6 @@ using XBee.Frames;
 using XBee.Frames.AtCommands;
 using XBee.Observable;
 
-#if DEBUG
-using System.Diagnostics;
-#endif
-
 // ReSharper disable once CheckNamespace
 namespace XBee.Core
 {
@@ -289,8 +285,7 @@ namespace XBee.Core
                 return _hardwareVersion.Value;
             }
 
-            HardwareVersion hardwareVersion;
-            if (address == null || !NodeHardwareVersionCache.TryGetValue(address, out hardwareVersion))
+            if (address == null || !NodeHardwareVersionCache.TryGetValue(address, out var hardwareVersion))
             {
                 var version =
                     await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
@@ -314,8 +309,7 @@ namespace XBee.Core
                 return _firmwareVersion.Value;
             }
 
-            ushort firmwareVersion;
-            if (address == null || !FirmwareVersionCache.TryGetValue(address, out firmwareVersion))
+            if (address == null || !FirmwareVersionCache.TryGetValue(address, out var firmwareVersion))
             {
                 var version =
                     await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new FirmwareVersionCommand(), address,
@@ -596,8 +590,7 @@ namespace XBee.Core
 
             await Task.Delay(timeout, cancellationToken);
 
-            Action<CommandResponseFrameContent> action;
-            _executeCallbacks.TryRemove(frame.FrameId, out action);
+            _executeCallbacks.TryRemove(frame.FrameId, out _);
         }
 
         private void Listen(bool once = false)
@@ -657,15 +650,13 @@ namespace XBee.Core
             {
                 var frameId = commandResponse.FrameId;
 
-                TaskCompletionSource<CommandResponseFrameContent> taskCompletionSource;
-                if (_executeTaskCompletionSources.TryRemove(frameId, out taskCompletionSource))
+                if (_executeTaskCompletionSources.TryRemove(frameId, out var taskCompletionSource))
                 {
                     taskCompletionSource.SetResult(commandResponse);
                 }
                 else
                 {
-                    Action<CommandResponseFrameContent> callback;
-                    if (_executeCallbacks.TryGetValue(frameId, out callback))
+                    if (_executeCallbacks.TryGetValue(frameId, out var callback))
                     {
                         callback(commandResponse);
                     }

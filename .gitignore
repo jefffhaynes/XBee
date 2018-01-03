@@ -158,3 +158,6 @@ $RECYCLE.BIN/
 *.DotSettings
 *.nupkg
 *.ide
+*.lock
+*.ide-shm
+*.ide-wal
