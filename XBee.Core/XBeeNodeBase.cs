@@ -21,7 +21,7 @@ namespace XBee
         /// <summary>
         /// The hardware version for this node.
         /// </summary>
-        public HardwareVersion HardwareVersion { get; private set; }
+        public HardwareVersion HardwareVersion { get; }
 
         /// <summary>
         /// The address of this node.
