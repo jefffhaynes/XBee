@@ -18,6 +18,8 @@ namespace XBee.Devices
         {
         }
 
+        private const double SupplyVoltageScale = 1200d / 1024000d;
+
         // cache max payload.  not great but we can't afford to query every time
         // if we're sending lots of data.
         private uint? _maxPayloadLength;
@@ -313,6 +315,14 @@ namespace XBee.Devices
         public override Task SetChangeDetectionChannelsAsync(DigitalSampleChannels channels)
         {
             return ExecuteAtCommandAsync(new InputOutputChangeDetectionCommandExt(channels));
+        }
+
+        public async Task<double> GetSupplyVoltageAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new SupplyVoltageCommand())
+                .ConfigureAwait(false);
+
+            return response.Value * SupplyVoltageScale;
         }
 
         protected override void OnMaxPayloadLengthDirty()

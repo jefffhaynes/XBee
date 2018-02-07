@@ -54,6 +54,7 @@ namespace XBee.Frames
         [Subtype(nameof(AtCommand), SampleRateCommand.Name, typeof(SampleRateResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), InputOutputChangeDetectionCommand.Name, typeof(InputOutputChangeDetectionResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), EncryptionEnableCommand.Name, typeof(PrimitiveResponseData<bool>), BindingMode = BindingMode.OneWay)]
+        [Subtype(nameof(AtCommand), SupplyVoltageCommand.Name, typeof(PrimitiveResponseData<ushort>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), PhoneNumberCommand.Name, typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), IccidCommand.Name, typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), ImeiCommand.Name, typeof(StringResponseData), BindingMode = BindingMode.OneWay)]

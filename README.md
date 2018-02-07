@@ -209,6 +209,7 @@ Below is a table summarizing the commands supported by this library.
 | NW    | Network Watchdog       | GetNetworkWatchdogTimeoutAsync          | SetNetworkWatchdogTimeoutAsync          |    | x  |    x   |          |
 | JN    | Join Notification      | IsJoinNotificationEnabledAsync          | SetJoinNotificationEnabledAsync         |    | x  |    x   |          |
 | CB    | Commissioning Button   | --                                      | PushCommissioningButtonAsync            |    | x  |    x   |          |
+| %V    | Supply Voltage         | GetSupplyVoltageAsync                   | --                                      |    | x  |    x   |          |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync                | SetEncryptionEnabledAsync               | x  | x  |    x   |          |
 | KY    | Encryption Key         | --                                      | SetEncryptionKeyAsync                   | x  | x  |    x   |          |
 | CE    | Coordinator Enable     | IsCoordinatorAsync                      | SetCoordinatorAsync                     | x  |    |        |          |
