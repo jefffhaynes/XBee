@@ -60,7 +60,7 @@ namespace XBee.Frames
         [Subtype(nameof(AtCommand), ImeiCommand.Name, typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), NetworkOperatorCommand.Name, typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), ModemFirmwareVersionCommand.Name, typeof(StringResponseData), BindingMode = BindingMode.OneWay)]
-        [Subtype(nameof(AtCommand), CellularSignalStrengthCommand.Name, typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
+        [Subtype(nameof(AtCommand), SignalStrengthCommand.Name, typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), InternetProtocolCommand.Name, typeof(PrimitiveResponseData<InternetProtocol>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), SslProtocolCommand.Name, typeof(PrimitiveResponseData<SslProtocol>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), TcpClientConnectionTimeoutCommand.Name, typeof(TcpClientConnectionTimeoutResponseData), BindingMode = BindingMode.OneWay)]

@@ -190,6 +190,16 @@ namespace XBee
             return ExecuteAtCommandAsync(new StopBitsCommand(stopBits));
         }
 
+
+        /// <summary>
+        ///     Gets the cellular signal strength for the modem in dBm.
+        /// </summary>
+        public async Task<byte> GetSignalStrengthAsync()
+        {
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new SignalStrengthCommand());
+            return response.Value;
+        }
+
         /// <summary>
         ///     Gets the number of character times of inter-character silence required before transmission begins when operating in
         ///     Transparent mode.

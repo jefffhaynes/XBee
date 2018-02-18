@@ -104,9 +104,10 @@ namespace XBee.Devices
         ///     Gets the cellular signal strength for the modem.
         /// </summary>
         /// <returns>0x71 - 0x33 (-113 dBm to -51 dBm)</returns>
+        [Obsolete("Use GetSignalStrengthAsync")]
         public async Task<byte> GetCellularSignalStrengthAsync()
         {
-            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new CellularSignalStrengthCommand());
+            var response = await ExecuteAtQueryAsync<PrimitiveResponseData<byte>>(new SignalStrengthCommand());
             return response.Value;
         }
 
