@@ -210,7 +210,7 @@ Below is a table summarizing the commands supported by this library.
 | NW    | Network Watchdog       | GetNetworkWatchdogTimeoutAsync          | SetNetworkWatchdogTimeoutAsync          |    | ✔ |   ✔   |          |
 | JN    | Join Notification      | IsJoinNotificationEnabledAsync          | SetJoinNotificationEnabledAsync         |    | ✔ |   ✔   |          |
 | CB    | Commissioning Button   | --                                      | PushCommissioningButtonAsync            |    | ✔ |   ✔   |          |
-| DD    | Device Type Code       | GetDeviceTypeIdentifierAsync            | SetDeviceTypeIdentifierAsync            |    | ✔ | (R.O.) |          |
+| DD    | Device Type Identifier | GetDeviceTypeIdentifierAsync            | SetDeviceTypeIdentifierAsync            |    | ✔ | (R.O.) |          |
 | %V    | Supply Voltage         | GetSupplyVoltageAsync                   | --                                      |    | ✔ |   ✔   |          |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync                | SetEncryptionEnabledAsync               | ✔ | ✔ |   ✔   |          |
 | KY    | Encryption Key         | --                                      | SetEncryptionKeyAsync                   | ✔ | ✔ |   ✔   |          |
