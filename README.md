@@ -169,63 +169,64 @@ Below is a table summarizing the commands supported by this library.
 
 |       | Description            | Query                                   | Command                                 | S1 | S2 | Pro900 | Cellular |
 |:-----:|:-----------------------|:----------------------------------------|:----------------------------------------|:--:|:--:|:------:|:--------:|
-| HV    | Hardware Version       | GetHardwareVersionAsync                 | --                                      | ✔  | ✔  |    ✔   |    ✔     |
-| AP    | API Mode               | GetApiModeAsync                         | SetApiModeAsync                         | ✔  | ✔  |    ✔   |    ✔     |
-| RE    | Restore Defaults       | --                                      | RestoreDefaultsAsync                    | ✔  | ✔  |    ✔   |    ✔     |
-| FR    | Soft Reset             | --                                      | ResetAsync                              | ✔  | ✔  |    ✔   |    ✔     |
-| BD    | Interface Data Rate    | GetBaudRateAsync                        | SetBaudRateAsync                        | ✔  | ✔  |    ✔   |    ✔     |
-| NB    | Parity                 | GetParityAsync                          | SetParityAsync                          | ✔  | ✔  |    ✔   |    ✔     |
-| SB    | Stop Bits              | GetStopBitsAsync                        | SetStopBitsAsync                        | ✔  | ✔  |    ✔   |    ✔     |
-| DB    | Signal Strength        | GetSignalStrengthAsync                  | --                                      | ✔  | ✔  |    ✔   |    ✔     |
-| RO    | Packetization Timeout  | GetPacketizationTimeoutAsync            | SetPacketizationTimeoutAsync            | ✔  | ✔  |    ✔   |    ✔     |
-| FT    | Flow Control Threshold | GetFlowControlThresholdAsync            | SetFlowControlThresholdAsync            | ✔  | ✔  |    ✔   |    ✔     |
-| NI    | Node Identifier        | GetNodeIdentifierAsync                  | SetNodeIdentifierAsync                  | ✔  | ✔  |    ✔   |    ✔     |
-| CN    | Exit Command Mode      | --                                      | ExitCommandModeAsync                    | ✔  | ✔  |    ✔   |    ✔     |
-| WR    | Write Command          | --                                      | WriteChangesAsync                       | ✔  | ✔  |    ✔   |    ✔     |
-| SH/SL | Serial Number          | GetSerialNumberAsync                    | --                                      | ✔  | ✔  |    ✔   |          |
-| DH/DL | Destination Address    | GetAddressAsync                         | SetDestinationAddressAsync              | ✔  | ✔  |    ✔   |          |
-| MY    | Source Address         | GetAddressAsync                         | SetSourceAddressAsync                   | ✔  | ✔  |    ✔   |  Note 1  |
-| SC    | Scan Channels          | GetScanChannelsAsync                    | SetScanChannelsAsync                    | ✔  | ✔  |    ✔   |          |
-| SD    | Scan Duration          | GetScanDurationAsync                    | SetScanDurationAsync                    | ✔  | ✔  |    ✔   |          |
-| ND    | Network Discovery      | --                                      | DiscoverNetworkAsync                    | ✔  | ✔  |    ✔   |          |
-| NT    | Discovery Timeout      | GetNetworkDiscoveryTimeoutAsync         | SetNetworkDiscoveryTimeoutAsync         | ✔  | ✔  |    ✔   |          |
-| AI    | Association Indicator  | GetAssociationAsync                     | --                                      | ✔  | ✔  |        |    ✔     |
-| A1    | End Device Association | GetEndDeviceAssociationOptionsAsync     | SetEndDeviceAssociationOptionsAsync     | ✔  |    |        |          |
-| A2    | Coordinator Association| GetCoordinatorAssociationOptionsAsync   | SetCoordinatorAssociationOptionsAsync   | ✔  |    |        |          |
-| DA    | Force Disassociation   | --                                      | DisassociateAsync                       | ✔  | ✔  |        |          |
-| D(N)  | DIO Configuration      | GetInputOutputConfigurationAsync        | SetInputOutputConfigurationAsync        | ✔  | ✔  |    ✔   |          |
-| IC    | Input Change           | GetChangeDetectionChannelsAsync         | SetChangeDetectionChannelsAsync         | ✔  | ✔  |    ✔   |          |
-| IR    | Sample Rate            | GetSampleRateAsync                      | SetSampleRateAsync                      | ✔  | ✔  |    ✔   |          |
-| IS    | Force Sample           | --                                      | ForceSampleAsync                        | ✔  | ✔  |    ✔   |          |
-| ID    | PAN ID / Module VID    | GetPanIdAsync/GetModuleVidAsync         | SetPanIdAsync/SetModuleVidAsync         | ✔  | ✔  |    ✔   |          |
-| RP    | RSSI PWM Timer         | GetRssiPwmTimeAsync                     | SetRssiPwmTimeAsync                     | ✔  | ✔  |    ✔   |          |
-| PR    | Pull-up Resistor Config| GetPullUpResistorConfigurationAsync     | SetPullUpResistorConfigurationAsync     | ✔  | ✔  |    ✔   |          |
-| SM    | Sleep Mode             | GetSleepModeAsync                       | SetSleepModeAsync                       | ✔  | ✔  |    ✔   |          |
-| SO    | Sleep Mode Options     | GetSleepOptionsAsync                    | SetSleepOptionsAsync                    | ✔  | ✔  |    ✔   |          |
-| SP    | Sleep Period           | GetSleepPeriodAsync                     | SetSleepPeriodAsync                     |    | ✔  |    ✔   |          |
-| SN    | Sleep Period Count     | GetSleepPeriodCountAsync                | SetSleepPeriodCountAsync                |    | ✔  |    ✔   |          |
-| ZS    | Stack Profile          | GetStackProfileAsync                    | SetStackProfileAsync                    |    | ✔  |    ✔   |          |
-| NJ    | Node Join Time         | GetNodeJoinTimeAsync                    | SetNodeJoinTimeAsync                    |    | ✔  |    ✔   |          |
-| JV    | Channel Verification   | IsChannelVerificationEnabledAsync       | SetChannelVerificationEnabledAsync      |    | ✔  |    ✔   |          |
-| NW    | Network Watchdog       | GetNetworkWatchdogTimeoutAsync          | SetNetworkWatchdogTimeoutAsync          |    | ✔  |    ✔   |          |
-| JN    | Join Notification      | IsJoinNotificationEnabledAsync          | SetJoinNotificationEnabledAsync         |    | ✔  |    ✔   |          |
-| CB    | Commissioning Button   | --                                      | PushCommissioningButtonAsync            |    | ✔  |    ✔   |          |
-| %V    | Supply Voltage         | GetSupplyVoltageAsync                   | --                                      |    | ✔  |    ✔   |          |
-| EE    | Encryption Enable      | IsEncryptionEnabledAsync                | SetEncryptionEnabledAsync               | ✔  | ✔  |    ✔   |          |
-| KY    | Encryption Key         | --                                      | SetEncryptionKeyAsync                   | ✔  | ✔  |    ✔   |          |
-| CE    | Coordinator Enable     | IsCoordinatorAsync                      | SetCoordinatorAsync                     | ✔  |    |        |          |
-| CH    | Channel                | GetChannelAsync                         | SetChannelAsync                         | ✔  |    |        |          |
-| AI    | Association Indicator  | GetAssociationAsync                     | SetAssociationAsync                     |    | ✔  |        |    ✔     |
-| PH    | Phone Number           | GetPhoneNumberAsync                     | --                                      |    |    |        |    ✔     |
-| S#    | ICCID                  | GetIccidAsync                           | --                                      |    |    |        |    ✔     |
-| IM    | IMEI                   | GetImeiAsync                            | --                                      |    |    |        |    ✔     |
-| MN    | Network Operator       | GetNetworkOperatorAsync                 | --                                      |    |    |        |    ✔     |
-| MV    | Modem Firmware Version | GetModemFirmwareVersionAsync            | --                                      |    |    |        |    ✔     |
-| IP    | Internet Protocol      | GetInternetProtocolAsync                | SetInternetProtocolAsync                |    |    |        |    ✔     |
-| TL    | SSL Protocol           | GetSslProtocolAsync                     | SetSslProtocolAsync                     |    |    |        |    ✔     |
-| TM    | Client Timeout         | GetTcpClientConnectionTimeoutAsync      | SetTcpClientConnectionTimeoutAsync      |    |    |        |    ✔     |
-| DO    | Device Option          | GetDeviceOptionAsync                    | SetDeviceOptionAsync                    |    |    |        |    ✔     |
-| AN    | Access Point Name      | GetAccessPointNameAsync                 | SetAccessPointNameAsync                 |    |    |        |    ✔     |
+| HV    | Hardware Version       | GetHardwareVersionAsync                 | --                                      | ✔ | ✔ |   ✔   |    ✔    |
+| AP    | API Mode               | GetApiModeAsync                         | SetApiModeAsync                         | ✔ | ✔ |   ✔   |    ✔    |
+| RE    | Restore Defaults       | --                                      | RestoreDefaultsAsync                    | ✔ | ✔ |   ✔   |    ✔    |
+| FR    | Soft Reset             | --                                      | ResetAsync                              | ✔ | ✔ |   ✔   |    ✔    |
+| BD    | Interface Data Rate    | GetBaudRateAsync                        | SetBaudRateAsync                        | ✔ | ✔ |   ✔   |    ✔    |
+| NB    | Parity                 | GetParityAsync                          | SetParityAsync                          | ✔ | ✔ |   ✔   |    ✔    |
+| SB    | Stop Bits              | GetStopBitsAsync                        | SetStopBitsAsync                        | ✔ | ✔ |   ✔   |    ✔    |
+| DB    | Signal Strength        | GetSignalStrengthAsync                  | --                                      | ✔ | ✔ |   ✔   |    ✔    |
+| RO    | Packetization Timeout  | GetPacketizationTimeoutAsync            | SetPacketizationTimeoutAsync            | ✔ | ✔ |   ✔   |    ✔    |
+| FT    | Flow Control Threshold | GetFlowControlThresholdAsync            | SetFlowControlThresholdAsync            | ✔ | ✔ |   ✔   |    ✔    |
+| NI    | Node Identifier        | GetNodeIdentifierAsync                  | SetNodeIdentifierAsync                  | ✔ | ✔ |   ✔   |    ✔    |
+| CN    | Exit Command Mode      | --                                      | ExitCommandModeAsync                    | ✔ | ✔ |   ✔   |    ✔    |
+| WR    | Write Command          | --                                      | WriteChangesAsync                       | ✔ | ✔ |   ✔   |    ✔    |
+| SH/SL | Serial Number          | GetSerialNumberAsync                    | --                                      | ✔ | ✔ |   ✔   |          |
+| DH/DL | Destination Address    | GetAddressAsync                         | SetDestinationAddressAsync              | ✔ | ✔ |   ✔   |          |
+| MY    | Source Address         | GetAddressAsync                         | SetSourceAddressAsync                   | ✔ | ✔ |   ✔   |  Note 1  |
+| SC    | Scan Channels          | GetScanChannelsAsync                    | SetScanChannelsAsync                    | ✔ | ✔ |   ✔   |          |
+| SD    | Scan Duration          | GetScanDurationAsync                    | SetScanDurationAsync                    | ✔ | ✔ |   ✔   |          |
+| ND    | Network Discovery      | --                                      | DiscoverNetworkAsync                    | ✔ | ✔ |   ✔   |          |
+| NT    | Discovery Timeout      | GetNetworkDiscoveryTimeoutAsync         | SetNetworkDiscoveryTimeoutAsync         | ✔ | ✔ |   ✔   |          |
+| AI    | Association Indicator  | GetAssociationAsync                     | --                                      | ✔ | ✔ |        |    ✔    |
+| A1    | End Device Association | GetEndDeviceAssociationOptionsAsync     | SetEndDeviceAssociationOptionsAsync     | ✔ |    |        |          |
+| A2    | Coordinator Association| GetCoordinatorAssociationOptionsAsync   | SetCoordinatorAssociationOptionsAsync   | ✔ |    |        |          |
+| DA    | Force Disassociation   | --                                      | DisassociateAsync                       | ✔ | ✔ |        |          |
+| D(N)  | DIO Configuration      | GetInputOutputConfigurationAsync        | SetInputOutputConfigurationAsync        | ✔ | ✔ |   ✔   |          |
+| IC    | Input Change           | GetChangeDetectionChannelsAsync         | SetChangeDetectionChannelsAsync         | ✔ | ✔ |   ✔   |          |
+| IR    | Sample Rate            | GetSampleRateAsync                      | SetSampleRateAsync                      | ✔ | ✔ |   ✔   |          |
+| IS    | Force Sample           | --                                      | ForceSampleAsync                        | ✔ | ✔ |   ✔   |          |
+| ID    | PAN ID / Module VID    | GetPanIdAsync/GetModuleVidAsync         | SetPanIdAsync/SetModuleVidAsync         | ✔ | ✔ |   ✔   |          |
+| RP    | RSSI PWM Timer         | GetRssiPwmTimeAsync                     | SetRssiPwmTimeAsync                     | ✔ | ✔ |   ✔   |          |
+| PR    | Pull-up Resistor Config| GetPullUpResistorConfigurationAsync     | SetPullUpResistorConfigurationAsync     | ✔ | ✔ |   ✔   |          |
+| SM    | Sleep Mode             | GetSleepModeAsync                       | SetSleepModeAsync                       | ✔ | ✔ |   ✔   |          |
+| SO    | Sleep Mode Options     | GetSleepOptionsAsync                    | SetSleepOptionsAsync                    | ✔ | ✔ |   ✔   |          |
+| SP    | Sleep Period           | GetSleepPeriodAsync                     | SetSleepPeriodAsync                     |    | ✔ |   ✔   |          |
+| SN    | Sleep Period Count     | GetSleepPeriodCountAsync                | SetSleepPeriodCountAsync                |    | ✔ |   ✔   |          |
+| ZS    | Stack Profile          | GetStackProfileAsync                    | SetStackProfileAsync                    |    | ✔ |   ✔   |          |
+| NJ    | Node Join Time         | GetNodeJoinTimeAsync                    | SetNodeJoinTimeAsync                    |    | ✔ |   ✔   |          |
+| JV    | Channel Verification   | IsChannelVerificationEnabledAsync       | SetChannelVerificationEnabledAsync      |    | ✔ |   ✔   |          |
+| NW    | Network Watchdog       | GetNetworkWatchdogTimeoutAsync          | SetNetworkWatchdogTimeoutAsync          |    | ✔ |   ✔   |          |
+| JN    | Join Notification      | IsJoinNotificationEnabledAsync          | SetJoinNotificationEnabledAsync         |    | ✔ |   ✔   |          |
+| CB    | Commissioning Button   | --                                      | PushCommissioningButtonAsync            |    | ✔ |   ✔   |          |
+| DD    | Device Type Code       | GetDeviceTypeIdentifierAsync            | SetDeviceTypeIdentifierAsync            |    | ✔ | (R.O.) |          |
+| %V    | Supply Voltage         | GetSupplyVoltageAsync                   | --                                      |    | ✔ |   ✔   |          |
+| EE    | Encryption Enable      | IsEncryptionEnabledAsync                | SetEncryptionEnabledAsync               | ✔ | ✔ |   ✔   |          |
+| KY    | Encryption Key         | --                                      | SetEncryptionKeyAsync                   | ✔ | ✔ |   ✔   |          |
+| CE    | Coordinator Enable     | IsCoordinatorAsync                      | SetCoordinatorAsync                     | ✔ |    |        |          |
+| CH    | Channel                | GetChannelAsync                         | SetChannelAsync                         | ✔ |    |        |          |
+| AI    | Association Indicator  | GetAssociationAsync                     | SetAssociationAsync                     |    | ✔ |        |    ✔    |
+| PH    | Phone Number           | GetPhoneNumberAsync                     | --                                      |    |    |        |    ✔    |
+| S#    | ICCID                  | GetIccidAsync                           | --                                      |    |    |        |    ✔    |
+| IM    | IMEI                   | GetImeiAsync                            | --                                      |    |    |        |    ✔    |
+| MN    | Network Operator       | GetNetworkOperatorAsync                 | --                                      |    |    |        |    ✔    |
+| MV    | Modem Firmware Version | GetModemFirmwareVersionAsync            | --                                      |    |    |        |    ✔    |
+| IP    | Internet Protocol      | GetInternetProtocolAsync                | SetInternetProtocolAsync                |    |    |        |    ✔    |
+| TL    | SSL Protocol           | GetSslProtocolAsync                     | SetSslProtocolAsync                     |    |    |        |    ✔    |
+| TM    | Client Timeout         | GetTcpClientConnectionTimeoutAsync      | SetTcpClientConnectionTimeoutAsync      |    |    |        |    ✔    |
+| DO    | Device Option          | GetDeviceOptionAsync                    | SetDeviceOptionAsync                    |    |    |        |    ✔    |
+| AN    | Access Point Name      | GetAccessPointNameAsync                 | SetAccessPointNameAsync                 |    |    |        |    ✔    |
 
 All other commands are currently unsupported but feel free to file an issue if you'd like to see something that isn't here.
 

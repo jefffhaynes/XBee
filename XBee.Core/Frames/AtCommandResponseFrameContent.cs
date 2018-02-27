@@ -35,6 +35,7 @@ namespace XBee.Frames
         [Subtype(nameof(AtCommand), StackProfileCommand.Name, typeof(PrimitiveResponseData<byte>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), DestinationAddressHighCommand.Name, typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), DestinationAddressLowCommand.Name, typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
+        [Subtype(nameof(AtCommand), DeviceTypeIdentifierCommand.Name, typeof(PrimitiveResponseData<uint>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), PanIdCommand.Name, typeof(PanIdResponseData), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), SleepModeCommand.Name, typeof(PrimitiveResponseData<SleepMode>), BindingMode = BindingMode.OneWay)]
         [Subtype(nameof(AtCommand), SleepOptionsCommand.Name, typeof(SleepOptionsResponseData), BindingMode = BindingMode.OneWay)]

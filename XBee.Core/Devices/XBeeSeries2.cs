@@ -57,5 +57,15 @@ namespace XBee.Devices
         {
             return ExecuteAtCommandAsync(new ForceDisassociationCommand());
         }
+
+        /// <summary>
+        /// Sets the device product identifier.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public Task SetDeviceTypeIdentifierAsync(uint type)
+        {
+            return ExecuteAtCommandAsync(new DeviceTypeIdentifierCommand(type));
+        }
     }
 }

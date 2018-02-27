@@ -164,6 +164,18 @@ namespace XBee.Devices
         }
 
         /// <summary>
+        /// Gets the device product identifier.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<uint> GetDeviceTypeIdentifierAsync()
+        {
+            var response = await Controller.ExecuteAtQueryAsync<PrimitiveResponseData<uint>>(new DeviceTypeIdentifierCommand())
+                .ConfigureAwait(false);
+
+            return response.Value;
+        }
+
+        /// <summary>
         /// Get the network watchdog timeout value in minutes.  Zero is disabled.
         /// </summary>
         /// <returns></returns>
