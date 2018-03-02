@@ -34,8 +34,6 @@ Note that for UWP apps you will need to declare a serial communications device c
   </Capabilities>
  ```
 
-<strong>Ensure that the controller (the physically attached XBee) is in API Mode 1</strong>
-
 ```C#
 
 var controllers = await XBeeController.FindControllersAsync(9600);
@@ -71,8 +69,6 @@ Console.ReadKey();
 ### .NET Quick Start ###
 
 Here is a simple example with a coordinator on COM3 and an arbitrary number of end devices that we're going to configure and monitor for sampling.
-
-<strong>Ensure that the controller (the physically attached XBee) is in API Mode 1</strong>
 
 ```C#
 var controller = new XBeeController();
@@ -210,7 +206,7 @@ Below is a table summarizing the commands supported by this library.
 | NW    | Network Watchdog       | GetNetworkWatchdogTimeoutAsync          | SetNetworkWatchdogTimeoutAsync          |    | ✔ |   ✔   |          |
 | JN    | Join Notification      | IsJoinNotificationEnabledAsync          | SetJoinNotificationEnabledAsync         |    | ✔ |   ✔   |          |
 | CB    | Commissioning Button   | --                                      | PushCommissioningButtonAsync            |    | ✔ |   ✔   |          |
-| DD    | Device Type Identifier | GetDeviceTypeIdentifierAsync            | SetDeviceTypeIdentifierAsync            |    | ✔ | (R.O.) |          |
+| DD    | Device Type Identifier | GetDeviceTypeIdentifierAsync            | SetDeviceTypeIdentifierAsync            |    | ✔ |   ✔   |          |
 | %V    | Supply Voltage         | GetSupplyVoltageAsync                   | --                                      |    | ✔ |   ✔   |          |
 | EE    | Encryption Enable      | IsEncryptionEnabledAsync                | SetEncryptionEnabledAsync               | ✔ | ✔ |   ✔   |          |
 | KY    | Encryption Key         | --                                      | SetEncryptionKeyAsync                   | ✔ | ✔ |   ✔   |          |

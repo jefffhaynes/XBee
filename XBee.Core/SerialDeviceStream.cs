@@ -62,9 +62,14 @@ namespace XBee
                 throw new ArgumentOutOfRangeException(nameof(offset), offset, "Must be zero.");
             }
 
+            if (count > buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count), count, "Must be equal to or less than buffer length.");
+            }
+
             if (count != buffer.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(count), count, "Must be equal to buffer length.");
+                Array.Resize(ref buffer, count);
             }
 
             _serialDevice.Write(buffer);

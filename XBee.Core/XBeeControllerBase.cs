@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BinarySerialization;
@@ -38,7 +40,7 @@ namespace XBee.Core
         private readonly SemaphoreSlim _initializeSemaphoreSlim = new SemaphoreSlim(1);
 
         private readonly SemaphoreSlim _listenLock = new SemaphoreSlim(1);
-        private readonly object _executionLock = new object();
+        private readonly SemaphoreSlim _executionLock = new SemaphoreSlim(1);
 
         private readonly Source<SourcedData> _receivedDataSource = new Source<SourcedData>();
         private readonly Source<SourcedSample> _sampleSource = new Source<SourcedSample>();
@@ -494,11 +496,17 @@ namespace XBee.Core
         {
             await InitializeAsync().ConfigureAwait(false);
 
-            lock (_executionLock)
+            await _executionLock.WaitAsync().ConfigureAwait(false);
+
+            try
             {
                 var stream = new SerialDeviceStream(SerialDevice);
                 var frame = new Frame(frameContent);
                 Serializer.Serialize(stream, frame);
+            }
+            finally
+            {
+                _executionLock.Release();
             }
         }
 
@@ -515,6 +523,8 @@ namespace XBee.Core
             {
                 return;
             }
+
+            await SetApiModeAsync().ConfigureAwait(false);
 
             try
             {
@@ -553,6 +563,30 @@ namespace XBee.Core
             finally
             {
                 _initializeSemaphoreSlim.Release();
+            }
+        }
+
+        private async Task SetApiModeAsync()
+        {
+            await _executionLock.WaitAsync().ConfigureAwait(false);
+
+            try
+            {
+                var stream = new SerialDeviceStream(SerialDevice);
+                var writer = new AtCommandWriter(stream);
+
+                // enter command mode
+                await writer.WriteAsync("+++").ConfigureAwait(false);
+
+                // enable API mode
+                await writer.WriteAsync("ATAP1\r").ConfigureAwait(false);
+                
+                // leave command mode
+                await writer.WriteAsync("ATCN\r").ConfigureAwait(false);
+            }
+            finally
+            {
+                _executionLock.Release();
             }
         }
 

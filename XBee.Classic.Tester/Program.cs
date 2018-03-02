@@ -15,11 +15,6 @@ namespace XBee.Classic.Tester
             var controller = new XBeeController();
             var openTask = controller.OpenAsync("COM4", 115200);
             openTask.Wait();
-
-            if (controller == null)
-            {
-                return;
-            }
             
             var s2 = new XBeeSeries2(controller);
             var s2Task = s2.GetPanIdAsync();
