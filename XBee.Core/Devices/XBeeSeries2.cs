@@ -67,5 +67,15 @@ namespace XBee.Devices
         {
             return ExecuteAtCommandAsync(new DeviceTypeIdentifierCommand(type));
         }
+
+        /// <summary>
+        /// Resets all network parameters.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public Task ResetNetworkAsync(NetworkResetOptions options)
+        {
+            return ExecuteAtCommandAsync(new NetworkResetCommand(options));
+        }
     }
 }

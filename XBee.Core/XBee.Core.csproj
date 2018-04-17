@@ -5,16 +5,16 @@
     <RootNamespace>XBee</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>.NET Standard library for controlling XBee wireless modules.</Description>
-    <Version>1.6</Version>
-    <PackageReleaseNotes>Automatically configures devices for API mode</PackageReleaseNotes>
+    <Version>1.6.1</Version>
+    <PackageReleaseNotes>Adds Network Reset (NR) command.</PackageReleaseNotes>
     <PackageTags>XBee Wireless</PackageTags>
     <Authors>Jeff Haynes</Authors>
     <Company />
     <PackageProjectUrl>https://github.com/jefffhaynes/XBee</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jefffhaynes/XBee</RepositoryUrl>
     <PackageLicenseUrl>http://www.opensource.org/licenses/mit-license.php</PackageLicenseUrl>
-    <AssemblyVersion>1.6.0.0</AssemblyVersion>
-    <FileVersion>1.6.0.0</FileVersion>
+    <AssemblyVersion>1.6.1.0</AssemblyVersion>
+    <FileVersion>1.6.1.0</FileVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/xbcs.png</PackageIconUrl>
   </PropertyGroup>
 

@@ -10,11 +10,11 @@ namespace XBee.Frames.AtCommands
         }
 
         public InputOutputConfigurationCommand(InputOutputChannel channel) :
-         base((int)channel > 9 ? $"P{(int)channel - 10}" : $"D{(int)channel}")
+            base((int) channel > 9 ? $"P{(int) channel - 10}" : $"D{(int) channel}")
         {
         }
 
-        public InputOutputConfigurationCommand(InputOutputChannel channel, 
+        public InputOutputConfigurationCommand(InputOutputChannel channel,
             InputOutputConfiguration configuration) : this(channel)
         {
             Configuration = configuration;
