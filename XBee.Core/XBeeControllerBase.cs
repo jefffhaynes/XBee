@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BinarySerialization;
@@ -291,7 +289,7 @@ namespace XBee.Core
             {
                 var version =
                     await ExecuteAtQueryAsync<HardwareVersionResponseData>(new HardwareVersionCommand(), address,
-                        TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+                        TimeSpan.FromSeconds(10)).ConfigureAwait(false);
 
                 hardwareVersion = version.HardwareVersion;
 
@@ -315,7 +313,7 @@ namespace XBee.Core
             {
                 var version =
                     await ExecuteAtQueryAsync<PrimitiveResponseData<ushort>>(new FirmwareVersionCommand(), address,
-                        TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+                        TimeSpan.FromSeconds(10)).ConfigureAwait(false);
 
                 firmwareVersion = version.Value;
 

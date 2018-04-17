@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using XBee.Devices;
+using XBee.Frames.AtCommands;
 
 namespace XBee.Classic.Tester
 {
@@ -12,47 +14,19 @@ namespace XBee.Classic.Tester
             //controllerTask.Wait();
             //var controller = controllerTask.Result;
 
-            var controller = new XBeeController();
-            var openTask = controller.OpenAsync("COM4", 115200);
-            openTask.Wait();
-            
-            var s2 = new XBeeSeries2(controller);
-            var s2Task = s2.GetPanIdAsync();
-            s2Task.Wait();
-
-            return;
-
-            var local = controller.Local as XBeeSeries1;
-
-            controller.ModemStatusChanged += (sender, eventArgs) =>
+            Task.Run(async () =>
             {
-                Console.WriteLine($"Modem status: {eventArgs.Status}");
-            };
+                var controller = new XBeeController();
+                await controller.OpenAsync("COM3", 115200);
 
-            var panIdTask = local.GetPanIdAsync();
-            panIdTask.Wait();
+                var s2 = new XBeeSeries2(controller);
+                s2.SampleReceived += (sender, eventArgs) => Console.WriteLine("SAMPLE ---------------");
+                await s2.SetInputOutputConfigurationAsync(InputOutputChannel.Channel0,
+                    InputOutputConfiguration.DigitalIn);
+                await s2.SetSampleRateAsync(TimeSpan.FromSeconds(3));
+                await s2.ForceSampleAsync();
+            });
 
-            //var panId = panIdTask.Result;
-
-            //var pullupTask = local.GetPullUpResistorConfigurationAsync();
-            //pullupTask.Wait();
-
-            //var pullupConfig = pullupTask.Result;
-
-            //var rssiCycleTask = local.GetRssiPwmTimeAsync();
-            //rssiCycleTask.Wait();
-
-            //var rssiCycle = rssiCycleTask.Result;
-
-            Console.WriteLine("Found controller.");
-            controller.NodeDiscovered += (sender, eventArgs) =>
-            {
-                Console.WriteLine($"{eventArgs.Name} discovered.");
-                eventArgs.Node.TransmitDataAsync(Enumerable.Repeat((byte) 5, 400).ToArray());
-            };
-            var discoverTask = controller.DiscoverNetworkAsync();
-            discoverTask.Wait();
-            Console.WriteLine("Discovery finished.");
             Console.ReadKey();
         }
     }

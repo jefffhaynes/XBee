@@ -213,6 +213,7 @@ Below is a table summarizing the commands supported by this library.
 | CE    | Coordinator Enable     | IsCoordinatorAsync                      | SetCoordinatorAsync                     | ✔ |    |        |          |
 | CH    | Channel                | GetChannelAsync                         | SetChannelAsync                         | ✔ |    |        |          |
 | AI    | Association Indicator  | GetAssociationAsync                     | SetAssociationAsync                     |    | ✔ |        |    ✔    |
+| NR    | Reset Network          | --                                      | ResetNetworkAsync                       |    | ✔ |        |          |
 | PH    | Phone Number           | GetPhoneNumberAsync                     | --                                      |    |    |        |    ✔    |
 | S#    | ICCID                  | GetIccidAsync                           | --                                      |    |    |        |    ✔    |
 | IM    | IMEI                   | GetImeiAsync                            | --                                      |    |    |        |    ✔    |
