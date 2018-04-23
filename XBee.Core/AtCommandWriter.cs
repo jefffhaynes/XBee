@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace XBee
 {
     internal class AtCommandWriter
     {
-        private const string AckResponse = "OK\r";
+        private static readonly TimeSpan AckTimeout = TimeSpan.FromSeconds(3);
 
         private readonly Stream _stream;
 
@@ -22,13 +23,28 @@ namespace XBee
             await writer.WriteAsync(command).ConfigureAwait(false);
             await writer.FlushAsync().ConfigureAwait(false);
 
-            var response = new byte[AckResponse.Length];
-            await _stream.ReadAsync(response, 0, response.Length).ConfigureAwait(false);
+            var start = DateTime.Now;
 
-            if (Encoding.UTF8.GetString(response) != AckResponse)
+            while (DateTime.Now - start > AckTimeout)
             {
-                throw new InvalidDataException();
+                if (await IsByteAsync(_stream, (byte) 'O').ConfigureAwait(false))
+                {
+                    if (await IsByteAsync(_stream, (byte)'K').ConfigureAwait(false))
+                    {
+                        if (await IsByteAsync(_stream, (byte)'\r').ConfigureAwait(false))
+                        {
+                            break;
+                        }
+                    }
+                }
             }
+        }
+
+        private static async Task<bool> IsByteAsync(Stream stream, byte value)
+        {
+            var data = new byte[1];
+            await stream.ReadAsync(data, 0, data.Length).ConfigureAwait(false);
+            return data[0] == value;
         }
     }
 }

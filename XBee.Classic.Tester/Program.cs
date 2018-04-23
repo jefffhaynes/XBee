@@ -20,6 +20,8 @@ namespace XBee.Classic.Tester
                 await controller.OpenAsync("COM3", 115200);
 
                 var s2 = new XBeeSeries2(controller);
+                var serial = await s2.GetSerialNumberAsync();
+                Console.WriteLine(serial);
                 s2.SampleReceived += (sender, eventArgs) => Console.WriteLine("SAMPLE ---------------");
                 await s2.SetInputOutputConfigurationAsync(InputOutputChannel.Channel0,
                     InputOutputConfiguration.DigitalIn);
