@@ -22,8 +22,8 @@ namespace XBee
         public ushort Length { get; set; }
 
         [FieldOrder(2)]
-        [FieldLength("Length")]
-        [ChecksumFieldValue("Checksum")]
+        [FieldLength(nameof(Length))]
+        [ChecksumFieldValue(nameof(Checksum))]
         public FramePayload Payload { get; set; }
 
         [FieldOrder(3)]
