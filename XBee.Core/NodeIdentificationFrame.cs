@@ -22,7 +22,7 @@ namespace XBee
         public LongAddress RemoteLongAddress { get; set; }
 
         [FieldOrder(5)]
-        [SerializeAs(SerializedType.NullTerminatedString)]
+        [SerializeAs(SerializedType.TerminatedString)]
         public string Name { get; set; }
 
         [FieldOrder(6)]

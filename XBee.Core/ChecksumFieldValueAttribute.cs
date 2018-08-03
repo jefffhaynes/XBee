@@ -1,32 +1,35 @@
-﻿using BinarySerialization;
+﻿using System;
+using BinarySerialization;
 
 namespace XBee
 {
     internal class ChecksumFieldValueAttribute : FieldValueAttributeBase
     {
-        private int _checksum;
-
         public ChecksumFieldValueAttribute(string valuePath) : base(valuePath)
         {
         }
 
-        protected override void Reset(BinarySerializationContext context)
+        protected override object GetInitialState(BinarySerializationContext context)
         {
-            _checksum = 0;
+            return 0;
         }
 
-        protected override void Compute(byte[] buffer, int offset, int count)
+        protected override object GetUpdatedState(object state, byte[] buffer, int offset, int count)
         {
+            var checksum = (int)state;
+
             for (var i = offset; i < count; i++)
             {
-                _checksum = _checksum + buffer[i];
+                checksum = checksum + buffer[i];
             }
+
+            return checksum;
         }
 
-        protected override object ComputeFinal()
+        protected override object GetFinalValue(object state)
         {
             // discard values > 1 byte
-            var checksum = 0xff & _checksum;
+            var checksum = 0xff & (int)state;
 
             // perform 2s complement
             checksum = 0xff - checksum;
