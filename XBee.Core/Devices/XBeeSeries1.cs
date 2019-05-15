@@ -2,12 +2,14 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using XBee.Core;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
+    [PublicAPI]
     public class XBeeSeries1 : XBeeNode, IAssociationIndicator, IDisassociation
     {
         internal XBeeSeries1(XBeeControllerBase controller,
@@ -80,7 +82,7 @@ namespace XBee.Devices
         }
 
         /// <summary>
-        /// Forces device to disassociate with current coordinator and attempt to reassociate.
+        /// Forces device to disassociate with current coordinator and attempt to re-associate.
         /// </summary>
         /// <returns></returns>
         public Task DisassociateAsync()
@@ -164,7 +166,7 @@ namespace XBee.Devices
                 await ExecuteAtQueryAsync<PullUpResistorConfigurationResponseData>(
                     new PullUpResistorConfigurationCommand());
 
-            return response == null ? PullUpResistorConfiguration.None : response.Configuration.GetValueOrDefault();
+            return response?.Configuration ?? PullUpResistorConfiguration.None;
         }
 
         /// <summary>

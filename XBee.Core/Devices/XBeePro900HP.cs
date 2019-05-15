@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using XBee.Core;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
+    [PublicAPI]
     // ReSharper disable once InconsistentNaming
     public class XBeePro900HP : XBeeSeries2Base
     {

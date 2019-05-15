@@ -1,4 +1,5 @@
 ﻿using BinarySerialization;
+using JetBrains.Annotations;
 
 namespace XBee.Frames
 {
@@ -10,8 +11,7 @@ namespace XBee.Frames
         [FieldOrder(1)]
         public ShortAddress ShortAddress { get; set; }
 
-        [FieldOrder(2)]
-        public ReceiveOptionsExt ReceiveOptions { get; set; }
+        [FieldOrder(2)] [UsedImplicitly] public ReceiveOptionsExt ReceiveOptions { get; set; }
 
         [FieldOrder(3)]
         public OneWireSensor OneWireSensor { get; set; }

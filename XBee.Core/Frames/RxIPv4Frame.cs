@@ -1,4 +1,5 @@
 ﻿using BinarySerialization;
+using JetBrains.Annotations;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
@@ -17,8 +18,7 @@ namespace XBee.Frames
         [FieldOrder(3)]
         public InternetProtocol Protocol { get; set; }
 
-        [FieldOrder(4)]
-        public byte Status { get; set; }
+        [FieldOrder(4)] [UsedImplicitly] public byte Status { get; set; }
 
         [FieldOrder(5)]
         public byte[] Data { get; set; }

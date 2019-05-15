@@ -1,5 +1,6 @@
 ﻿using System;
 using BinarySerialization;
+using JetBrains.Annotations;
 
 namespace XBee.Frames
 {
@@ -7,6 +8,7 @@ namespace XBee.Frames
     {
         private const int MaxPayloadLength = 140;
 
+        [UsedImplicitly]
         public TxSmsFrame()
         {
         }

@@ -1,7 +1,9 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace XBee.Frames
 {
+    [PublicAPI]
     [Flags]
     public enum DigitalSampleChannels : ushort
     {

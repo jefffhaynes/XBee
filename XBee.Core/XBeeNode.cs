@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using XBee.Core;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
@@ -9,6 +10,7 @@ using XBee.Observable;
 
 namespace XBee
 {
+    [PublicAPI]
     public abstract class XBeeNode
     {
         private static readonly TimeSpan HardwareResetTime = TimeSpan.FromMilliseconds(200);
@@ -436,7 +438,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the Recevied Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
+        /// Gets the Received Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
         /// </summary>
         /// <returns>The duration for which the RSSI PWM will go high after a receive event.</returns>
         public virtual async Task<TimeSpan> GetRssiPwmTimeAsync()
@@ -446,7 +448,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the Recevied Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer raw value.
+        /// Gets the Received Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer raw value.
         /// </summary>
         /// <returns>The raw value that represents the duration for which the RSSI PWM will go high after a receive event.</returns>
         public virtual async Task<byte> GetRssiPwmTimeValueAsync()
@@ -456,7 +458,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the Recevied Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
+        /// Sets the Received Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
         /// </summary>
         /// <param name="timeout">The duration for which the RSSI PWM will go high after a receive event.</param>
         /// <returns></returns>
@@ -466,7 +468,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the Recevied Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
+        /// Sets the Received Signal Strength Indicator (RSSI) Pulse Width Modulation (PWM) timer value.
         /// </summary>
         /// <param name="value">The value which represents the duration for which the RSSI PWM will go high after a receive event.</param>
         /// <returns></returns>
@@ -609,7 +611,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Gets the transmit power level for this module.  Refer to documentation for dBm equivelent.
+        /// Gets the transmit power level for this module.  Refer to documentation for dBm equivalent.
         /// </summary>
         /// <returns></returns>
         public virtual async Task<byte> GetPowerLevelValueAsync()
@@ -619,7 +621,7 @@ namespace XBee
         }
 
         /// <summary>
-        /// Sets the transmit power level for this module.  Refer to documentation for dBm equivelent.
+        /// Sets the transmit power level for this module.  Refer to documentation for dBm equivalent.
         /// </summary>
         /// <param name="powerLevel"></param>
         /// <returns></returns>

@@ -2,12 +2,14 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using XBee.Core;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
+    [PublicAPI]
     public class XBeeCellular : XBeeNode, IAssociationIndicator
     {
         private const string NotSupportedMessage = "This feature is not supported on the XBee Cellular device.";

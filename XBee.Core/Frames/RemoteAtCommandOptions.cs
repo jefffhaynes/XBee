@@ -1,5 +1,8 @@
-﻿namespace XBee.Frames
+﻿using JetBrains.Annotations;
+
+namespace XBee.Frames
 {
+    [PublicAPI]
     public enum RemoteAtCommandOptions : byte
     {
         None = 0x0,

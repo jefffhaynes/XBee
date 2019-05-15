@@ -3,9 +3,11 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace XBee
 {
+    [PublicAPI]
     public class XBeeStream : Stream
     {
         private readonly XBeeNode _node;

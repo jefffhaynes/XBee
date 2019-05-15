@@ -1,11 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using XBee.Core;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee
 {
+    [PublicAPI]
     public abstract class XBeeNodeBase
     {
         private static readonly TimeSpan HardwareResetTime = TimeSpan.FromMilliseconds(200);

@@ -1,5 +1,6 @@
 ﻿using System;
 using BinarySerialization;
+using JetBrains.Annotations;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Frames
@@ -8,6 +9,7 @@ namespace XBee.Frames
     {
         private const int MaxPayloadLength = 1500;
 
+        [UsedImplicitly]
         public TxIPv4Frame()
         {
         }

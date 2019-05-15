@@ -1,4 +1,5 @@
 ﻿using BinarySerialization;
+using JetBrains.Annotations;
 
 namespace XBee.Frames
 {
@@ -7,8 +8,7 @@ namespace XBee.Frames
         [FieldOrder(0)]
         public LongAddress Source { get; set; }
 
-        [FieldOrder(1)]
-        public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
+        [FieldOrder(1)] [UsedImplicitly] public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
 
         [FieldOrder(2)]
         public ReceiveOptions Options { get; set; }

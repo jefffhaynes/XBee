@@ -1,7 +1,9 @@
 ﻿using BinarySerialization;
+using JetBrains.Annotations;
 
 namespace XBee.Frames
 {
+    [PublicAPI]
     internal class FirmwareUpdateStatusFrame : CommandResponseFrameContent
     {
         [FieldOrder(0)]

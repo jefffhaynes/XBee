@@ -1,5 +1,8 @@
-﻿namespace XBee
+﻿using JetBrains.Annotations;
+
+namespace XBee
 {
+    [PublicAPI]
     public enum StartDelimiter : byte
     {
         FrameDelimiter = 0x7e,

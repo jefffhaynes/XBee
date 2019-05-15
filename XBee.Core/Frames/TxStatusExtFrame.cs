@@ -1,4 +1,5 @@
 ﻿using BinarySerialization;
+using JetBrains.Annotations;
 
 namespace XBee.Frames
 {
@@ -12,13 +13,11 @@ namespace XBee.Frames
         [FieldOrder(0)]
         public ShortAddress ShortAddress { get; set; }
 
-        [FieldOrder(1)]
-        public byte RetryCount { get; set; }
+        [FieldOrder(1)] [UsedImplicitly] public byte RetryCount { get; set; }
 
         [FieldOrder(2)]
         public DeliveryStatusExt DeliveryStatus { get; set; }
 
-        [FieldOrder(3)]
-        public DiscoveryStatus DiscoveryStatus { get; set; }
+        [FieldOrder(3)] [UsedImplicitly] public DiscoveryStatus DiscoveryStatus { get; set; }
     }
 }

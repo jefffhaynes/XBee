@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using BinarySerialization;
+using JetBrains.Annotations;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 using XBee.Observable;
@@ -12,6 +13,7 @@ using XBee.Observable;
 // ReSharper disable once CheckNamespace
 namespace XBee.Core
 {
+    [PublicAPI]
     public abstract class XBeeControllerBase : IDisposable
     {
         private readonly ConcurrentDictionary<byte, TaskCompletionSource<CommandResponseFrameContent>>
@@ -203,7 +205,7 @@ namespace XBee.Core
         /// <param name="cancellationToken"></param>
         /// <remarks>During network discovery nodes may be unresponsive</remarks>
         public Task DiscoverNetworkAsync(TimeSpan timeout,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             var atCommandFrame = new AtCommandFrameContent(new NetworkDiscoveryCommand());
 

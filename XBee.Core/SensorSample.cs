@@ -5,14 +5,14 @@ namespace XBee
     public class SensorSample
     {
         internal SensorSample(OneWireSensor oneWireSensor, ushort sensorValueA, ushort sensorValueB, ushort sensorValueC,
-            ushort sensorValueD, double temperatureCelcius)
+            ushort sensorValueD, double degreesCelsius)
         {
             OneWireSensor = oneWireSensor;
             SensorValueA = sensorValueA;
             SensorValueB = sensorValueB;
             SensorValueC = sensorValueC;
             SensorValueD = sensorValueD;
-            TemperatureCelsius = temperatureCelcius;
+            TemperatureCelsius = degreesCelsius;
         }
         
         public OneWireSensor OneWireSensor { get; }

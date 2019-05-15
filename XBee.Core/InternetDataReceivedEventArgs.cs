@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
+using JetBrains.Annotations;
 using XBee.Frames.AtCommands;
 
 namespace XBee
 {
+    [PublicAPI]
     public class InternetDataReceivedEventArgs : EventArgs
     {
         internal InternetDataReceivedEventArgs(IPAddress sourceAddress, ushort destinationPort, ushort sourcePort,

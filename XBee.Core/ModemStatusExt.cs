@@ -1,5 +1,8 @@
-﻿namespace XBee
+﻿using JetBrains.Annotations;
+
+namespace XBee
 {
+    [PublicAPI]
     public enum ModemStatusExt : byte
     {
         Rejoin = 0x00,

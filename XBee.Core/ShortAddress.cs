@@ -1,14 +1,17 @@
 ﻿using System;
 using BinarySerialization;
+using JetBrains.Annotations;
 
 namespace XBee
 {
+    [PublicAPI]
     public class ShortAddress : IEquatable<ShortAddress>
     {
         public static readonly ShortAddress Broadcast = new ShortAddress(0xffff);
         public static readonly ShortAddress Disabled = new ShortAddress(0xfffe);
         public static readonly ShortAddress Coordinator = new ShortAddress(0);
 
+        [UsedImplicitly]
         public ShortAddress()
         {
             Value = Disabled.Value;

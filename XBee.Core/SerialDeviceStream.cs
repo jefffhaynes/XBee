@@ -2,9 +2,11 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace XBee
 {
+    [PublicAPI]
     public class SerialDeviceStream : Stream
     {
         private readonly ISerialDevice _serialDevice;

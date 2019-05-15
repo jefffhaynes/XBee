@@ -1,10 +1,12 @@
 ﻿using BinarySerialization;
+using JetBrains.Annotations;
 using XBee.Frames;
 
 namespace XBee
 {
     internal class FramePayload
     {
+        [UsedImplicitly]
         public FramePayload()
         {
         }

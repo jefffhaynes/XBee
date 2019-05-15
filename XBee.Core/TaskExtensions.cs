@@ -6,30 +6,6 @@ namespace XBee
 {
     internal static class TaskExtensions
     {
-        public static async Task Retry(Action action, TimeSpan timeout, Type allowedExceptionType)
-        {
-            var start = DateTime.Now;
-
-            while (DateTime.Now - start < timeout)
-            {
-                try
-                {
-                    action();
-                    return;
-                }
-                catch (Exception e)
-                {
-                    if (e.GetType() != allowedExceptionType)
-                    {
-                        throw;
-                    }
-                }
-                await Task.Delay(100).ConfigureAwait(false);
-            }
-
-            throw new TimeoutException();
-        }
-
         public static async Task<T> Retry<T>(Func<Task<T>> func, TimeSpan timeout, params Type[] allowedExceptionTypes)
         {
             var start = DateTime.Now;

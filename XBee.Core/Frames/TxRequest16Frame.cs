@@ -1,9 +1,11 @@
 ﻿using BinarySerialization;
+using JetBrains.Annotations;
 
 namespace XBee.Frames
 {
     internal class TxRequest16Frame : CommandFrameContent
     {
+        [UsedImplicitly]
         public TxRequest16Frame()
         {
         }

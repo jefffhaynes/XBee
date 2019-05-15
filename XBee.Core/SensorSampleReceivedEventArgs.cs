@@ -6,14 +6,14 @@ namespace XBee
     public class SensorSampleReceivedEventArgs : EventArgs
     {
         internal SensorSampleReceivedEventArgs(OneWireSensor oneWireSensor, ushort sensorValueA, ushort sensorValueB, ushort sensorValueC,
-            ushort sensorValueD, double temperatureCelcius)
+            ushort sensorValueD, double temperatureCelsius)
         {
             OneWireSensor = oneWireSensor;
             SensorValueA = sensorValueA;
             SensorValueB = sensorValueB;
             SensorValueC = sensorValueC;
             SensorValueD = sensorValueD;
-            TemperatureCelsius = temperatureCelcius;
+            TemperatureCelsius = temperatureCelsius;
         }
 
         public OneWireSensor OneWireSensor { get; }

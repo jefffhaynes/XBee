@@ -1,7 +1,9 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace XBee
 {
+    [PublicAPI]
     public class NodeDiscoveredEventArgs : EventArgs
     {
         internal NodeDiscoveredEventArgs(string name, SignalStrength? signalStrength, XBeeNode node)

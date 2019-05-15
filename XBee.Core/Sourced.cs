@@ -1,5 +1,8 @@
-﻿namespace XBee
+﻿using JetBrains.Annotations;
+
+namespace XBee
 {
+    [PublicAPI]
     public abstract class Sourced
     {
         protected Sourced(NodeAddress address)

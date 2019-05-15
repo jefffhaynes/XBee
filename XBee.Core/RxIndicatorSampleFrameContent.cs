@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BinarySerialization;
+using JetBrains.Annotations;
 using XBee.Converters;
 using XBee.Frames;
 
@@ -8,14 +9,11 @@ namespace XBee
 {
     internal class RxIndicatorSampleFrameContent
     {
-        [FieldOrder(0)]
-        public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
+        [FieldOrder(0)] [UsedImplicitly] public ReceivedSignalStrengthIndicator ReceivedSignalStrengthIndicator { get; set; }
 
-        [FieldOrder(1)]
-        public ReceiveOptions ReceiveOptions { get; set; }
+        [FieldOrder(1)] [UsedImplicitly] public ReceiveOptions ReceiveOptions { get; set; }
 
-        [FieldOrder(2)]
-        public byte SampleCount { get; set; }
+        [FieldOrder(2)] [UsedImplicitly] public byte SampleCount { get; set; }
 
         [FieldOrder(3)]
         public SampleChannels Channels { get; set; }

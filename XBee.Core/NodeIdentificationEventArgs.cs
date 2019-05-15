@@ -1,9 +1,11 @@
 ﻿using System;
+using JetBrains.Annotations;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee
 {
+    [PublicAPI]
     public class NodeIdentificationEventArgs : EventArgs
     {
         public NodeIdentificationEventArgs(NodeAddress senderAddress, NodeAddress remoteAddress,

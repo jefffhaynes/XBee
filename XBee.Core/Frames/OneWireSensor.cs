@@ -1,5 +1,8 @@
-﻿namespace XBee.Frames
+﻿using JetBrains.Annotations;
+
+namespace XBee.Frames
 {
+    [PublicAPI]
     public enum OneWireSensor : byte
     {
         AnalogDigital = 0x01,

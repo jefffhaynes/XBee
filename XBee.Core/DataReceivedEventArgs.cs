@@ -1,7 +1,9 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace XBee
 {
+    [PublicAPI]
     public class DataReceivedEventArgs : EventArgs
     {
         internal DataReceivedEventArgs(NodeAddress address, byte[] data)

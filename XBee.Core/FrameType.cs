@@ -1,6 +1,9 @@
-﻿namespace XBee
+﻿using JetBrains.Annotations;
+
+namespace XBee
 {
-    public enum FrameType : byte
+    [PublicAPI]
+    internal enum FrameType : byte
     {
         TxRequest = 0x00,
         TxRequest16 = 0x01,

@@ -1,5 +1,4 @@
-﻿using System;
-using BinarySerialization;
+﻿using BinarySerialization;
 
 namespace XBee
 {

@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace XBee
 {
-    public interface IDisassociation
+    [PublicAPI]
+    internal interface IDisassociation
     {
         Task DisassociateAsync();
     }

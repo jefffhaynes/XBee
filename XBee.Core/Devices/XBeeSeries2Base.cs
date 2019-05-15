@@ -2,12 +2,14 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using XBee.Core;
 using XBee.Frames;
 using XBee.Frames.AtCommands;
 
 namespace XBee.Devices
 {
+    [PublicAPI]
     public abstract class XBeeSeries2Base : XBeeNode
     {
         internal XBeeSeries2Base(XBeeControllerBase controller,
@@ -286,7 +288,7 @@ namespace XBee.Devices
                         throw new XBeeException($"Delivery failed with status code '{response.DeliveryStatus}'.");
                     }
 
-                    // per documention, update short address
+                    // per documentation, update short address
                     Address.ShortAddress = response.ShortAddress;
                 }
             }
@@ -320,7 +322,7 @@ namespace XBee.Devices
                 throw new XBeeException($"Delivery failed with status code '{response.DeliveryStatus}'.");
             }
 
-            // per documention, update short address
+            // per documentation, update short address
             Address.ShortAddress = response.ShortAddress;
         }
 

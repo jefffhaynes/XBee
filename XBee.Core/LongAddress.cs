@@ -1,8 +1,10 @@
 ﻿using System;
 using BinarySerialization;
+using JetBrains.Annotations;
 
 namespace XBee
 {
+    [PublicAPI]
     public class LongAddress : IEquatable<LongAddress>
     {
         public static readonly LongAddress Broadcast = new LongAddress(0xFFFF);

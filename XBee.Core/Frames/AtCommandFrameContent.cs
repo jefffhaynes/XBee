@@ -1,7 +1,10 @@
-﻿namespace XBee.Frames
+﻿using JetBrains.Annotations;
+
+namespace XBee.Frames
 {
     internal class AtCommandFrameContent : CommandFrameContent
     {
+        [UsedImplicitly]
         public AtCommandFrameContent()
         {
         }

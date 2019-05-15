@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BinarySerialization;
+using JetBrains.Annotations;
 using XBee.Converters;
 
 namespace XBee.Frames
@@ -19,11 +20,9 @@ namespace XBee.Frames
         [FieldOrder(1)]
         public ShortAddress ShortAddress { get; set; }
 
-        [FieldOrder(2)]
-        public ReceiveOptionsExt ReceiveOptions { get; set; }
+        [FieldOrder(2)] [UsedImplicitly] public ReceiveOptionsExt ReceiveOptions { get; set; }
 
-        [FieldOrder(3)]
-        public byte SampleCount { get; set; }
+        [FieldOrder(3)] [UsedImplicitly] public byte SampleCount { get; set; }
 
         [FieldOrder(4)]
         public DigitalSampleChannels DigitalChannels { get; set; }

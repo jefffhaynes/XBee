@@ -1,9 +1,11 @@
 ﻿using System;
 using BinarySerialization;
+using JetBrains.Annotations;
 using XBee.Frames;
 
 namespace XBee
 {
+    [PublicAPI]
     public class AnalogSample
     {
         internal AnalogSample(SampleChannels sampleChannel, ushort value)

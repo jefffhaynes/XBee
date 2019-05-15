@@ -1,7 +1,9 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace XBee
 {
+    [PublicAPI]
     public class SmsReceivedEventArgs : EventArgs
     {
         public SmsReceivedEventArgs(string phoneNumber, string message)

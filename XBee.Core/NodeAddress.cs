@@ -1,9 +1,13 @@
-﻿namespace XBee
+﻿using JetBrains.Annotations;
+
+namespace XBee
 {
+    [PublicAPI]
     public class NodeAddress
     {
         public static readonly NodeAddress Broadcast = new NodeAddress(LongAddress.Broadcast);
 
+        [UsedImplicitly]
         public NodeAddress()
         {
         }
