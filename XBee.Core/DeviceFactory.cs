@@ -27,8 +27,7 @@ namespace XBee
 
         public static DeviceSeries GetSeries(HardwareVersion hardwareVersion)
         {
-            DeviceSeries series;
-            if (!Series.TryGetValue(hardwareVersion, out series))
+            if (!Series.TryGetValue(hardwareVersion, out var series))
             {
                 throw new NotSupportedException($"Hardware version {hardwareVersion} not supported.");
             }
@@ -121,6 +120,15 @@ namespace XBee
                         if (firmwareVersionHex.StartsWith("9"))
                             return XBeeProtocol.DigiMesh;
                         return XBeeProtocol.ZigBee;
+                    }
+
+                case HardwareVersion.XBee868LP:
+                    {
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("8"))
+                            return XBeeProtocol.DigiMesh;
+                        if (firmwareVersionHex.Length == 4 && firmwareVersionHex.StartsWith("1"))
+                            return XBeeProtocol.DigiPoint;
+                        return XBeeProtocol.XC;
                     }
 
                 case HardwareVersion.XBeePro900HP:
