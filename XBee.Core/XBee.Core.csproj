@@ -5,15 +5,15 @@
     <RootNamespace>XBee</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>.NET Standard library for controlling XBee wireless modules.</Description>
-    <Version>1.6.4</Version>
-    <PackageReleaseNotes>More device support</PackageReleaseNotes>
+    <Version>1.6.4.1</Version>
+    <PackageReleaseNotes>Fixes issue with new device support</PackageReleaseNotes>
     <PackageTags>XBee Wireless</PackageTags>
     <Authors>Jeff Haynes</Authors>
     <Company />
     <PackageProjectUrl>https://github.com/jefffhaynes/XBee</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jefffhaynes/XBee</RepositoryUrl>
-    <AssemblyVersion>1.6.4.0</AssemblyVersion>
-    <FileVersion>1.6.4.0</FileVersion>
+    <AssemblyVersion>1.6.4.1</AssemblyVersion>
+    <FileVersion>1.6.4.1</FileVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/xbcs.png</PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

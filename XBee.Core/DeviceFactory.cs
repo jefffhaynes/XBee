@@ -19,6 +19,7 @@ namespace XBee
             {HardwareVersion.XBee24C, DeviceSeries.Series2},
             {HardwareVersion.XBeePro24C, DeviceSeries.Series2},
             {HardwareVersion.XBeePro24CSmt, DeviceSeries.Series2},
+            {HardwareVersion.XBee868LP, DeviceSeries.Series2},
             {HardwareVersion.XBeePro900, DeviceSeries.Pro900},
             {HardwareVersion.XBeePro900HP, DeviceSeries.Pro900},
             {HardwareVersion.XBeeProSX, DeviceSeries.Pro900},
