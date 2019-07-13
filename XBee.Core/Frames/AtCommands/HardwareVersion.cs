@@ -17,6 +17,9 @@
         XBeePro24C = 0x2D,     // XBP24C_TH_DIP
         XBeePro24CSmt = 0x30,  // XBP24C_S2C_SMT
         XBeeProSX = 0x31,      // XK9X-DMS-0
-        XBeeCellular = 0x40
+        XBeeCellular = 0x40,
+        XBee3 = 0x41,          // XBee 3
+        XBee3Smt = 0x42,       // XBee 3 SMT
+        XBee3Th = 0x43         // XBee 3 Through-hole
     }
 }
