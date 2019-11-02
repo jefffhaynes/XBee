@@ -32,7 +32,40 @@ namespace XBee
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            throw new NotSupportedException();
+            //Note, it's not clear why BinarySerializer ends up calling this method.
+            //The following is a work around which needs review.
+
+            //Do the same checks as the aync version.
+            if (buffer == null)
+            {
+                throw new ArgumentNullException(nameof(buffer));
+            }
+
+            if (offset != 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset), offset, "Must be zero.");
+            }
+
+            //Receive the data in a blocking fashion. 
+            Task<byte[]> dataTask = _serialDevice.ReadAsync((uint)count, new CancellationToken());
+
+            dataTask.Wait();
+
+            byte[] data = dataTask.Result;
+
+            if (data.Length == count)
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+                    buffer[i] = data[i];
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+
+            return data.Length;
         }
 
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
