@@ -53,18 +53,7 @@ namespace XBee
 
             byte[] data = dataTask.Result;
 
-            if (data.Length == count)
-            {
-                for (int i = 0; i < data.Length; i++)
-                {
-                    buffer[i] = data[i];
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
-
+            Array.Copy(data, buffer, data.Length);
             return data.Length;
         }
 
