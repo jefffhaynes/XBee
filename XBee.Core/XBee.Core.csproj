@@ -5,22 +5,29 @@
     <RootNamespace>XBee</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>.NET Standard library for controlling XBee wireless modules.</Description>
-    <Version>1.6.5-alpha</Version>
-    <PackageReleaseNotes>Fixes issue with new device support</PackageReleaseNotes>
+    <Version>1.6.6</Version>
+    <PackageReleaseNotes>Package updates including serializer fixes</PackageReleaseNotes>
     <PackageTags>XBee Wireless</PackageTags>
     <Authors>Jeff Haynes</Authors>
     <Company />
     <PackageProjectUrl>https://github.com/jefffhaynes/XBee</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jefffhaynes/XBee</RepositoryUrl>
-    <AssemblyVersion>1.6.4.2</AssemblyVersion>
-    <FileVersion>1.6.4.2</FileVersion>
-    <PackageIconUrl>https://raw.githubusercontent.com/jefffhaynes/XBee/master/xbcs.png</PackageIconUrl>
+    <AssemblyVersion>1.6.6</AssemblyVersion>
+    <FileVersion>1.6.6</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>xbcs.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BinarySerializer" Version="8.3.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
+    <PackageReference Include="BinarySerializer" Version="8.5.2" />
+    <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\xbcs.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
