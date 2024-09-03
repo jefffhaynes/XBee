@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "XBee.Utility (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "XBee.Utility (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

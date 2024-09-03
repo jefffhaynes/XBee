@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>XBee</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>.NET Standard library for controlling XBee wireless modules.</Description>
@@ -17,18 +16,16 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>xbcs.png</PackageIcon>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="BinarySerializer" Version="8.5.2" />
-    <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="BinarySerializer" Version="8.6.4.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\xbcs.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
   </ItemGroup>
-
 </Project>
