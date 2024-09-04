@@ -5,6 +5,16 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\xbcs.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Runtime" />
     <Reference Include="System.Threading.Tasks" />
   </ItemGroup>
@@ -22,5 +32,13 @@
     <Product>XBee.Classic</Product>
     <AssemblyVersion>5.3.3.0</AssemblyVersion>
     <FileVersion>5.3.3.0</FileVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/jefffhaynes/XBee</PackageProjectUrl>
+    <PackageIcon>xbcs.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/jefffhaynes/XBee</RepositoryUrl>
+    <PackageTags>XBee Wireless</PackageTags>
+    <PackageReleaseNotes>Initial release of .NET only (no UWP)</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 </Project>
